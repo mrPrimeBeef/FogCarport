@@ -11,11 +11,11 @@
 <body>
 <header th:fragment="headerCustomer">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container">
         <nav class="navbar navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+                    <img class = "logo" src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
                 </a>
             </div>
         </nav>
@@ -36,23 +36,23 @@
 
 <header th:fragment="headerAdmin">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container">
         <nav class="navbar navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+                    <img class = "logo" src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
                 </a>
             </div>
         </nav>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="nav nav-tabs navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a href="alleOrdrer.html" class="nav-link active" aria-current="page" th:href="@{/alleOrdrer}">Alle ordrer</a>
                 </li>
                 <li class="nav-item">
                     <a href="alleKunder.html" class="nav-link" aria-current="page" th:href="@{/alleKunder}">Kunder</a>
                 </li>
-            </ul>
+                </ul>
         </div>
     </div>
 </nav>
@@ -60,11 +60,11 @@
 
 <footer th:fragment="footer" class="footer-container">
 <nav class="navbar fixed-bottom navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Skoleopgave</a>
-        <a class="navbar-brand" href="#">Test Hjemmeside</a>
-        <a class="navbar-brand" href="#">
-            <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+    <div class="container">
+        <a class="nav-link active" aria-current="page" href="#">Skoleopgave</a>
+        <a class="nav-link active" aria-current="page" href="#">Test Hjemmeside</a>
+        <a class="nav-link active" aria-current="page" href="#">
+            <img class = "logo" src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
         </a>
     </div>
 </nav>
