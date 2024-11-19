@@ -5,49 +5,111 @@
     <title th:text="${title}">Frontpage</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
 <header th:fragment="headerCustomer">
-    <div class="headerimage">
-        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
-    </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+                </a>
+            </div>
+        </nav>
 
-    <div class="header-text">
-        <div class="left">
-            <a href="customCarport.html" th:href="@{/customCarport}" class="header-link">Individuelle tilpassed carporte</a>
-            <a href="mineordrer.html" th:href="@{/mineordrer}" class="header-link">Mine ordrer</a>
-        </div>
-
-        <div class="right">
-            <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember}">Fog konto</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContents">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a href="customCarport.html" th:href="@{/customCarport}" class="nav-link active" aria-current="page" href="#">Individuelle tilpassed carporte</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <a href="login.html" class="nav-link active" aria-current="page" th:if="${#ctx.session.currentMember}">Fog konto</a>
+            </form>
         </div>
     </div>
+</nav>
 </header>
 
 <header th:fragment="headerAdmin">
-    <div class="headerimage">
-        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
-    </div>
-
-    <div class="header-text">
-        <div class="left">
-            <a href="alleOrdrer.html" class="header-link" th:href="@{/alleOrdrer}">Alle ordrer</a>
-            <a href="alleKunder.html" class="header-link" th:href="@{/alleKunder}">Kunder</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+                </a>
+            </div>
+        </nav>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a href="alleOrdrer.html" class="nav-link active" aria-current="page" th:href="@{/alleOrdrer}">Alle ordrer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="alleKunder.html" class="nav-link" aria-current="page" th:href="@{/alleKunder}">Kunder</a>
+                </li>
+            </ul>
         </div>
     </div>
+</nav>
 </header>
 
 <footer th:fragment="footer" class="footer-container">
-    <div class="skoleopgave">
-        <p>Skoleopgave <br></p>
+<nav class="navbar fixed-bottom navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Skoleopgave</a>
+        <a class="navbar-brand" href="#">Test Hjemmeside</a>
+        <a class="navbar-brand" href="#">
+            <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+        </a>
     </div>
-    <div class="TestHjemmeside">
-        <p>Test hjemmeside<br></p>
-    </div>
-    <div class="footerimage">
-        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
-    </div>
+</nav>
 </footer>
+
+<!--<header th:fragment="headerCustomer">-->
+<!--    <div class="headerimage">-->
+<!--        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>-->
+<!--    </div>-->
+
+<!--    <div class="header-text">-->
+<!--        <div class="left">-->
+<!--            <a href="customCarport.html" th:href="@{/customCarport}" class="header-link">Individuelle tilpassed carporte</a>-->
+<!--            <a href="mineordrer.html" th:href="@{/mineordrer}" class="header-link">Mine ordrer</a>-->
+<!--        </div>-->
+
+<!--        <div class="right">-->
+<!--            <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember}">Fog konto</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--<header th:fragment="headerAdmin">-->
+<!--    <div class="headerimage">-->
+<!--        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>-->
+<!--    </div>-->
+
+<!--    <div class="header-text">-->
+<!--        <div class="left">-->
+<!--            <a href="alleOrdrer.html" class="header-link" th:href="@{/alleOrdrer}">Alle ordrer</a>-->
+<!--            <a href="alleKunder.html" class="header-link" th:href="@{/alleKunder}">Kunder</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--<footer th:fragment="footer" class="footer-container">-->
+<!--    <div class="skoleopgave">-->
+<!--        <p>Skoleopgave <br></p>-->
+<!--    </div>-->
+<!--    <div class="TestHjemmeside">-->
+<!--        <p>Test hjemmeside<br></p>-->
+<!--    </div>-->
+<!--    <div class="footerimage">-->
+<!--        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>-->
+<!--    </div>-->
+<!--</footer>-->
 </body>
 </html>
