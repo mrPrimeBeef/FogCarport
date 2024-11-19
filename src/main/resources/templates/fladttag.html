@@ -51,7 +51,7 @@
 
         <div class="mb-3">
             <label for="carport-laengde" class="form-label">Carport længde*</label>
-            <select class="form-select" id="carport-laengde" required>
+            <select class="form-select" id="carport-laengde" name="carport-laengde" required>
                 <option value="" disabled selected>Vælg længde</option>
                 <option>240 cm</option>
                 <option>270 cm</option>
@@ -77,7 +77,7 @@
 
         <div class="mb-3">
             <label for="trapeztag" class="form-label">Carport trapeztag*</label>
-            <select class="form-select" id="trapeztag" required>
+            <select class="form-select" id="trapeztag" name="trapeztag" required>
                 <option value="" disabled selected>Vælg tag</option>
                 <option>uden tagplader</option>
                 <option>Plasttrapezplader</option>
@@ -91,7 +91,7 @@
 
         <div class="mb-3">
             <label for="redskabsrum-bredde" class="form-label">Redskabsrum bredde*</label>
-            <select class="form-select" id="redskabsrum-bredde">
+            <select class="form-select" id="redskabsrum-bredde" name="redskabsrum-bredde">
                 <option value="" disabled selected>Vælg bredde</option>
                 <option>Uden redskabsrum</option>
                 <option>210 cm</option>
@@ -117,7 +117,7 @@
 
         <div class="mb-3">
             <label for="redskabsrum-laengde" class="form-label">Redskabsrum længde*</label>
-            <select class="form-select" id="redskabsrum-laengde">
+            <select class="form-select" id="redskabsrum-laengde" name="redskabsrum-laengde">
                 <option value="" disabled selected>Vælg bredde</option>
                 <option>Uden redskabsrum</option>
                 <option>150 cm</option>
@@ -144,7 +144,7 @@
 
         <div class="mb-3">
             <label for="bemærkninger" class="form-label">Evt. bemærkninger / særlige ønsker</label>
-            <textarea class="form-control" id="bemærkninger" rows="3"></textarea>
+            <textarea class="form-control" id="bemærkninger" rows="3" name="bemærkninger"></textarea>
         </div>
 
         <h4 class="fw-bold mt-4">Kontaktoplysninger:</h4>
@@ -154,23 +154,23 @@
         </div>
         <div class="mb-3">
             <label for="adresse" class="form-label">Adresse*</label>
-            <input type="text" class="form-control" id="adresse" placeholder="Adresse (vej + nummer)" required>
+            <input type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse (vej + nummer)" required>
         </div>
         <div class="mb-3">
             <label for="postnummer" class="form-label">Postnummer*</label>
-            <input type="text" class="form-control" id="postnummer" placeholder="Postnummer" required>
+            <input type="text" class="form-control" id="postnummer" name="postnummer" placeholder="Postnummer" required>
         </div>
         <div class="mb-3">
             <label for="by" class="form-label">By*</label>
-            <input type="text" class="form-control" id="by" placeholder="Bynavn" required>
+            <input type="text" class="form-control" id="by" name="by" placeholder="Bynavn" required>
         </div>
         <div class="mb-3">
             <label for="telefon" class="form-label">Telefon</label>
-            <input type="tel" class="form-control" id="telefon" placeholder="Telefon nummer">
+            <input type="tel" class="form-control" id="telefon" name="telefon" placeholder="Telefon nummer">
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email*</label>
-            <input type="email" class="form-control" id="email" placeholder="Din email adresse" required>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Din email adresse" required>
         </div>
 
         <div class="form-check mb-4">
