@@ -1,6 +1,6 @@
 package app.controllers;
 
-import app.exceptions.DatabaseException;
+import app.entities.EmailReceipt;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -18,7 +18,7 @@ public class PlainRoofController {
         String trapeztag = ctx.formParam("trapeztag");
         String shedWidth = ctx.formParam("redskabsrum-bredde");
         String shedLength = ctx.formParam("redskabsrum-laengde");
-        String Notes = ctx.formParam("bemærkninger");
+        String notes = ctx.formParam("bemærkninger");
 
         String name = ctx.formParam("navn");
         String adress = ctx.formParam("adresse");
@@ -27,8 +27,11 @@ public class PlainRoofController {
         String mobil = ctx.formParam("telefon");
         String email = ctx.formParam("email");
 
-        System.out.println(carportWidth);
-        System.out.println(name);
+
+
+        EmailReceipt emailReceipt = new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
+
+
     }
 }
 
