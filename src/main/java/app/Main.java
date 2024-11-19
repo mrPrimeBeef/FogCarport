@@ -1,6 +1,7 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.PlainRoofController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -20,5 +21,7 @@ public class Main {
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
             config.staticFiles.add("/templates");
         }).start(7070);
+
+        PlainRoofController.addRoutes(app, connectionPool);
     }
 }

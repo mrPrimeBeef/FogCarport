@@ -22,7 +22,7 @@
         Ved bestilling medfølger standardbyggevejledning.<br><br>
     </p>
 
-    <form class="bg-white border rounded p-4 shadow-sm w-75 mx-auto">
+    <form method="post" action="fladttag" class="bg-white border rounded p-4 shadow-sm w-75 mx-auto">
         <h4 class="fw-bold mb-3">Carport med fladt tag</h4>
 
         <p>Udfyld nedenstående omhyggeligt og tryk "Bestil tilbud".
@@ -30,7 +30,8 @@
 
         <div class="mb-3">
             <label for="carport-bredde" class="form-label">Carport bredde*</label>
-            <select class="form-select" id="carport-bredde" required>
+            <select class="form-select" id="carport-bredde" name="carport-bredde" required>
+
                 <option value="" disabled selected>Vælg bredde</option>
                 <option>240 cm</option>
                 <option>270 cm</option>
@@ -149,7 +150,7 @@
         <h4 class="fw-bold mt-4">Kontaktoplysninger:</h4>
         <div class="mb-3">
             <label for="navn" class="form-label">Navn*</label>
-            <input type="text" class="form-control" id="navn" placeholder="Fornavn og efternavn" required>
+            <input type="text" class="form-control" id="navn" name="navn" placeholder="Fornavn og efternavn" required>
         </div>
         <div class="mb-3">
             <label for="adresse" class="form-label">Adresse*</label>
