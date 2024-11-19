@@ -2,17 +2,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Frontpage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="/images/favicon-fog.png">
 </head>
 
 <body>
+<header th:replace="fragments :: headerCustomer"></header>
 
 <h1>Welcome to the Javalin / Thymeleaf demo</h1>
 
-<p>This is your first web application in this world</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
+    consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante, eget
+    ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+    Integer venenatis augue nisi, blandit aliquet libero feugiat at. Mauris tempus ipsum a turpis molestie accumsan.
+    Duis eu cursus orci, a sollicitudin sapien. In ut augue ut metus pharetra pharetra vel eu nisi. Nam tincidunt
+    malesuada hendrerit. In massa nibh, scelerisque eget iaculis eu, tristique ac urna.
 
+    Nullam at faucibus justo, sed hendrerit tortor. Sed volutpat tortor sed tellus mollis tempor. Ut augue ligula,
+    mattis quis eleifend finibus, tempor et risus. Nunc sed auctor risus, et porta magna. Curabitur a libero quis est
+    vulputate eleifend. Sed pulvinar ut metus aliquam interdum. Cras hendrerit auctor iaculis. Sed nec pharetra dolor.
+    Aenean ac elementum erat. Fusce scelerisque tristique sem, a laoreet nibh malesuada in. Integer ac enim viverra,
+    facilisis tortor id, cursus nisi. Quisque condimentum magna in risus faucibus, ut sodales diam placerat. In ultrices
+    vehicula dolor, eget consectetur quam ultricies sit amet.
+
+    Phasellus nec lectus eu augue vehicula hendrerit quis ac diam. Fusce egestas vestibulum purus, a luctus neque
+    ultrices quis. Cras vel odio nec nibh sollicitudin accumsan quis a magna. Pellentesque tellus ligula, ultrices ac
+    malesuada eget, vestibulum blandit purus. Curabitur elit justo, dapibus ac ultricies at, volutpat in nulla. Nulla
+    felis odio, iaculis quis justo id, scelerisque dapibus dui. Fusce faucibus est nisl, id ullamcorper augue
+    sollicitudin eu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at augue ut nisl pharetra feugiat ut
+    ac enim.
+
+    Fusce quis nibh nulla. Nullam eleifend ac dui eu tincidunt. Donec in libero tempor, tristique tortor vitae, lobortis
+    tellus. Ut molestie ex ac imperdiet rutrum. Etiam nec pellentesque massa. Orci varius natoque penatibus et magnis
+    dis parturient montes, nascetur ridiculus mus. Aliquam in enim nisl. Morbi malesuada fermentum elit vel accumsan.
+    Donec dui tortor, cursus ac pharetra a, egestas in neque. Curabitur imperdiet ex ut tincidunt varius. Ut nibh velit,
+    feugiat ut orci eget, venenatis placerat dui. Suspendisse in nunc eu risus varius lacinia ut non dolor. Duis et
+    ipsum tempor, facilisis lorem eu, accumsan mi.
+
+    Fusce gravida molestie ante, non pulvinar dui iaculis sed. Aenean eget dapibus leo, in feugiat orci. Class aptent
+    taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque habitant morbi tristique
+    senectus et netus et malesuada fames ac turpis egestas. Orci varius natoque penatibus et magnis dis parturient
+    montes, nascetur ridiculus mus. Nunc blandit purus tellus, non vehicula metus dapibus pellentesque. Phasellus id
+    arcu ac nibh pharetra accumsan. Praesent aliquam eget sem a tempor. Donec at lorem gravida, fermentum erat a,
+    facilisis tellus. Curabitur nec purus sodales, porttitor dui eu, cursus orci.</p>
+
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>
