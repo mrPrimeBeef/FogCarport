@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+    <title th:text="${title}">Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<header th:fragment="headerCustomer">
+    <div class="headerimage">
+        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+    </div>
+
+    <div class="header-text">
+        <div class="left">
+            <a href="customCarport.html" th:href="@{/customCarport}" class="header-link">Individuelle tilpassed carporte</a>
+            <a href="mineordrer.html" th:href="@{/mineordrer}" class="header-link">Mine ordrer</a>
+        </div>
+
+        <div class="right">
+            <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember}">Fog konto</a>
+        </div>
+    </div>
+</header>
+
+<header th:fragment="headerAdmin">
+    <div class="headerimage">
+        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+    </div>
+
+    <div class="header-text">
+        <div class="left">
+            <a href="alleOrdrer.html" class="header-link" th:href="@{/alleOrdrer}">Alle ordrer</a>
+            <a href="alleKunder.html" class="header-link" th:href="@{/alleKunder}">Kunder</a>
+        </div>
+    </div>
+</header>
+
+<footer th:fragment="footer" class="footer-container">
+    <div class="skoleopgave">
+        <p>Skoleopgave <br></p>
+    </div>
+    <div class="TestHjemmeside">
+        <p>Test hjemmeside<br></p>
+    </div>
+    <div class="footerimage">
+        <img src="images/fog-logo.png" th:src="@{/images/fog-logo.png}"/>
+    </div>
+</footer>
+</body>
+</html>
