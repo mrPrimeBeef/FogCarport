@@ -45,10 +45,10 @@ public class EmailReceipt {
         System.out.println("Carport dimensioner:");
         System.out.println("bredde: " + carportWidth + " cm");
         System.out.println("længde: " + carportLength + " cm");
-        System.out.println("Trapeztag: " + trapeztag);
+        System.out.println("trapeztag: " + trapeztag);
         System.out.println();
 
-        System.out.println("redskabskur dimensioner:");
+        System.out.println("Redskabskur dimensioner:");
         System.out.println("bredde: " + shedWidth + " cm");
         System.out.println("længde: " + shedLength + " cm");
         System.out.println();
