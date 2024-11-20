@@ -27,13 +27,6 @@ public class PlainRoofController {
         String mobil = ctx.formParam("telefon");
         String email = ctx.formParam("email");
 
-        System.out.println(carportWidth);
-
-
-
         EmailReceipt emailReceipt = new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
-
-
     }
 }
-
