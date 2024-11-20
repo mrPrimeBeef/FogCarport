@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<!-- HEAD FRAGMENT -->
-<head th:fragment="head">
+<head>
     <title th:text="${title}">Frontpage</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,13 +15,13 @@
 <header th:fragment="headerCustomer">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand">
             <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}" />
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/customCarport}" aria-current="page">Byg-selv carporte</a>
+                    <a class="nav-link active" th:href="@{/customCarport}" href="/" aria-current="page">Byg-selv carporte</a>
                 </li>
             </ul>
             <form class="d-flex">
@@ -33,30 +32,33 @@
 </nav>
 </header>
 
+
 <!-- HEADER FOR ADMIN-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="headerAdmin">
+<header th:fragment="headerAdmin">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand">
             <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}" />
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/alleOrdrer}" aria-current="page">Alle ordrer</a>
+                    <a class="nav-link active" href="#" th:href="@{/alleOrdrer}" aria-current="page">Alle ordrer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/alleKunder}" aria-current="page">Kunder</a>
+                    <a class="nav-link" href="#" th:href="@{/alleKunder}" aria-current="page">Kunder</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+</header>
 
 <!-- FOOTER -->
 <footer class="navbar fixed-bottom navbar-light bg-light" th:fragment="footer">
     <div class="container">
-        <a class="nav-link active" href="#">Skoleopgave</a>
-        <a class="nav-link active" href="#">Test hjemmeside</a>
+        <a class="nav-link active">Skoleopgave</a>
+        <a class="nav-link active">Test hjemmeside</a>
         <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}" />
     </div>
 </footer>
