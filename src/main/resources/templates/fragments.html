@@ -13,15 +13,15 @@
 
 <!-- HEADER FOR CUSTOMER-->
 <header th:fragment="headerCustomer">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
             <a class="navbar-brand">
                 <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
             </a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/customCarport}" href="/" aria-current="page">Byg-selv
+                        <a class="nav-link active" th:href="@{/customCarport}" href="index.html" aria-current="page">Byg-selv
                             carporte</a>
                     </li>
                 </ul>
@@ -35,8 +35,8 @@
 
 <!-- HEADER FOR ADMIN-->
 <header th:fragment="headerAdmin">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
             <a class="navbar-brand">
                 <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
             </a>
@@ -55,8 +55,8 @@
 </header>
 
 <!-- FOOTER -->
-<footer class="navbar fixed-bottom navbar-light bg-light" th:fragment="footer">
-    <div class="container">
+<footer class="navbar fixed-bottom navbar-light bg-white" th:fragment="footer">
+    <div class="container-fluid">
         <a class="nav-link active">Skoleopgave</a>
         <a class="nav-link active">Test hjemmeside</a>
         <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
