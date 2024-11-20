@@ -1,18 +1,20 @@
 package app.controllers;
 
 import app.entities.EmailReceipt;
+import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.ArrayList;
+
 public class PlainRoofController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("fladttag", ctx -> ctx.render("fladttag"));
-        app.post("fladttag", ctx -> postCarportInfo(ctx, connectionPool));
-
+        app.post("fladttag", ctx -> getCarportInfo(ctx, connectionPool));
     }
 
-    private static void postCarportInfo(Context ctx, ConnectionPool connectionPool) {
+    private static void getCarportInfo(Context ctx, ConnectionPool connectionPool) {
         String carportWidth = ctx.formParam("carport-bredde");
         String carportLength = ctx.formParam("carport-laengde");
         String trapeztag = ctx.formParam("trapeztag");
@@ -27,6 +29,23 @@ public class PlainRoofController {
         String mobil = ctx.formParam("telefon");
         String email = ctx.formParam("email");
 
-        EmailReceipt emailReceipt = new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
+        boolean allreadyUser = false;
+        ArrayList<String> emails = AccountMapper.getAllEmailsFromAccount(ctx, connectionPool);
+
+        for (String mail : emails) {
+            if (mail.equals(email)) {
+                allreadyUser = true;
+            }
+        }
+
+        if (!allreadyUser) {
+            AccountMapper.createAccount(name, adress, zip, mobil, email, ctx, connectionPool);
+        }
+
+        new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
+
+        CarportMapper.createCarportInquiry(carportWidth,carportLength,trapeztag,shedWidth,shedLength,ctx,connectionPool);
+
+        ctx.render("tak.html");
     }
 }
