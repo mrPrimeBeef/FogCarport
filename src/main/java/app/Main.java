@@ -23,5 +23,7 @@ public class Main {
         }).start(7070);
 
         PlainRoofController.addRoutes(app, connectionPool);
+
+        app.get("/", ctx -> ctx.render("index.html"));
     }
 }
