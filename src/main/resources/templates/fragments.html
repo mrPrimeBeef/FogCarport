@@ -13,7 +13,8 @@
 </head>
 
 <!-- HEADER FOR CUSTOMER-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="headerCustomer">
+<header th:fragment="headerCustomer">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="#">
             <img class="logo" src="../images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}" />
@@ -30,6 +31,7 @@
         </div>
     </div>
 </nav>
+</header>
 
 <!-- HEADER FOR ADMIN-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="headerAdmin">
