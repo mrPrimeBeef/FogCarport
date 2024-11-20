@@ -20,5 +20,7 @@ public class Main {
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
             config.staticFiles.add("/templates");
         }).start(7070);
+
+        app.get("/", ctx -> ctx.render("index.html"));
     }
 }
