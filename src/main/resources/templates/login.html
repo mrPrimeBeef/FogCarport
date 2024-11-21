@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <!-- head links -->
-<head th:fragment="head">
+<head>
     <title th:text="${title}">Frontpage</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,9 +13,6 @@
 </head>
 
 <body>
-<!-- headerCustomer fragment -->
-<nav th:replace="fragments :: headerCustomer"></nav>
-
 <main class="col d-flex justify-content-center">
 
     <div class="col-2-sm">
@@ -35,11 +32,10 @@
         <button id="sub_button" class="btn btn-primary" type="submit" formaction="/login">Log på</button>
 
     </form>
-    <p class="opret-bruger">Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
     </div>
 </main>
-
-<!-- footer fragment -->
-<footer th:replace="fragments :: footer"></footer>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </html>
