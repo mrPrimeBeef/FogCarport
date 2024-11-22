@@ -5,6 +5,8 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import app.controllers.DeleteMe;
+
 
 public class Main {
     private static final String USER = "postgres";
@@ -22,6 +24,6 @@ public class Main {
         }).start(7070);
 
         app.get("/", ctx -> ctx.render("index.html"));
-        app.get("/svg", ctx -> ctx.render("show_svg.html"));
+        DeleteMe.addRoutes(app, connectionPool);
     }
 }
