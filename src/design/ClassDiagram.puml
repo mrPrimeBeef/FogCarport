@@ -26,7 +26,7 @@ package app {
     class OrderController{
     + static void addRoutes(Javalin app, ConnectionPool connectionPool)
     + static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool)
-    + static void showThankYouPage(Context ctx, ConnectionPool connectionPool)
+    - static void showThankYouPage(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool)
     + static void customerShowOrderPage(Context ctx, ConnectionPool connectionPool)
@@ -51,6 +51,22 @@ package app {
     + static boolean updateOrderStatus(String status, Context ctx, ConnectionPool connectionPool)
     + static List<Order> getAllOrdersByAccountId(int accountId, Context ctx, ConnectionPool connectionPool)
     }
+    class ItemMapper{
+
+    }
+  }
+
+  package Services{
+  package svgEngine {
+  class SVG{
+  }
+  }
+  package Calculator{
+  class calculaterEngien{
+
+  }
+
+  }
   }
 
   package entities{
@@ -94,21 +110,7 @@ package app {
 '         + calculateSubtotal(Cupcake cupcake)
 '         + toString()
 '         }
-     class Calculator{
 
-     }
-     class Carport{
-
-     }
-     class Material{
-
-     }
-     class MaterialList{
-
-     }
-     class MaterialType{
-
-     }
   }
 
   package dto {
@@ -149,6 +151,14 @@ package app {
     OrderMapper --> entities : uses
 
     persistence -->  exceptions : uses
+
+    Calculator --> svgEngine : carport object
+
+    svgEngine --> OrderController : svg String
+
+    Calculator <--> ItemMapper
+
+    OrderController --> Services : carport info
 
 
 }
