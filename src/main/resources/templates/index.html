@@ -1,66 +1,64 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<!-- th:replace="~{fragments :: head('Frontpage')}" -->
 <head>
-    <title th:text="${title}">Frontpage</title>
+    <title>Individuelle tilpassede carporte</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous">
-    <link rel="icon" type="image/x-icon" href="/images/favicon-fog.png">
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
 </head>
-
-<body>
-<!-- headerCustomer fragment -->
+<body class="bg-light">
 <header th:replace="fragments :: headerCustomer"></header>
+<main class="mb-5">
+    <div class="container text-center py-5">
 
-<main>
-    <h1>Welcome to the Javalin / Thymeleaf demo</h1>
-
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet purus in sem tempor lacinia. Cras
-        consectetur mi quis ligula convallis tempor. Sed dictum tincidunt orci viverra tincidunt. Sed ut mollis ante,
-        eget ultrices libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas.
-    </p>
+        <div class="text-white py-5 mb-4">
+            <img src="/images/carportpic.png" th:src="@{/images/carportpic.png}" class="img-fluid">
+        </div>
+        <h3 class="fw-bold">Lad os tegne din carport drøm - bestil et Quick-Byg tilbud</h3>
+        <p class="mt-3">
+            Med et specialudviklet computerprogram kan vi lynhurtigt beregne prisen og udskrive en
+            skitsetegning på en carport indenfor vores standardprogram.<br>
+            Tilbud og skitsetegning fremsendes på mail hurtigst muligt.<br>
+            Ved bestilling medfølger standardbyggevejledning.
+        </p>
+        <p class="fw-bold mt-4">
+            Vælg nedenfor, om du ønsker tilbud på carport med fladt tag eller carport med høj rejsning.
+        </p>
+        <div class="container">
+            <div class="row mt-5 justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <a href="fladttag.html" class="text-decoration-none text-dark">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center"
+                                 style="min-height: 200px;">
+                                <img src="/images/flad.png" th:src="@{/images/flad.png}" alt="Carport ikon" class="mb-3"
+                                     style="width: 100px; height: auto;">
+                                <h5 class="card-title text-center mb-2">Carport med fladt tag</h5>
+                                <p class="text-center mb-0">Bestil tilbud på Quick-Byg carport med fladt tag →</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center justify-content-center"
+                             style="min-height: 200px;">
+                            <div class="text-center">
+                                <img src="/images/rejs.png" th:src="@{/images/rejs.png}" alt="Carport ikon" class="mb-3"
+                                     style="width: 100px; height: auto;">
+                                <h5 class="card-title mb-0">Carport høj rejsning</h5>
+                                <p class="mb-0">Kommer snart</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
-<!-- footer fragment -->
 <footer th:replace="fragments :: footer"></footer>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </html>
