@@ -2,12 +2,12 @@ package app.services;
 
 public class Svg {
 
-    private StringBuilder svg;
+    private static final String SVG_TEMPLATE = "";
+    private StringBuilder svg = new StringBuilder();
 
     public Svg(String viewBox, String width, String height) {
-        svg = new StringBuilder();
         svg.append("");
-//        String.format("%f tester %s tester", 100, "nej");
+//        String.format("%f tester %s tester", 100.0, "nej");
 
 
     }
