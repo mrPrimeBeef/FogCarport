@@ -1,7 +1,7 @@
 package app;
 
 import app.config.ThymeleafConfig;
-import app.controllers.PlainRoofController;
+import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -22,7 +22,7 @@ public class Main {
             config.staticFiles.add("/templates");
         }).start(7070);
 
-        PlainRoofController.addRoutes(app, connectionPool);
+        OrderController.addRoutes(app, connectionPool);
 
         app.get("/", ctx -> ctx.render("index.html"));
     }
