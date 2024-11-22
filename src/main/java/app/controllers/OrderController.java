@@ -5,6 +5,7 @@ import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -13,15 +14,15 @@ import java.util.ArrayList;
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("fladttag", ctx -> ctx.render("fladttag"));
-        app.post("fladttag", ctx -> getCarportInfo(ctx, connectionPool));
+        app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
     }
 
-    private static void getCarportInfo(Context ctx, ConnectionPool connectionPool) {
-        String carportWidth = ctx.formParam("carport-bredde");
-        String carportLength = ctx.formParam("carport-laengde");
+    private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
+        int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
+        int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
         String trapeztag = ctx.formParam("trapeztag");
-        String shedWidth = ctx.formParam("redskabsrum-bredde");
-        String shedLength = ctx.formParam("redskabsrum-laengde");
+        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
+        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
         String notes = ctx.formParam("bemærkninger");
 
         String name = ctx.formParam("navn");
@@ -49,10 +50,14 @@ public class OrderController {
 
             new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
 
-            CarportMapper.createCarportInquiry(carportWidth, carportLength, trapeztag, shedWidth, shedLength, ctx, connectionPool);
+           OrderMapper.createOrder(carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
 
         } catch (DatabaseException | AccountCreationException) {
 
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        } catch (AccountCreationException e) {
+            throw new RuntimeException(e);
         }
 
         ctx.render("tak.html");

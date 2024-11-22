@@ -1,11 +1,11 @@
 package app.entities;
 
 public class EmailReceipt {
-    private String carportWidth;
-    private String carportLength;
+    private int carportWidth;
+    private int carportLength;
     private String trapeztag;
-    private String shedWidth;
-    private String shedLength;
+    private int shedWidth;
+    private int shedLength;
     private String notes;
     private String name;
     private String address;
@@ -14,7 +14,7 @@ public class EmailReceipt {
     private String mobil;
     private String email;
 
-    public EmailReceipt(String carportWidth, String carportLength, String trapeztag, String shedWidth, String shedLength,
+    public EmailReceipt(int carportWidth, int carportLength, String trapeztag, int shedWidth, int shedLength,
                         String notes, String name, String address, String zip, String city, String mobil, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;

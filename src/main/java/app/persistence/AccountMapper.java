@@ -32,7 +32,8 @@ public class AccountMapper {
 
     public static boolean createAccount(String name, String adress, String zip, String mobil, String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
         boolean success = false;
-        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, mobil) VALUES (?, ?, ?, ?, ?, ?, ?) ";
+        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, mobil)" +
+                     " VALUES (?, ?, ?, ?, ?, ?, ?) ";
         try (Connection connection = connectionPool.getConnection();
         PreparedStatement ps = connection.prepareStatement(sql)){
 
