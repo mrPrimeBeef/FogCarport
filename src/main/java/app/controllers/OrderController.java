@@ -6,20 +6,20 @@ import io.javalin.http.Context;
 import app.persistence.ConnectionPool;
 import app.services.svgEngine.CarportSvg;
 
-public class DeleteMe {
+public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("svg", ctx -> showSvg(ctx, connectionPool));
+        app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
     }
 
-    private static void showSvg(Context ctx, ConnectionPool connectionPool) {
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
         int carportLengthCm = 780;
         int carportWidthCm = 600;
         int carportHeightCm = 0;
 
         ctx.attribute("carportTopView", CarportSvg.topView(carportLengthCm, carportWidthCm));
-        ctx.render("show_svg.html");
+        ctx.render("saelgerordre.html");
     }
 
 }

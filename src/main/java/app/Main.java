@@ -5,7 +5,7 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
-import app.controllers.DeleteMe;
+import app.controllers.OrderController;
 
 
 public class Main {
@@ -24,6 +24,6 @@ public class Main {
         }).start(7070);
 
         app.get("/", ctx -> ctx.render("index.html"));
-        DeleteMe.addRoutes(app, connectionPool);
+        OrderController.addRoutes(app, connectionPool);
     }
 }
