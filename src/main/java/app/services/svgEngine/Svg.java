@@ -1,4 +1,4 @@
-package app.services.svg;
+package app.services.svgEngine;
 
 import java.util.Locale;
 
@@ -24,7 +24,9 @@ public class Svg {
 
     private static final String SVG_ARROW_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" marker-start=\"url(#beginArrow)\" marker-end=\"url(#endArrow)\"/>";
 
-    private StringBuilder svg = new StringBuilder();
+    private static final String SVG_TEXT_TEMPLATE = "<text x=\"%f\" y=\"%f\">%s</text>";
+
+    private StringBuilder svgString = new StringBuilder();
 
 //    public Svg(String viewBox, String width, String height) {
 //        svg.append("");
@@ -35,34 +37,33 @@ public class Svg {
 //    }
     public Svg(int x, int y, String viewBox, String width) {
         Locale.setDefault(new Locale("US"));
-
-        svg.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
-        svg.append(SVG_ARROW_DEFS);
+        svgString.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
+        svgString.append(SVG_ARROW_DEFS);
     }
 
     public void addRectangle(double x, double y, double width, double height, String style) {
-        svg.append(String.format(SVG_RECT_TEMPLATE, x, y, width, height, style));
+        svgString.append(String.format(SVG_RECT_TEMPLATE, x, y, width, height, style));
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String style) {
-        svg.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
+    public void addLine(double x1, double y1, double x2, double y2) {
+        svgString.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2));
     }
 
     public void addArrow(double x1, double y1, double x2, double y2) {
-        // Kald addLine med en style der indeholder pilehoveder
-        svg.append(String.format(SVG_ARROW_TEMPLATE, x1, y1, x2, y2));
+        svgString.append(String.format(SVG_ARROW_TEMPLATE, x1, y1, x2, y2));
     }
 
-    public void addText(int x, int y, int rotation, String text) {
+    public void addText(double x, double y, int rotation, String text) {
+        svgString.append(String.format(SVG_TEXT_TEMPLATE, x, y, text));
     }
 
     public void addSvg(Svg innerSvg) {
-        svg.append(innerSvg.toString());
+        svgString.append(innerSvg.toString());
     }
 
     public String toString() {
 
-        return svg.append("</svg>").toString();
+        return svgString.append("</svg>").toString();
     }
 
 }

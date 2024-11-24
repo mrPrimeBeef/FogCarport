@@ -4,7 +4,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.persistence.ConnectionPool;
-import app.services.svg.CarportSvg;
+import app.services.svgEngine.CarportSvg;
 
 public class DeleteMe {
 
