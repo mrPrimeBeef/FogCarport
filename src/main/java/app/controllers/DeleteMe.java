@@ -18,11 +18,11 @@ public class DeleteMe {
 
         Locale.setDefault(new Locale("US"));
 
-        Svg carportSvg = new Svg(0, 0, "0 0 855 690", "100%", "auto");
+        Svg carportSvg = new Svg(0, 0, "0 0 855 690", "100%");
 
 
-        for (int y = 10; y <= 600; y += 50) {
-            carportSvg.addRectangle(10, y, 600, 10, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+        for (int x = 10; x <= 600; x += 50) {
+            carportSvg.addRectangle(x, 10, 10, 600, "stroke-width:1px; stroke:#000000; fill: #ffffff");
         }
 
         carportSvg.addLine(100,100,200,400, "");

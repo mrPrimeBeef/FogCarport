@@ -7,6 +7,6 @@ h1 {
 }
 
 /*Bør der styles på id istedet for på class?*/
-.carport-svg-topview {
+#carport-svg-topview {
     max-width: 400px;
 }
