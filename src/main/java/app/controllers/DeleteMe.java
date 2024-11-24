@@ -1,12 +1,10 @@
 package app.controllers;
 
-import java.util.Locale;
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.persistence.ConnectionPool;
-import app.services.Svg;
+import app.services.svg.CarportSvg;
 
 public class DeleteMe {
 
@@ -16,18 +14,11 @@ public class DeleteMe {
 
     private static void showSvg(Context ctx, ConnectionPool connectionPool) {
 
-        Locale.setDefault(new Locale("US"));
+        int carportLengthCm = 780;
+        int carportWidthCm = 600;
+        int carportHeightCm = 0;
 
-        Svg carportSvg = new Svg(0, 0, "0 0 855 690", "100%");
-
-
-        for (int x = 10; x <= 600; x += 50) {
-            carportSvg.addRectangle(x, 10, 10, 600, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-        }
-
-        carportSvg.addLine(100,100,200,400, "");
-
-        ctx.attribute("drawing", carportSvg.toString());
+        ctx.attribute("carportTopView", CarportSvg.topView(carportLengthCm, carportWidthCm));
         ctx.render("show_svg.html");
     }
 

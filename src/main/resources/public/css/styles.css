@@ -6,7 +6,12 @@ h1 {
     font-size: 3rem;
 }
 
-/*Bør der styles på id istedet for på class?*/
-#carport-svg-topview {
-    max-width: 400px;
+#carport-side-view {
+    padding: 10px;
+    max-width: 800px;
+}
+
+#carport-top-view {
+    padding: 10px;
+    max-width: 800px;
 }

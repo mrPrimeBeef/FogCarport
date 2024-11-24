@@ -1,4 +1,6 @@
-package app.services;
+package app.services.svg;
+
+import java.util.Locale;
 
 public class Svg {
 
@@ -16,9 +18,11 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
-    private static final String SVG_RECT_TEMPLATE = "<rect x=\"%d\" y=\"%d\" width=\"%f\" height=\"%f\" style=\"%s\"/>";
+    private static final String SVG_RECT_TEMPLATE = "<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"%s\"/>";
 
-    private static final String SVG_LINE_TEMPLATE = "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\"/>";
+    private static final String SVG_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\"/>";
+
+    private static final String SVG_ARROW_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" marker-start=\"url(#beginArrow)\" marker-end=\"url(#endArrow)\"/>";
 
     private StringBuilder svg = new StringBuilder();
 
@@ -30,20 +34,23 @@ public class Svg {
 //
 //    }
     public Svg(int x, int y, String viewBox, String width) {
+        Locale.setDefault(new Locale("US"));
+
         svg.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
         svg.append(SVG_ARROW_DEFS);
     }
 
-    public void addRectangle(int x, int y, double width, double height, String style) {
+    public void addRectangle(double x, double y, double width, double height, String style) {
         svg.append(String.format(SVG_RECT_TEMPLATE, x, y, width, height, style));
     }
 
-    public void addLine(int x1, int y1, int x2, int y2, String style) {
+    public void addLine(double x1, double y1, double x2, double y2, String style) {
         svg.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
     }
 
-    public void addArrow(int x1, int y1, int x2, int y2, String style) {
+    public void addArrow(double x1, double y1, double x2, double y2) {
         // Kald addLine med en style der indeholder pilehoveder
+        svg.append(String.format(SVG_ARROW_TEMPLATE, x1, y1, x2, y2));
     }
 
     public void addText(int x, int y, int rotation, String text) {
