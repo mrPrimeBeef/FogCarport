@@ -28,6 +28,13 @@ public class CarportSvg {
         // En linje
         svg.addLine(600, 300, 300, 500);
 
+
+        // Tilføjelse af indre SVG
+        Svg innerSvg = new Svg(200, 50, "0 0 400 400", "100%");
+        innerSvg.addLine(0,0,400,400);
+        innerSvg.addLine(400,0,0,400);
+        svg.addSvg(innerSvg);
+
         return svg.toString();
     }
 }

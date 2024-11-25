@@ -1,12 +1,11 @@
 package app;
 
-import app.config.ThymeleafConfig;
-import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import app.config.ThymeleafConfig;
+import app.persistence.ConnectionPool;
 import app.controllers.OrderController;
-
 
 public class Main {
     private static final String USER = "postgres";
