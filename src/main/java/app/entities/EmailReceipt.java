@@ -9,13 +9,13 @@ public class EmailReceipt {
     private String notes;
     private String name;
     private String address;
-    private String zip;
+    private int zip;
     private String city;
     private String mobil;
     private String email;
 
     public EmailReceipt(int carportWidth, int carportLength, String trapeztag, int shedWidth, int shedLength,
-                        String notes, String name, String address, String zip, String city, String mobil, String email) {
+                        String notes, String name, String address, int zip, String city, String mobil, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.trapeztag = trapeztag;

@@ -9,11 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class OrderMapper {
-    public static boolean createOrder(int carportWidth, int carportLength, int shedWidth, int shedLength, Context ctx, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, Context ctx, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
         boolean sucess = false;
 
-        String sql = "INSERT INTO orderr carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
-                " VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orderr (carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
+                     " VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -28,11 +28,11 @@ public class OrderMapper {
             if (rowsAffected == 0) {
                 sucess = true;
             } else {
-                throw new OrderCreationException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder methode");
+                throw new OrderCreationException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder methode", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method", e.getMessage());
         }
         return sucess;
     }

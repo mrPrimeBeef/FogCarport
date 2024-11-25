@@ -4,10 +4,7 @@ import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class AccountMapper {
@@ -30,31 +27,54 @@ public class AccountMapper {
         }
     }
 
-    public static boolean createAccount(String name, String adress, String zip, String mobil, String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
-        boolean success = false;
-        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, mobil)" +
-                     " VALUES (?, ?, ?, ?, ?, ?, ?) ";
+    public static int getIdFromAccountEmail(String email, Context ctx, ConnectionPool connectionPool) {
+        int accountId;
+        String sql = "select id from account where email = ?";
+
         try (Connection connection = connectionPool.getConnection();
-        PreparedStatement ps = connection.prepareStatement(sql)){
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            accountId = rs.getInt("id");
+            return accountId;
+        } catch (SQLException e) {
+
+        }
+    return 0;
+    }
+
+    public static int createAccount(String name, String adress, int zip, String phone, String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
+        int accountId;
+        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?) ";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, email);
             ps.setString(2, "1234");
             ps.setString(3, name);
             ps.setString(4, "Kunde");
             ps.setString(5, adress);
-            ps.setString(6, zip);
-            ps.setString(7, mobil);
+            ps.setInt(6, zip);
+            ps.setString(7, phone);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
                 throw new AccountCreationException("Fejl ved oprettelse af ny bruger.");
-            } else{
-                success = true;
+            } else {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    accountId = rs.getInt(1);
+                } else {
+                    throw new AccountCreationException("Kunne ikke hente det genererede account ID.");
+                }
             }
-        } catch (SQLException e){
+
+        } catch (SQLException e) {
             throw new AccountCreationException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
         }
-        return success;
+        return accountId;
     }
-
-    }
+}

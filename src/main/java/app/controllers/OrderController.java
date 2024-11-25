@@ -28,30 +28,16 @@ public class OrderController {
 
         String name = ctx.formParam("navn");
         String adress = ctx.formParam("adresse");
-        String zip = ctx.formParam("postnummer");
+        int zip = Integer.parseInt(ctx.formParam("postnummer"));
         String city = ctx.formParam("by");
-        String mobil = ctx.formParam("telefon");
+        String phone = ctx.formParam("telefon");
         String email = ctx.formParam("email");
 
-        boolean allreadyUser = false;
-        ArrayList<String> emails = null;
-
         try {
-            emails = AccountMapper.getAllEmailsFromAccount(ctx, connectionPool);
+            int accountId = createOrGetAccountId(email, name, adress, zip, phone, ctx, connectionPool);
+            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
 
-            for (String mail : emails) {
-                if (mail.equals(email)) {
-                    allreadyUser = true;
-                }
-            }
-
-            if (!allreadyUser) {
-                AccountMapper.createAccount(name, adress, zip, mobil, email, ctx, connectionPool);
-            }
-
-            new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
-
-            OrderMapper.createOrder(carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
+            new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, phone, email);
 
         } catch (AccountCreationException e) {
             ctx.attribute("ErrorMessage", new AccountCreationException(e.getMessage()));
@@ -64,5 +50,24 @@ public class OrderController {
             ctx.render("error.html");
         }
         ctx.render("tak.html");
+    }
+
+    private static int createOrGetAccountId(String email, String name, String adress, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
+        int accountId;
+        boolean allreadyUser = false;
+        ArrayList<String> emails;
+        emails = AccountMapper.getAllEmailsFromAccount(ctx, connectionPool);
+
+        for (String mail : emails) {
+            if (mail.equals(email)) {
+                allreadyUser = true;
+            }
+        }
+
+        if (!allreadyUser) {
+            accountId = AccountMapper.createAccount(name, adress, zip, phone, email, ctx, connectionPool);
+            return accountId;
+        }
+        return AccountMapper.getIdFromAccountEmail(email, ctx, connectionPool);
     }
 }
