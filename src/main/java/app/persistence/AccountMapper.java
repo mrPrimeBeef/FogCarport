@@ -30,10 +30,10 @@ public class AccountMapper {
                 String role = rs.getString("role");
                 return new Account(accountId, name, address, zip, phone, Email, password, role);
             } else {
-                throw new DatabaseException("Forkert email eller adgangskode.");
+                throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB error in login.", e.getMessage());
+            throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
         }
     }
 }
