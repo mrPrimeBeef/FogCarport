@@ -18,7 +18,7 @@ public class OrderController {
         int carportWidthCm = 600;
         int carportHeightCm = 0;
 
-        ctx.attribute("carportTopView", CarportSvg.topView(carportLengthCm, carportWidthCm));
+        ctx.attribute("carportSvgTopView", CarportSvg.topView(carportLengthCm, carportWidthCm));
         ctx.render("saelgerordre.html");
     }
 
