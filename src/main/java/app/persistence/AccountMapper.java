@@ -27,22 +27,25 @@ public class AccountMapper {
         }
     }
 
-    public static int getIdFromAccountEmail(String email, Context ctx, ConnectionPool connectionPool) {
-        int accountId;
-        String sql = "select id from account where email = ?";
+    public static int getIdFromAccountEmail(String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
+        int accountId = 0;
+        String sql = "SELECT account_id FROM account WHERE email = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, email);
 
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
-            accountId = rs.getInt("id");
-            return accountId;
-        } catch (SQLException e) {
+            if (rs.next()) {
+                accountId = rs.getInt("account_id");
+            }
 
+        } catch (SQLException e) {
+            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail" ,e.getMessage());
         }
-    return 0;
+
+        return accountId;
     }
 
     public static int createAccount(String name, String adress, int zip, String phone, String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
