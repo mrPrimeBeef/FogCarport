@@ -1,0 +1,74 @@
+@startuml
+
+abstract class Structure {
+    - CalculationStrategy calculationStrategy
+    + List<PlacedMaterial> getPlacedMaterials()
+    + int getWidth()
+    + int getLength()
+    + int getHeight()
+}
+
+class Carport {
+    + extends Structure
+    + Carport(int width, int length, int height)
+    + addShed(Shed shed)
+    + Shed getShed()
+}
+
+class Shed {
+    + extends Structure
+    + Shed(int width, int length, int height)
+    + void attachToCarport(Carport carport)
+    + Carport getAttachedCarport()
+}
+
+interface CalculationStrategy {
+    + List<PlacedMaterial> calculateStructure()
+}
+
+class CarportCalculationStrategy {
+    + implements CalculationStrategy
+    + List<PlacedMaterial> calculateStructure()
+}
+
+class ShedCalculationStrategy {
+    + implements CalculationStrategy
+    + List<PlacedMaterial> calculateStructure()
+}
+
+class Material {
+    - String type
+    - int length
+    + Material(String type, int quantity)
+    + String toString()
+}
+
+class PlacedMaterial {
+    - Material material
+    - double x
+    - double y
+    - double z
+    + PlacedMaterial(Material material, double x, double y, double z)
+    + Material getMaterial()
+    + double getX()
+    + double getY()
+    + double getZ()
+    + int materialId(itemMapper)
+    + String toString()
+}
+
+enum MaterialType {
+    WOOD
+    METAL
+    PLASTIC
+}
+
+Structure <|-- Carport
+Structure <|-- Shed
+Structure *-- CalculationStrategy
+CalculationStrategy <|.. CarportCalculationStrategy
+CalculationStrategy <|.. ShedCalculationStrategy
+Material --> MaterialType
+PlacedMaterial *-- Material
+
+@enduml
