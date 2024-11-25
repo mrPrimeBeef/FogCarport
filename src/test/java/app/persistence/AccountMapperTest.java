@@ -1,20 +1,16 @@
 package app.persistence;
 
-import app.exceptions.AccountCreationException;
-import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import app.exceptions.AccountCreationException;
+import app.exceptions.DatabaseException;
 
 class AccountMapperTest {
 
@@ -211,7 +207,7 @@ class AccountMapperTest {
     void getAllEmailsFromAccount() throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
 
-        emails = AccountMapper.getAllEmailsFromAccount(connectionPool);
+        emails = AccountMapper.getAllAccountEmails(connectionPool);
         assertEquals(3, emails.size());
 
         String mail = emails.get(0);
@@ -224,7 +220,7 @@ class AccountMapperTest {
 
     @Test
     void getIdFromAccountEmail() throws AccountCreationException {
-        int actual = AccountMapper.getIdFromAccountEmail("test@test.dk", connectionPool);
+        int actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
         assertEquals(1, actual);
 
 //        Will fail

@@ -1,16 +1,15 @@
 package app.persistence;
 
-import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import app.exceptions.DatabaseException;
+import app.exceptions.OrderCreationException;
 
 class OrderMapperTest {
     private static final String USER = "postgres";

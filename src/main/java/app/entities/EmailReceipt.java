@@ -11,7 +11,7 @@ public class EmailReceipt {
     private String address;
     private int zip;
     private String city;
-    private String mobil;
+    private String phone;
     private String email;
 
     public EmailReceipt(int carportWidth, int carportLength, String trapeztag, int shedWidth, int shedLength,
@@ -26,7 +26,7 @@ public class EmailReceipt {
         this.address = address;
         this.zip = zip;
         this.city = city;
-        this.mobil = mobil;
+        this.phone = phone;
         this.email = email;
 
         printEmail();
@@ -38,7 +38,7 @@ public class EmailReceipt {
         System.out.println("Addresse: " + address);
         System.out.println("Postnummer: " + zip);
         System.out.println("By: " + city);
-        System.out.println("Mobile: " + mobil);
+        System.out.println("Telfon: " + phone);
         System.out.println("Email: " + email);
         System.out.println();
 
@@ -48,7 +48,7 @@ public class EmailReceipt {
         System.out.println("trapeztag: " + trapeztag);
         System.out.println();
 
-        System.out.println("Redskabskur dimensioner:");
+        System.out.println("Redskabsrum dimensioner:");
         System.out.println("bredde: " + shedWidth + " cm");
         System.out.println("længde: " + shedLength + " cm");
         System.out.println();

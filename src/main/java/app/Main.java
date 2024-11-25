@@ -1,10 +1,11 @@
 package app;
 
+import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinThymeleaf;
+
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
-import io.javalin.Javalin;
-import io.javalin.rendering.template.JavalinThymeleaf;
 
 
 public class Main {
@@ -23,7 +24,5 @@ public class Main {
         }).start(7070);
 
         OrderController.addRoutes(app, connectionPool);
-
-        app.get("/", ctx -> ctx.render("index.html"));
     }
 }

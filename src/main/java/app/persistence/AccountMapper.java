@@ -1,17 +1,16 @@
 package app.persistence;
 
-import app.exceptions.AccountCreationException;
-import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
-
 import java.sql.*;
 import java.util.ArrayList;
 
+import app.exceptions.AccountCreationException;
+import app.exceptions.DatabaseException;
+
 public class AccountMapper {
-    public static ArrayList<String> getAllEmailsFromAccount(ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
 
-        String sql = "select email from account";
+        String sql = "SELECT email FROM account";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -27,7 +26,7 @@ public class AccountMapper {
         }
     }
 
-    public static int getIdFromAccountEmail(String email, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountCreationException {
         int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
@@ -42,7 +41,7 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail" ,e.getMessage());
+            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail", e.getMessage());
         }
 
         return accountId;
