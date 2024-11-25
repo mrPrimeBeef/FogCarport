@@ -4,10 +4,7 @@ import java.util.Locale;
 
 public class Svg {
 
-    private static final String SVG_TEMPLATE = "<svg version=\"1.1\"\n" +
-            "x=\"%d\" y=\"%d\"\n" +
-            "viewBox=\"%s\" width=\"%s\" \n" +
-            "preserveAspectRatio=\"xMinYMin\">";
+    private static final String SVG_TEMPLATE = "<svg version=\"1.1\" x=\"%f\" y=\"%f\" viewBox=\"%s\" width=\"%s\" preserveAspectRatio=\"xMinYMin\">";
 
     private static final String SVG_ARROW_DEFS = "<defs>\n" +
             "        <marker id=\"beginArrow\" markerWidth=\"12\" markerHeight=\"12\" refX=\"0\" refY=\"6\" orient=\"auto\">\n" +
@@ -28,14 +25,7 @@ public class Svg {
 
     private StringBuilder svgString = new StringBuilder();
 
-//    public Svg(String viewBox, String width, String height) {
-//        svg.append("");
-
-    /// /        String.format("%f tester %s tester", 100.0, "nej");
-//
-//
-//    }
-    public Svg(int x, int y, String viewBox, String width) {
+    public Svg(double x, double y, String viewBox, String width) {
         Locale.setDefault(new Locale("US"));
         svgString.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
         svgString.append(SVG_ARROW_DEFS);
