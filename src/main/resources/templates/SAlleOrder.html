@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Individuelle tilpassede carporte</title>
+    <title>Sælger</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -26,7 +26,7 @@
             <th>Status</th>
         </tr>
         <tr th:each="orderAccountDto: ${orderAccountDtos}">
-            <td><a href="??.html" th:href="@{/??(accound_it=${orderAccountDto.account_id})}"
+            <td><a href="??.html" th:href="@{/??(account_id=${orderAccountDto.account_id})}"
                    th:text="${orderAccountDto.memberEmail}"></a></td>
             <td><a href="??.html" th:href="@{/??(orderr_id=${orderMemberDto.orderr_id})}"
                    th:text="${orderAccountDto.orderr_id}"></a></td>
@@ -37,7 +37,6 @@
             <td th:text="${orderAccountDto.status}"></td>
         </tr>
     </table>
-
 </main>
 <footer th:replace="fragments :: footer"></footer>
 </body>
