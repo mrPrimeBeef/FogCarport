@@ -4,15 +4,19 @@ public class Account {
 
     private int accountId;
     private String name;
+    private String address;
+    private String zip;
+    private String phone;
     private String email;
-    private String password;
     private String role;
 
-    public Account(int accountId, String name, String email, String password, String role) {
+    public Account(int accountId, String name, String address, String zip, String phone, String email, String password, String role) {
         this.accountId = accountId;
         this.name = name;
+        this.address = address;
+        this.zip = zip;
+        this.phone = phone;
         this.email = email;
-        this.password = password;
         this.role = role;
     }
 
@@ -24,12 +28,20 @@ public class Account {
         return name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAddress(){
+        return address;
     }
 
-    public String getPassword() {
-        return password;
+    public String getZip(){
+        return zip;
+    }
+
+    public String getPhone(){
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getRole() {
@@ -42,8 +54,10 @@ public class Account {
         return "Member{" +
                 "memberId=" + accountId +
                 ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", zip='" + zip + '\'' +
+                ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }
