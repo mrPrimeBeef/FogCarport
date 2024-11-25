@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class Svg {
 
-    private static final String SVG_TEMPLATE = "<svg version=\"1.1\" x=\"%f\" y=\"%f\" viewBox=\"%s\" width=\"%s\" preserveAspectRatio=\"xMinYMin\">";
+    private static final String SVG_TEMPLATE = "<svg version=\"1.1\" x=\"%s\" y=\"%s\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
 
     private static final String SVG_ARROW_DEFS = "<defs>\n" +
             "        <marker id=\"beginArrow\" markerWidth=\"12\" markerHeight=\"12\" refX=\"0\" refY=\"6\" orient=\"auto\">\n" +
@@ -25,9 +25,9 @@ public class Svg {
 
     private StringBuilder svgString = new StringBuilder();
 
-    public Svg(double x, double y, String viewBox, String width) {
+    public Svg(String x, String y, String width, String viewBox) {
         Locale.setDefault(new Locale("US"));
-        svgString.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
+        svgString.append(String.format(SVG_TEMPLATE, x, y, width, viewBox));
         svgString.append(SVG_ARROW_DEFS);
     }
 
@@ -39,7 +39,7 @@ public class Svg {
         svgString.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2));
     }
 
-    public void addArrow(double x1, double y1, double x2, double y2) {
+    public void addDimensionLine(double x1, double y1, double x2, double y2) {
         svgString.append(String.format(SVG_ARROW_TEMPLATE, x1, y1, x2, y2));
     }
 
