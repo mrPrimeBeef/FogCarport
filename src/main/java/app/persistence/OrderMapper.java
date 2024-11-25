@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class OrderMapper {
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, Context ctx, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
         boolean success = false;
 
         String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
@@ -27,7 +27,7 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
 
-            if (rowsAffected == 1) { // Rettet: success når én række er påvirket
+            if (rowsAffected == 1) {
                 success = true;
             } else {
                 throw new OrderCreationException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");

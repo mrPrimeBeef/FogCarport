@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class AccountMapper {
-    public static ArrayList<String> getAllEmailsFromAccount(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<String> getAllEmailsFromAccount(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
 
         String sql = "select email from account";
@@ -27,7 +27,7 @@ public class AccountMapper {
         }
     }
 
-    public static int getIdFromAccountEmail(String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int getIdFromAccountEmail(String email, ConnectionPool connectionPool) throws AccountCreationException {
         int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
@@ -48,7 +48,7 @@ public class AccountMapper {
         return accountId;
     }
 
-    public static int createAccount(String name, String adress, int zip, String phone, String email, Context ctx, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountCreationException {
         int accountId;
         String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?) ";

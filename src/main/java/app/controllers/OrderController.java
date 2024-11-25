@@ -35,7 +35,7 @@ public class OrderController {
 
         try {
             int accountId = createOrGetAccountId(email, name, adress, zip, phone, ctx, connectionPool);
-            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
+            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
 
             new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, phone, email);
 
@@ -56,7 +56,7 @@ public class OrderController {
         int accountId;
         boolean allreadyUser = false;
         ArrayList<String> emails;
-        emails = AccountMapper.getAllEmailsFromAccount(ctx, connectionPool);
+        emails = AccountMapper.getAllEmailsFromAccount(connectionPool);
 
         for (String mail : emails) {
             if (mail.equals(email)) {
@@ -65,9 +65,9 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            accountId = AccountMapper.createAccount(name, adress, zip, phone, email, ctx, connectionPool);
+            accountId = AccountMapper.createAccount(name, adress, zip, phone, email, connectionPool);
             return accountId;
         }
-        return AccountMapper.getIdFromAccountEmail(email, ctx, connectionPool);
+        return AccountMapper.getIdFromAccountEmail(email, connectionPool);
     }
 }
