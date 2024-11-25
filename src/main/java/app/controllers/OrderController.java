@@ -3,6 +3,7 @@ package app.controllers;
 import app.entities.EmailReceipt;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
+import app.exceptions.OrderCreationException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
@@ -50,16 +51,18 @@ public class OrderController {
 
             new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, adress, zip, city, mobil, email);
 
-           OrderMapper.createOrder(carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
+            OrderMapper.createOrder(carportWidth, carportLength, shedWidth, shedLength, ctx, connectionPool);
 
-        } catch (DatabaseException | AccountCreationException) {
-
-        } catch (DatabaseException e) {
-            throw new RuntimeException(e);
         } catch (AccountCreationException e) {
-            throw new RuntimeException(e);
+            ctx.attribute("ErrorMessage", new AccountCreationException(e.getMessage()));
+            ctx.render("error.html");
+        } catch (OrderCreationException e) {
+            ctx.attribute("ErrorMessage", new OrderCreationException(e.getMessage()));
+            ctx.render("error.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("ErrorMessage", new DatabaseException(e.getMessage()));
+            ctx.render("error.html");
         }
-
         ctx.render("tak.html");
     }
 }
