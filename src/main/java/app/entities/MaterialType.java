@@ -2,10 +2,9 @@ package app.entities;
 
 public enum MaterialType {
 
-    PLANED_WOOD,
-    PRESSURE_TREATED_WOOD,
-    BRACKET,
-    SCREW,
-    PLASTIC_ROOFING
-
+    TRYKIMP_TRAE,
+    UBH_TRAE,
+    PLASTIK,
+    METAL,
+    UNKNOWN;
 }
