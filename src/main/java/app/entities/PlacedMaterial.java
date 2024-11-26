@@ -2,9 +2,8 @@ package app.entities;
 
 public class PlacedMaterial {
     Material material;
-    double x;
-    double y;
-    double z;
+    double x, y, z;
+    double rotationX, rotationY, rotationZ;
 
     public PlacedMaterial(Material material, double x, double y, double z) {
         this.material = material;
@@ -27,5 +26,17 @@ public class PlacedMaterial {
 
     public double getZ() {
         return z;
+    }
+
+    void setX(double x){
+        this.x = x;
+    }
+
+    void setY(double y){
+        this.y = y;
+    }
+
+    void setZ(double z){
+        this.z = z;
     }
 }
