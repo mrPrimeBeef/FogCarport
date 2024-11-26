@@ -49,7 +49,7 @@ public class OrderController {
             ctx.render("error.html");
         }
        // ctx.render("tak.html");
-        showThankYouPage(ctx, connectionPool);
+        showThankYouPage(name, email, ctx);
 
     }
 
@@ -72,8 +72,9 @@ public class OrderController {
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
 
-    private static void showThankYouPage(Context ctx, ConnectionPool connectionPool) {
-        System.out.println("hej fra showthank");
+    private static void showThankYouPage(String name, String email, Context ctx) {
+        ctx.attribute("navn",name);
+        ctx.attribute("email",email);
         ctx.render("tak.html");
 
     }
