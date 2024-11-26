@@ -1,5 +1,6 @@
 package app;
 
+import app.controllers.AccountController;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -23,6 +24,7 @@ public class Main {
             config.staticFiles.add("/templates");
         }).start(7070);
 
+        AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
     }
 }
