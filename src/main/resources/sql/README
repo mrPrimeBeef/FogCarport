@@ -1,0 +1,3 @@
+Husk at lave en ny database (med navnet fog).
+Scriptet sletter alt i databasen, og starter uden nogen data ind til videre.
+Der bliver lavet en public og test
