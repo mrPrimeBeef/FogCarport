@@ -1,10 +1,5 @@
 package app.persistence;
 
-import app.dto.OverviewOrderAccountDto;
-import app.exceptions.DatabaseException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,10 +9,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
 
-class OrderMapperTest {
+class AccountMapperTest {
+
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
@@ -208,18 +204,37 @@ class OrderMapperTest {
     }
 
     @Test
-    void createOrder() throws OrderCreationException, DatabaseException {
-        boolean actual = OrderMapper.createOrder(1, 200, 200, 200, 200, connectionPool);
-        assertTrue(actual);
+    void getAllEmailsFromAccount() throws DatabaseException {
+        ArrayList<String> emails = new ArrayList<>();
+
+        emails = AccountMapper.getAllAccountEmails(connectionPool);
+        assertEquals(3, emails.size());
+
+        String mail = emails.get(0);
+        assertEquals("test@test.dk", mail);
+
+
+        mail = emails.get(1);
+        assertNotEquals("test@test.dk", mail);
     }
 
-    @test
-    void getOverviewOrderAccountDtos() throws DatabaseException {
-        ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+    @Test
+    void getIdFromAccountEmail() throws AccountCreationException {
+        int actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
+        assertEquals(1, actual);
 
-        assertEquals(3, OverviewOrderAccountDtos.size());
-        assertEquals(1, OverviewOrderAccountDtos.get(1).getAccountId());
-        assertNotEquals(1, OverviewOrderAccountDtos.size());
 
+        actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
+        assertNotEquals(0,actual);
+    }
+
+    @Test
+    void createAccount() throws AccountCreationException {
+        int actual = AccountMapper.createAccount("String name", "String adress", 2100, "String phone", "String email", connectionPool);
+        assertEquals(4, actual);
+
+
+        actual = AccountMapper.createAccount("String name2", "String adress2", 2100, "String phone2", "String email2", connectionPool);
+        assertNotEquals(4, actual);
     }
 }

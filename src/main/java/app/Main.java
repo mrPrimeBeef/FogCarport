@@ -1,10 +1,11 @@
 package app;
 
+import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinThymeleaf;
+
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
-import io.javalin.Javalin;
-import io.javalin.rendering.template.JavalinThymeleaf;
 
 
 public class Main {
