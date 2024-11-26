@@ -18,6 +18,7 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
+        app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -66,4 +67,14 @@ public class OrderController {
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
+
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
+//        int carportLengthCm = 780;
+//        int carportWidthCm = 600;
+//        int carportHeightCm = 0;
+
+//        ctx.attribute("carportSvgTopView", CarportSvg.topView(carportLengthCm, carportWidthCm));
+        ctx.render("saelgerordre.html");
+    }
+
 }
