@@ -29,9 +29,9 @@ public class AccountMapper {
                 String role = rs.getString("role");
                 return new Account(accountId, name, address, phone, Email, password, role);
             } else {
-                throw new DatabaseException("Forkert email eller kode, prøv igen."); //Skal dobbelt tjekke om det er det rigtige som skal stå her.
+                throw new DatabaseException("Forkert email eller kode, prøv igen."); //TODO skal enten have sin egen AccountLoginException eller ændre AccountCreationException til AccountException.
             }
-        } catch (SQLException e) { //Skal dobbelt tjekke om det er det rigtige som skal stå her.
+        } catch (SQLException e) {
             throw new DatabaseException("Fejl i login." , "an error happend in login.", e.getMessage());
         }
     }
