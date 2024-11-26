@@ -6,7 +6,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.EmailReceipt;
-import app.entities..Account;
+import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
@@ -70,30 +70,8 @@ public class OrderController {
     }
 
     private static void showThankYouPage(Context ctx, ConnectionPool connectionPool) {
-        Account currentAccount = ctx.sessionAttribute("currentAccount");
-
-        try {
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
-            if (orderlines.isEmpty()) {
-                ctx.attribute("errorMessage", "Læg noget i kurven for at købe.");
-                showOrderingPage(ctx, connectionPool);
-                return;
-            }
-
-            double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.getOrderPrice(activeOrderNumber, connectionPool);
-            if (totalOrderPrice > memberBalance) {
-                ctx.attribute("errorMessage", "Der er ikke nok penge på din konto til at gennemføre ordren.");
-                ctx.render("errorAlreadyLogin.html");
-                return;
-            }
 
 
-            ctx.attribute("activeOrderNumber", activeOrderNumber);
-            ctx.render("tak.html");
 
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
-        }
     }
 }
