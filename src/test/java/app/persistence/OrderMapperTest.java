@@ -1,10 +1,5 @@
 package app.persistence;
 
-import app.dto.OverviewOrderAccountDto;
-import app.exceptions.DatabaseException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,8 +9,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.exceptions.DatabaseException;
+import app.dto.OverviewOrderAccountDto;
 import app.exceptions.OrderCreationException;
+import app.exceptions.DatabaseException;
 
 class OrderMapperTest {
     private static final String USER = "postgres";
@@ -213,7 +209,7 @@ class OrderMapperTest {
         assertTrue(actual);
     }
 
-    @test
+    @Test
     void getOverviewOrderAccountDtos() throws DatabaseException {
         ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
 
