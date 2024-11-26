@@ -45,6 +45,7 @@ package app {
       + static boolean updateEmail(Context ctx, ConnectionPool connectionPool)
       + static Arraylist<String> getAllEmailsFromAccount(ctx, connectionPool)
       + static int getIdFromAccountEmail(email, ctx, connectionPool)
+
     }
     class OrderMapper{
     + static boolean createOrder(int carportWidth, int carportLength,(rest of caport info), Context ctx, ConnectionPool connectionPool)
@@ -158,11 +159,15 @@ package app {
 
   class DatabaseException{
   }
+
   class AccountCreationException{
   }
   class OrderCreationException{
   }
   }
+
+  }
+
     Main --> controllers : uses
 
     AccountController --> AccountMapper : uses

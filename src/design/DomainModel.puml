@@ -1,0 +1,50 @@
+@startuml
+object Kunde {
++Kontaktinformationer
+}
+object Sælger {
+(Som udgangspunkt én sælger pr. kunde,
+men i tilfælde af fravær skal sælgerne
+kunne servicere hinandens kunder)
+}
+object Carport {
++Stolper
++Rem
++Spær
++Stern
++Hulbånd
++Tagbeklædning
++Søm, skruer, beslag
++Evt. skur
++Evt. vægbeklædning
+}
+object Stykliste
+object Tegningssæt {
+(Ovenfra, fra siden, forfra, evt. 3D)
+}
+object Ordre {
++Ordrenr.
++Dato
++Total pris
+}
+object Ordrelinje {
++Varenr.
++Antal
++Pris for dette antal
+}
+object Vare{
+(Alle vare i Fogs sortiment)
++Varenr.
++Beskrivelse
++Kostpris eks. moms
++Salgspris eks. moms
+}
+
+Kunde "1" -- "1..*" Ordre
+Ordre "1" -- "1" Carport
+Carport "1" -- "1" Tegningssæt
+Carport "1" -- "1" Stykliste
+Stykliste "1" -- "*" Ordrelinje
+Vare "1" -- "0..*" Ordrelinje
+
+@enduml
