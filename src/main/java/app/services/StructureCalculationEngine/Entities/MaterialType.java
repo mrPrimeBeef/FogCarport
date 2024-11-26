@@ -1,4 +1,4 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
 
 public enum MaterialType {
 

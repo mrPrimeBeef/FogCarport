@@ -1,6 +1,8 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
 
 import app.persistence.ConnectionPool;
+import app.services.StructureCalculationEngine.CarportCalculationStrategy;
+import app.services.StructureCalculationEngine.RoofType;
 
 public class Carport extends Structure{
 

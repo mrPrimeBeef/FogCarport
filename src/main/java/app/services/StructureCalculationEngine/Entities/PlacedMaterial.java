@@ -1,4 +1,4 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
 
 public class PlacedMaterial {
     Material material;
@@ -28,15 +28,15 @@ public class PlacedMaterial {
         return z;
     }
 
-    void setX(double x){
+    public void setX(double x){
         this.x = x;
     }
 
-    void setY(double y){
+    public void setY(double y){
         this.y = y;
     }
 
-    void setZ(double z){
+    public void setZ(double z){
         this.z = z;
     }
 }

@@ -1,4 +1,6 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
+
+import app.services.StructureCalculationEngine.CalculationStrategy;
 
 import java.sql.SQLException;
 import java.util.List;

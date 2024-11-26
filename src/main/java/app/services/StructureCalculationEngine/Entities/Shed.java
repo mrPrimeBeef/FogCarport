@@ -1,4 +1,6 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
+
+import app.services.StructureCalculationEngine.ShedCalculationStrategy;
 
 public class Shed extends Structure{
 

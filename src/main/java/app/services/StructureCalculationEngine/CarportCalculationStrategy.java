@@ -1,9 +1,13 @@
-package app.entities;
+package app.services.StructureCalculationEngine;
 
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.ItemMapper;
 import app.persistence.ItemSearchBuilder;
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.StructureCalculationEngine.Entities.Material;
+import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
+import app.services.StructureCalculationEngine.Entities.Structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,12 +80,12 @@ public class CarportCalculationStrategy implements CalculationStrategy{
                 PlacedMaterial placedPillar = new PlacedMaterial(clonedMaterial, x, y, 0);
 
                 placedMaterialList.add(placedPillar);
-                float length = placedPillar.material.getLengthCm();
-                float width = placedPillar.material.getWidthMm()/10;
-                float height = placedPillar.material.getHeightMm()/10;
-                placedPillar.material.setHeightMm(length);
-                placedPillar.material.setLengthCm(width);
-                placedPillar.material.setWidthMm(width);
+                float length = placedPillar.getMaterial().getLengthCm();
+                float width = placedPillar.getMaterial().getWidthMm()/10;
+                float height = placedPillar.getMaterial().getHeightMm()/10;
+                placedPillar.getMaterial().setHeightMm(length);
+                placedPillar.getMaterial().setLengthCm(width);
+                placedPillar.getMaterial().setWidthMm(width);
             }
         }
     }
@@ -97,8 +101,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             placedBeam.setX(placedBeam.getX());
             placedMaterialList.add(placedBeam);
 
-            placedBeam.material.setHeightMm(placedBeam.material.getHeightMm()/10);
-            placedBeam.material.setWidthMm(placedBeam.material.getWidthMm()/10);
+            placedBeam.getMaterial().setHeightMm(placedBeam.getMaterial().getHeightMm()/10);
+            placedBeam.getMaterial().setWidthMm(placedBeam.getMaterial().getWidthMm()/10);
         }
     }
 
@@ -130,11 +134,11 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             placedRafter.setX(placedRafter.getX());
             placedMaterialList.add(placedRafter);
 
-            float length = placedRafter.material.getLengthCm();
-            float width = placedRafter.material.getWidthMm();
+            float length = placedRafter.getMaterial().getLengthCm();
+            float width = placedRafter.getMaterial().getWidthMm();
 
-            placedRafter.material.setHeightMm(placedRafter.material.getHeightMm()/10);
-            placedRafter.material.setWidthMm(placedRafter.material.getWidthMm()/10);
+            placedRafter.getMaterial().setHeightMm(placedRafter.getMaterial().getHeightMm()/10);
+            placedRafter.getMaterial().setWidthMm(placedRafter.getMaterial().getWidthMm()/10);
         }
     }
 }

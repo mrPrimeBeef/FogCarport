@@ -1,6 +1,6 @@
 package app.persistence;
 
-import app.entities.Material;
+import app.services.StructureCalculationEngine.Entities.Material;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;

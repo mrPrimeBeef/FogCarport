@@ -1,4 +1,7 @@
-package app.entities;
+package app.services.StructureCalculationEngine;
+
+import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
+import app.services.StructureCalculationEngine.Entities.Structure;
 
 import java.util.List;
 

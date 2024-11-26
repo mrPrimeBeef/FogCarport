@@ -1,4 +1,4 @@
-package app.entities;
+package app.services.StructureCalculationEngine.Entities;
 
 public class Material {
 
@@ -44,7 +44,7 @@ public class Material {
         }
     }
 
-    Material cloneMaterial(Material original) {
+    public Material cloneMaterial(Material original) {
         return new Material(
                 original.materialId,
                 original.name,
