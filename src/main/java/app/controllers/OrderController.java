@@ -1,6 +1,6 @@
 package app.controllers;
 
-import app.dto.OrderAccountDto;
+import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
@@ -25,8 +25,8 @@ public class OrderController {
 //        }
 
         try {
-            ArrayList<OrderAccountDto> orderAccountDtos = OrderMapper.getAllOrderAccountDtos(connectionPool);
-            ctx.attribute("orderAccountDtos", orderAccountDtos);
+            ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+            ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
             ctx.render("saelgeralleorder.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", e.getMessage());

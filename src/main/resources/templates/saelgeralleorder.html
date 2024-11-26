@@ -11,32 +11,35 @@
 </head>
 <body class="bg-light">
 <header th:replace="fragments :: headerAdmin"></header>
-<main class="">
+<main class=" text-center">
 
-    <h2>Alle ordrer for alle kunder</h2>
-
-    <table>
-        <tr>
-            <th>Ordrenr.</th>
-            <th>Email</th>
-            <th>Henvendelse</th>
-            <th>Dato betalt</th>
-            <th>Dato færdig</th>
-            <th>Pris</th>
-            <th>Status</th>
-        </tr>
-        <tr th:each="orderAccountDto: ${orderAccountDtos}">
-            <td><a href="??.html" th:href="@{/??(account_id=${orderAccountDto.account_id})}"
-                   th:text="${orderAccountDto.memberEmail}"></a></td>
-            <td><a href="saelgerordre.html" th:href="@{/saelgerordre(orderr_id=${orderMemberDto.orderr_id})}"
-                   th:text="${orderAccountDto.orderr_id}"></a></td>
-            <td th:text="${orderAccountDto.datePlaced}"></td>
-            <td th:text="${orderAccountDto.dateCompleted}"></td>
-            <td th:text="${orderAccountDto.datePaid}"></td>
-            <td th:text="${orderAccountDto.salesPrice}"></td>
-            <td th:text="${orderAccountDto.status}"></td>
-        </tr>
-    </table>
+    <h2 class="mt-5">Alle ordrer for alle kunder</h2>
+    <div class="d-flex flex-column justify-content-around p-0 m-5">
+        <table class="table table-striped table-bordered">
+            <tr class="justify-content-around">
+                <th>Ordrenr.</th>
+                <th>Email</th>
+                <th>Henvendelse</th>
+                <th>Dato betalt</th>
+                <th>Dato færdig</th>
+                <th>Pris</th>
+                <th>Status</th>
+            </tr>
+            <tbody class="table-group-divider">
+            <tr th:each="OverviewOrderAccountDtos: ${OverviewOrderAccountDtos}">
+                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(order_id=${OverviewOrderAccountDtos.orderId})}"
+                       th:text="${OverviewOrderAccountDtos.orderId}"></a></td>
+                <td><a href="??.html" th:href="@{/??(account_id=${OverviewOrderAccountDtos.accountId})}"
+                       th:text="${OverviewOrderAccountDtos.email}"></a></td>
+                <td th:text="${OverviewOrderAccountDtos.datePlaced}"></td>
+                <td th:text="${OverviewOrderAccountDtos.dateCompleted}"></td>
+                <td th:text="${OverviewOrderAccountDtos.datePaid}"></td>
+                <td th:text="${OverviewOrderAccountDtos.salesPrice}"></td>
+                <td th:text="${OverviewOrderAccountDtos.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 <footer th:replace="fragments :: footer"></footer>
 </body>

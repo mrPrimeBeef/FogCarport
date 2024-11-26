@@ -2,7 +2,7 @@ package app.dto;
 
 import java.util.Date;
 
-public class OrderAccountDto {
+public class OverviewOrderAccountDto {
     private int orderId;
     private int accountId;
     private String email;
@@ -12,7 +12,7 @@ public class OrderAccountDto {
     private double salesPrice;
     private String status;
 
-    public OrderAccountDto(int orderId, int accountId, String email, Date datePlaced, Date datePaid, Date dateCompleted, double salesPrice, String status) {
+    public OverviewOrderAccountDto(int orderId, int accountId, String email, Date datePlaced, Date datePaid, Date dateCompleted, double salesPrice, String status) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
