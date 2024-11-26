@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.persistence.AccountMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -64,5 +65,24 @@ public class OrderController {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
+    }
+
+    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
+        int accountId;
+        boolean allreadyUser = false;
+        ArrayList<String> emails;
+        emails = AccountMapper.getAllAccountEmails(connectionPool);
+
+        for (String mail : emails) {
+            if (mail.equals(email)) {
+                allreadyUser = true;
+            }
+        }
+
+        if (!allreadyUser) {
+            accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return accountId;
+        }
+        return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
 }
