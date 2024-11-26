@@ -216,6 +216,5 @@ class OrderMapperTest {
         assertEquals(3, OverviewOrderAccountDtos.size());
         assertEquals(1, OverviewOrderAccountDtos.get(1).getAccountId());
         assertNotEquals(1, OverviewOrderAccountDtos.size());
-
     }
 }
