@@ -29,10 +29,10 @@ public class AccountMapper {
                 String role = rs.getString("role");
                 return new Account(accountId, name, address, zip, phone, Email, password, role);
             } else {
-                throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
+                throw new DatabaseException("Forkert email eller kode, prøv igen."); //Skal dobbelt tjekke om det er det rigtige som skal stå her.
             }
-        } catch (SQLException e) {
-            throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
+        } catch (SQLException e) { //Skal dobbelt tjekke om det er det rigtige som skal stå her.
+            throw new DatabaseException("Fejl i login." , "an error happend in login.", e.getMessage());
         }
     }
 
