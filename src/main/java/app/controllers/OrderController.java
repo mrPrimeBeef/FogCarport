@@ -6,6 +6,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.EmailReceipt;
+import app.entities..Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
@@ -18,6 +19,7 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
+        app.get("tak", ctx -> ctx.render("tak.html"));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -65,5 +67,44 @@ public class OrderController {
             return accountId;
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+    }
+
+    private static void thanksForYourOrder(Context ctx, ConnectionPool connectionPool) {
+        Account currentAccount = ctx.sessionAttribute("currentAccount");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at købe.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+
+            int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
+            if (orderlines.isEmpty()) {
+                ctx.attribute("errorMessage", "Læg noget i kurven for at købe.");
+                showOrderingPage(ctx, connectionPool);
+                return;
+            }
+
+            double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
+            double totalOrderPrice = OrderMapper.getOrderPrice(activeOrderNumber, connectionPool);
+            if (totalOrderPrice > memberBalance) {
+                ctx.attribute("errorMessage", "Der er ikke nok penge på din konto til at gennemføre ordren.");
+                ctx.render("errorAlreadyLogin.html");
+                return;
+            }
+
+            double newBalance = memberBalance - totalOrderPrice;
+            MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
+            OrderMapper.updateOrderStatus(activeOrderNumber, "Completed", connectionPool);
+
+            ctx.attribute("activeOrderNumber", activeOrderNumber);
+            ctx.render("tak.html");
+
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
+            ctx.render("errorAlreadyLogin.html");
+        }
     }
 }
