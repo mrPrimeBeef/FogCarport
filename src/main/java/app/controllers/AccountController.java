@@ -19,7 +19,6 @@ public class AccountController {
 
         try {
             Account account = AccountMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("currentAccount", account);
 
             if (account.getRole().equals("admin")) {
                 return;

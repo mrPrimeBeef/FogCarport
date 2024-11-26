@@ -3,10 +3,39 @@ package app.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 
+import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 
 public class AccountMapper {
+
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM member WHERE email=? AND password=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String zip = rs.getString("zip");
+                String phone = rs.getString("phone");
+                String Email = rs.getString("email");
+                String role = rs.getString("role");
+                return new Account(accountId, name, address, zip, phone, Email, password, role);
+            } else {
+                throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(""); //Jeg skal lige finde ud af hvad der skal stå i beskeden
+        }
+    }
+
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
 
