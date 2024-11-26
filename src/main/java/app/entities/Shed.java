@@ -36,4 +36,8 @@ public class Shed extends Structure{
     public int getHeight() {
         return 0;
     }
+
+    void setHeight(int height){
+        this.height = height;
+    }
 }
