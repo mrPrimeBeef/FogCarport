@@ -9,7 +9,7 @@ import app.persistence.AccountMapper;
 
 public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("login.html"));
+        app.get("login", ctx -> ctx.render("login.html"));
         app.post("login", ctx -> login(ctx, connectionPool));
     }
 
@@ -21,6 +21,12 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
 
             if (account.getRole().equals("admin")) {
+                System.out.println("logget på som admin");
+                return;
+            }
+
+            if (account.getRole().equals("customer")) {
+                System.out.println("logget på som kunde");
                 return;
             }
 
