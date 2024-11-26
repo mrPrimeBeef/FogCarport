@@ -10,7 +10,7 @@ import app.exceptions.DatabaseException;
 public class AccountMapper {
 
     public static Account login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM member WHERE email=? AND password=?";
+        String sql = "SELECT * FROM account WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
