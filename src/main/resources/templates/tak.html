@@ -15,15 +15,13 @@
 <main class="mb-5">
     <div class="container text-center py-5">
 
-        <tr th:each="account : ${accounts}">
             <h1 class="fw-bold"> Tak for din henveldelse </h1>
-            <h1 class="fx-bold" th:text=" ${account.name} + 'på'"></h1>
-            <p class="mt-3">design selv carporte</p>
+            <h1 class="fx-bold" th:text=" ${navn} + ' på'"></h1>
+            <h2 class="mt-3">Quick-Byg carport</h2>
             <p class="mt-3"
-               th:text="'Du får en kvittering på ' +${account.mail} + ' også vender vi tilbage ligeså snart vi har kigget på den'"></p>
+               th:text="'Vi sender din kvittering til ' +${email} + ' også vender vi tilbage ligeså snart vi har kigget på den'"></p>
 
             <a class="nav-link" href="#" th:href="@{/index}" aria-current="page">Tilbage til forsiden</a>
-        </tr>
 
         <img src="/images/carportpic.png" th:src="@{/images/carportpic.png}" class="img-fluid">
     </div>
