@@ -23,11 +23,11 @@ public class AccountMapper {
                 int accountId = rs.getInt("account_id");
                 String name = rs.getString("name");
                 String address = rs.getString("address");
-                String zip = rs.getString("zip");
+                //int zip = rs.getInt("zip");
                 String phone = rs.getString("phone");
                 String Email = rs.getString("email");
                 String role = rs.getString("role");
-                return new Account(accountId, name, address, zip, phone, Email, password, role);
+                return new Account(accountId, name, address, phone, Email, password, role);
             } else {
                 throw new DatabaseException("Forkert email eller kode, prøv igen."); //Skal dobbelt tjekke om det er det rigtige som skal stå her.
             }
