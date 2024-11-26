@@ -41,7 +41,7 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail", e.getMessage());
+            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
         }
 
         return accountId;
