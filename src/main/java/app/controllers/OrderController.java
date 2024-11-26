@@ -14,7 +14,6 @@ import app.persistence.OrderMapper;
 import app.persistence.ConnectionPool;
 
 
-
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -47,27 +46,23 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
+    }
 
-
-
-
-                ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
-                ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
-                ctx.render("saelgeralleorder.html");
-            } catch (DatabaseException e) {
-                ctx.attribute("errorMessage", e.getMessage());
-                ctx.render("error.html");
-            }
-            ctx.render("tak.html");
-        }
-    static void salesrepShowAllOrdersPage (Context ctx, ConnectionPool connectionPool) {
+    static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
 //        Account currentUser = ctx.sessionAttribute("currentUser");
 //        if (currentUser == null || !currentUser.getRole().equals("admin")) {
 //            ctx.attribute("errorMessage", "Kun adgang for admin.");
 //            ctx.render("error.html");
 //            return;
 //        }
+
+        try {
+            ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+            ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
+            ctx.render("saelgeralleorder.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
     }
-
-
 }
