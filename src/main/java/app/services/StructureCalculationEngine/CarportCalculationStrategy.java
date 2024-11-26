@@ -50,14 +50,14 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             Material beamMaterial = ItemMapper.searchSingleItem(filtersBeam, pool);
             calculateBeams(carport, beamMaterial);
 
-            //ItemSearchBuilder builderRafter = new ItemSearchBuilder();
-            //Map<String, Object> filtersRafter = builderRafter
-            //        .setItemType("Spær")
-            //        .setLengthCm(carport.getWidth())
-            //        .build();
+            ItemSearchBuilder builderRafter = new ItemSearchBuilder();
+            Map<String, Object> filtersRafter = builderRafter
+                    .setItemType("Spær")
+                    .setLengthCm(carport.getLength())
+                    .build();
 
-            //Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
-            //calculateRafters(carport, rafterMaterial);
+            Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
+            calculateRafters(carport, rafterMaterial);
 
         } catch (DatabaseException e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     }
 
     private void calculateBeams(Carport carport, Material beamMaterial) {
-        int amountOfBeamsX = (carport.getLength()-defaultOverhang*2)/maxPillarDistance % maxPillarDistance + 1;
+        int amountOfBeamsX = (carport.getLength() - defaultOverhang * 2) / maxPillarDistance % maxPillarDistance + 1;
 
         PlacedMaterial placedBeam = null;
         for (int j = 0; j <= amountOfBeamsX; j++) {
@@ -101,34 +101,18 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             placedBeam.setX(placedBeam.getX());
             placedMaterialList.add(placedBeam);
 
-            placedBeam.getMaterial().setHeightMm(placedBeam.getMaterial().getHeightMm()/10);
-            placedBeam.getMaterial().setWidthMm(placedBeam.getMaterial().getWidthMm()/10);
+            placedBeam.getMaterial().setHeightMm(placedBeam.getMaterial().getHeightMm() / 10);
+            placedBeam.getMaterial().setWidthMm(placedBeam.getMaterial().getWidthMm() / 10);
         }
     }
 
     private void calculateRafters(Carport carport, Material rafterMaterial){
 
-        int amountOfRaftersY = (carport.getLength()-defaultOverhang*2)/maxPillarDistance % maxPillarDistance + 1;
-        float bestDistanceBetweenRafters = 0;
-        float bestRafterAmount = 0;
-        float smallestRemainder = 1000;
-        int rafterAmount = 1;
-
-        for(rafterAmount = 1; rafterAmount <= carport.getLength() / 50; rafterAmount++){
-            float distanceBetweenRafters = (float)carport.getLength() / rafterAmount;
-            if(distanceBetweenRafters >= 50 && distanceBetweenRafters <= 60){
-                float remainder = Math.abs(distanceBetweenRafters - Math.round(distanceBetweenRafters));
-                if(remainder < smallestRemainder){
-                    smallestRemainder = remainder;
-                    bestDistanceBetweenRafters = distanceBetweenRafters;
-                    bestRafterAmount = rafterAmount;
-                }
-            }
-        }
+        int amountOfRaftersY = (carport.getWidth() / 50);
 
         PlacedMaterial placedRafter = null;
         for(int k = 0; k <= amountOfRaftersY; k++){
-            float y = k * ((float) (carport.getLength() - 2 * defaultOverhang) / amountOfRaftersY) + defaultOverhang;
+            float y = k * ((float) (carport.getWidth()) / amountOfRaftersY);
             Material clonedMaterial = rafterMaterial.cloneMaterial(rafterMaterial);
             placedRafter = new PlacedMaterial(clonedMaterial, 0, y, 0);
             placedRafter.setX(placedRafter.getX());
@@ -137,8 +121,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             float length = placedRafter.getMaterial().getLengthCm();
             float width = placedRafter.getMaterial().getWidthMm();
 
-            placedRafter.getMaterial().setHeightMm(placedRafter.getMaterial().getHeightMm()/10);
-            placedRafter.getMaterial().setWidthMm(placedRafter.getMaterial().getWidthMm()/10);
+            placedRafter.getMaterial().setLengthCm(width/10);
+            placedRafter.getMaterial().setWidthMm(length);
         }
     }
 }

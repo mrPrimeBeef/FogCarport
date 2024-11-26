@@ -9,38 +9,47 @@ abstract class Structure {
 }
 
 class Carport {
-    + extends Structure
     + Carport(int width, int length, int height)
-    + addShed(Shed shed)
-    + Shed getShed()
+    + getShed()
+    + setShedHeight()
 }
 
 class Shed {
-    + extends Structure
     + Shed(int width, int length, int height)
     + void attachToCarport(Carport carport)
     + Carport getAttachedCarport()
 }
 
 interface CalculationStrategy {
-    + List<PlacedMaterial> calculateStructure()
+    - List<PlacedMaterial> calculateStructure
 }
 
 class CarportCalculationStrategy {
-    + implements CalculationStrategy
-    + List<PlacedMaterial> calculateStructure()
+    - List<PlacedMaterial> calculateStructure
+    + calculatePillars(Carport carport, Material pillarMaterial)
+    + calculateBeams(Carport carport, Material beamMaterial)
 }
 
 class ShedCalculationStrategy {
-    + implements CalculationStrategy
-    + List<PlacedMaterial> calculateStructure()
+    - List<PlacedMaterial> calculateStructure
 }
 
 class Material {
-    - String type
-    - int length
+    - int materialId
+    - String name
+    - String description
+    - String itemType
+    - float lengthCm
+    - float widthMm
+    - heightMm;
+    - int packageAmount
+    - String packageType
+    - float costPrice
     + Material(String type, int quantity)
+    + Material cloneMaterial(Material original)
     + String toString()
+    + getters()
+    + setter()
 }
 
 class PlacedMaterial {
