@@ -3,10 +3,37 @@ package app.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 
+import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 
 public class AccountMapper {
+    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<Account> accounts = new ArrayList<>();
+
+        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String mail = rs.getString("email");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                int zipCode = rs.getInt("zip_code");
+                String phone = rs.getString("phone");
+                String city = rs.getString("city");
+
+                accounts.add(new Account(name, address, zipCode, phone, mail, city));
+            }
+            return accounts;
+
+        } catch (SQLException e) {
+        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+        }
+    }
+
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
 
