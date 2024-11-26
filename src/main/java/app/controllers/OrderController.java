@@ -69,17 +69,10 @@ public class OrderController {
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
 
-    private static void thanksForYourOrder(Context ctx, ConnectionPool connectionPool) {
+    private static void showThankYouPage(Context ctx, ConnectionPool connectionPool) {
         Account currentAccount = ctx.sessionAttribute("currentAccount");
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at købe.");
-            ctx.render("error.html");
-            return;
-        }
 
         try {
-
-            int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
             if (orderlines.isEmpty()) {
                 ctx.attribute("errorMessage", "Læg noget i kurven for at købe.");
@@ -95,16 +88,12 @@ public class OrderController {
                 return;
             }
 
-            double newBalance = memberBalance - totalOrderPrice;
-            MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
-            OrderMapper.updateOrderStatus(activeOrderNumber, "Completed", connectionPool);
 
             ctx.attribute("activeOrderNumber", activeOrderNumber);
             ctx.render("tak.html");
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
-            ctx.render("errorAlreadyLogin.html");
         }
     }
 }
