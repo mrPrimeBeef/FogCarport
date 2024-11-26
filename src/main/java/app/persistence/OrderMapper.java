@@ -27,7 +27,7 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salesPrice = rs.getDouble("sales_price");
+                double salesPrice = rs.getDouble("sale_price");
                 String status = rs.getString("status");
                 orderAccountDtos.add(new OrderAccountDto(orderId, accountId,email,datePlaced,datePaid, dateCompleted, salesPrice, status));
             }

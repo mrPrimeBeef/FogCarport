@@ -28,7 +28,7 @@
         <tr th:each="orderAccountDto: ${orderAccountDtos}">
             <td><a href="??.html" th:href="@{/??(account_id=${orderAccountDto.account_id})}"
                    th:text="${orderAccountDto.memberEmail}"></a></td>
-            <td><a href="??.html" th:href="@{/??(orderr_id=${orderMemberDto.orderr_id})}"
+            <td><a href="saelgerordre.html" th:href="@{/saelgerordre(orderr_id=${orderMemberDto.orderr_id})}"
                    th:text="${orderAccountDto.orderr_id}"></a></td>
             <td th:text="${orderAccountDto.datePlaced}"></td>
             <td th:text="${orderAccountDto.dateCompleted}"></td>

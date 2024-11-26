@@ -22,8 +22,6 @@ public class Main {
             config.staticFiles.add("/templates");
         }).start(7070);
 
-        app.get("/", ctx -> ctx.render("index.html"));
-
         OrderController.addRoutes(app, connectionPool);
     }
 }
