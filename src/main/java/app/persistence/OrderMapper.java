@@ -65,7 +65,8 @@ public class OrderMapper {
                 Date dateCompleted = rs.getDate("date_completed");
                 double salesPrice = rs.getDouble("sale_price");
                 String status = rs.getString("status");
-                DetailOrderAccountDtos.add(new DetailOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salesPrice, status));
+                DetailOrderAccountDtos.add(new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, salesPrice, status));
+
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos", e.getMessage());
