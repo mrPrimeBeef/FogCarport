@@ -213,9 +213,9 @@ class AccountMapperTest {
         String mail = emails.get(0);
         assertEquals("test@test.dk", mail);
 
-//        Will fail
-//        mail = emails.get(1);
-//        assertEquals(mail,"test@test.dk");
+
+        mail = emails.get(1);
+        assertNotEquals("test@test.dk", mail);
     }
 
     @Test
@@ -223,9 +223,9 @@ class AccountMapperTest {
         int actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
         assertEquals(1, actual);
 
-//        Will fail
-//        actual = AccountMapper.getIdFromAccountEmail("test@test.dk", connectionPool);
-//        assertEquals(0,actual);
+
+        actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
+        assertNotEquals(0,actual);
     }
 
     @Test
@@ -233,8 +233,8 @@ class AccountMapperTest {
         int actual = AccountMapper.createAccount("String name", "String adress", 2100, "String phone", "String email", connectionPool);
         assertEquals(4, actual);
 
-//        Will fail
-//        actual = AccountMapper.createAccount("String name2", "String adress2", 2100, "String phone2", "String email2", connectionPool);
-//        assertEquals(4, actual);
+
+        actual = AccountMapper.createAccount("String name2", "String adress2", 2100, "String phone2", "String email2", connectionPool);
+        assertNotEquals(4, actual);
     }
 }
