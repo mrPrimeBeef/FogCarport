@@ -14,7 +14,7 @@ public class OrderMapper {
     public static ArrayList<OrderAccountDto> getAllOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OrderAccountDto> orderAccountDtos = new ArrayList<>();
 
-        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, sales_price, status FROM orderr JOIN account USING(account_id) ORDER BY status, date_placed";
+        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, sale_price, status FROM orderr JOIN account USING(account_id) ORDER BY status, date_placed";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

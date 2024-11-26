@@ -27,7 +27,7 @@ public class OrderController {
         try {
             ArrayList<OrderAccountDto> orderAccountDtos = OrderMapper.getAllOrderAccountDtos(connectionPool);
             ctx.attribute("orderAccountDtos", orderAccountDtos);
-            ctx.render("saelgeralleorder");
+            ctx.render("saelgeralleorder.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
