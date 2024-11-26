@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import app.entities.Account;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -236,5 +237,12 @@ class AccountMapperTest {
 
         actual = AccountMapper.createAccount("String name2", "String adress2", 2100, "String phone2", "String email2", connectionPool);
         assertNotEquals(4, actual);
+    }
+
+    @Test
+    void login() throws DatabaseException{
+        Account account = null;
+        account = AccountMapper.login("String email", "String password",connectionPool);
+        assertEquals("mail",account.getEmail());
     }
 }
