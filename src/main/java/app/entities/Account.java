@@ -5,12 +5,12 @@ public class Account {
     private int accountId;
     private String name;
     private String address;
-    private String zip;
+    private int zip;
     private String phone;
     private String email;
     private String role;
 
-    public Account(int accountId, String name, String address, String zip, String phone, String email, String password, String role) {
+    public Account(int accountId, String name, String address, int zip, String phone, String email, String password, String role) {
         this.accountId = accountId;
         this.name = name;
         this.address = address;
@@ -32,7 +32,7 @@ public class Account {
         return address;
     }
 
-    public String getZip(){
+    public int getZip(){
         return zip;
     }
 
