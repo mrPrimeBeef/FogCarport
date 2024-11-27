@@ -1,8 +1,39 @@
 package app.services.svgEngine;
 
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
+
+import java.sql.SQLDataException;
+import java.sql.SQLException;
+import java.util.List;
+
 public class CarportSvg {
 
-    public static String topView(int carportLengthCm, int carportWidthCm) {
+    public static String topView(Carport carport) throws SQLException {
+
+        int carportLengthCm = carport.getLength();
+        int carportWidthCm = carport.getWidth();
+
+        Svg svg = new Svg("0", "0", ""+carportLengthCm,"0 0 " + carportLengthCm + " " + carportWidthCm);
+        svg.addRectangle(0, 0, carportLengthCm, carportWidthCm,"fill:lightblue");
+
+        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
+        for(PlacedMaterial placedMaterial: placedMaterials) {
+            double x = placedMaterial.getX();
+            double y = placedMaterial.getY();
+            float length = placedMaterial.getMaterial().getLengthCm();
+            float height = placedMaterial.getMaterial().getHeightMm();///10;
+
+            if(placedMaterial.getMaterial().getItemType().equalsIgnoreCase("stolpe")) {
+                svg.addRectangle(x,y,length, height, "stroke:black;fill: red");
+            }
+            else {
+                svg.addRectangle(x,y,length, height, "stroke:black;fill: white");
+            }
+
+        }
+
+
 
         // outerSvg which is the size of the carport in cm plus 100 cm on each side for dimensions
         Svg outerSvg = new Svg("0", "0", "100%","0 0 " + (carportLengthCm+200) + " " + (carportWidthCm+200));
@@ -36,6 +67,6 @@ public class CarportSvg {
 
         outerSvg.addSvg(innerSvg);
 
-        return outerSvg.toString();
+        return svg.toString();
     }
 }
