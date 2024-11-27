@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.entities.Account;
 import app.persistence.AccountMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -50,12 +51,12 @@ public class OrderController {
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-//        Account currentUser = ctx.sessionAttribute("currentUser");
-//        if (currentUser == null || !currentUser.getRole().equals("admin")) {
-//            ctx.attribute("errorMessage", "Kun adgang for admin.");
-//            ctx.render("error.html");
-//            return;
-//        }
+        Account account = ctx.sessionAttribute("account");
+        if (account == null || !account.getRole().equals("salesrep")) {
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         try {
             ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);

@@ -15,12 +15,12 @@ public class AccountController {
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-//        Account currentUser = ctx.sessionAttribute("currentUser");
-//        if (currentUser == null || !currentUser.getRole().equals("admin")) {
-//            ctx.attribute("errorMessage", "Kun adgang for admin.");
-//            ctx.render("error.html");
-//            return;
-//        }
+        Account account = ctx.sessionAttribute("account");
+        if (account == null || !account.getRole().equals("salesrep")) {
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
         try {
             ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
             ctx.attribute("accounts", accounts);
