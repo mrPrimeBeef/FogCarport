@@ -16,7 +16,8 @@ import java.util.Map;
 public class CarportCalculationStrategy implements CalculationStrategy{
 
     //Every unit is in cm unless otherwise is specified
-    int defaultOverhang = 100;
+    int defaultOverhangY = 100;
+    int defaultOverhangX = 20;
     int maxPillarDistance = 310;
     List<PlacedMaterial> placedMaterialList;
 
@@ -67,13 +68,13 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     }
 
     void calculatePillars(Carport carport, Material pillarMaterial) {
-        int amountOfPillarsX = (carport.getLength() - defaultOverhang * 2) / maxPillarDistance % maxPillarDistance + 1;
-        int amountOfPillarsY = (carport.getWidth() - defaultOverhang * 2) / maxPillarDistance % maxPillarDistance + 1;
+        int amountOfPillarsX = (carport.getLength()) / maxPillarDistance % maxPillarDistance + 1;
+        int amountOfPillarsY = (carport.getWidth() - defaultOverhangY * 2) / maxPillarDistance % maxPillarDistance + 1;
 
         for (int i = 0; i <= amountOfPillarsY; i++) {
             for (int j = 0; j <= amountOfPillarsX; j++) {
-                float x = j * ((float) (carport.getLength() - 2 * defaultOverhang) / amountOfPillarsX) + defaultOverhang;
-                float y = i * ((float) (carport.getWidth() - 2 * defaultOverhang) / amountOfPillarsY) + defaultOverhang;
+                float x = j * ((float) carport.getLength() / amountOfPillarsX - 2 * defaultOverhangX) - pillarMaterial.getWidthMm()/20+defaultOverhangX;
+                float y = i * ((float) (carport.getWidth() - 2 * defaultOverhangY) / amountOfPillarsY) + defaultOverhangY;
 
                 // Clone the material for each pillar
                 Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
@@ -91,13 +92,13 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     }
 
     private void calculateBeams(Carport carport, Material beamMaterial) {
-        int amountOfBeamsX = (carport.getLength() - defaultOverhang * 2) / maxPillarDistance % maxPillarDistance + 1;
+        int amountOfBeamsX = (carport.getLength() - defaultOverhangY * 2) / maxPillarDistance % maxPillarDistance + 1;
 
         PlacedMaterial placedBeam = null;
         for (int j = 0; j <= amountOfBeamsX; j++) {
-            float x = j * ((float) (carport.getLength() - 2 * defaultOverhang) / amountOfBeamsX) + defaultOverhang;
+            float x = j * ((float) carport.getLength() / amountOfBeamsX - 2 * defaultOverhangX) - beamMaterial.getWidthMm()/20+defaultOverhangX;
             Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
-            placedBeam = new PlacedMaterial(clonedMaterial, x, 0, 0);
+            placedBeam = new PlacedMaterial(clonedMaterial, x, 0, carport.getHeight());
             placedBeam.setX(placedBeam.getX());
             placedMaterialList.add(placedBeam);
 
