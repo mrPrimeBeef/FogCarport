@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.exceptions.AccountException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.entities.Account;
@@ -23,13 +24,13 @@ public class AccountController {
                 ctx.render("saelgeralleorder");
                 return;
             }
-            //TODO skal henvise til en kunde index side.
+            //TODO skal henvise til en kunde index side i ctx.render.
             if (account.getRole().equals("customer")) {
-                System.out.println("logget på som kunde");
+                ctx.render("/");
                 return;
             }
 
-        } catch (DatabaseException e) {
+        } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }
