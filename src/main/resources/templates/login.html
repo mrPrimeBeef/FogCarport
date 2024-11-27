@@ -10,17 +10,20 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
     <link rel="icon" type="image/x-icon" href="public/images/favicon-fog.png">
+    <style>
+        .bg-dark-blue, .btn-dark-blue {
+            background-color: #14488C !important;
+        }
+    </style>
 </head>
 
-<body class="bg-primary">
-<main class="container mt-5">
+<body class="bg-dark-blue">
+<main class="container vh-100 d-flex justify-content-center align-items-center">
     <div class=" row d-flex justify-content-center">
-        <div class="col-md-6">
+        <div class="col">
             <div class="card px-5 py-5 text-center">
                 <div clas="justify-content-center">
-                    <img class="card-img-center mb-5" src="public/images/fog-logo.png" width="60" height="60"
-                         th:src="@{/images/fog-logo.png}"/>
-                </div>
+                    <img class="card-img-center mb-5" src="public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/></div>
                 <div class="mb-4">
                     <h2 id="log-text">Log på</h2>
                 </div>
@@ -36,8 +39,7 @@
                     <p class="m-4"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
                     </p>
 
-                    <button id="sub_button" class="btn btn-primary" type="submit" formaction="/login">Log på</button>
-
+                    <button id="sub_button" class="btn btn-dark-blue text-light" type="submit" formaction="/login">Log på</button>
                 </form>
             </div>
         </div>
