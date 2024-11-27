@@ -19,12 +19,12 @@ public class AccountController {
 
         try {
             Account account = AccountMapper.login(email, password, connectionPool);
-
+            //TODO skal henvise til en admin index side.
             if (account.getRole().equals("admin")) {
                 System.out.println("logget på som admin");
                 return;
             }
-
+            //TODO skal henvise til en kunde index side.
             if (account.getRole().equals("customer")) {
                 System.out.println("logget på som kunde");
                 return;
