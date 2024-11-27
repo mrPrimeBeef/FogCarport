@@ -20,7 +20,7 @@ public class OrderController {
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         //app.get("tak", ctx -> ctx.render("tak.html"));
-       // app.post("tak", ctx -> showThankYouPage(ctx, connectionPool));
+        //app.post("tak", ctx -> showThankYouPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -48,7 +48,7 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
-       // ctx.render("tak.html");
+        // ctx.render("tak.html");
         showThankYouPage(name, email, ctx);
 
     }
@@ -73,9 +73,8 @@ public class OrderController {
     }
 
     private static void showThankYouPage(String name, String email, Context ctx) {
-        ctx.attribute("navn",name);
-        ctx.attribute("email",email);
+        ctx.attribute("navn", name);
+        ctx.attribute("email", email);
         ctx.render("tak.html");
-
     }
 }
