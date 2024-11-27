@@ -29,7 +29,7 @@
             <tr th:each="OverviewOrderAccountDtos: ${OverviewOrderAccountDtos}">
                 <td><a href="saelgerordre.html" th:href="@{/saelgerordre(order_id=${OverviewOrderAccountDtos.orderId})}"
                        th:text="${OverviewOrderAccountDtos.orderId}"></a></td>
-                <td><a href="??.html" th:href="@{/??(account_id=${OverviewOrderAccountDtos.accountId})}"
+                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(account_id=${OverviewOrderAccountDtos.accountId})}"
                        th:text="${OverviewOrderAccountDtos.email}"></a></td>
                 <td th:text="${OverviewOrderAccountDtos.datePlaced}"></td>
                 <td th:text="${OverviewOrderAccountDtos.dateCompleted}"></td>
