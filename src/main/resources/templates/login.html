@@ -12,28 +12,35 @@
     <link rel="icon" type="image/x-icon" href="public/images/favicon-fog.png">
 </head>
 
-<body>
-<main class="col d-flex justify-content-center">
+<body class="bg-primary">
+<main class="container mt-5">
+    <div class=" row d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card px-5 py-5 text-center">
+                <div clas="justify-content-center">
+                    <img class="card-img-center mb-5" src="public/images/fog-logo.png" width="60" height="60"
+                         th:src="@{/images/fog-logo.png}"/>
+                </div>
+                <div class="mb-4">
+                    <h2 id="log-text">Log på</h2>
+                </div>
+                <form id="login-form" method="post">
 
-    <div class="col-2-sm">
-        <img class="logo" src="public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
-        <h2 id="log-text">Log på</h2>
+                    <label for="email"></label>
+                    <input type="email" id="email" name="email" placeholder="Emailadresse" required/><br>
+                    <div class="m-2">
+                        <label for="password"></label>
+                        <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
+                    </div>
+                    <!--Der skal nok oprettes en html glemt kode side?-->
+                    <p class="m-4"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
+                    </p>
 
-        <form id="login-form" method="post">
+                    <button id="sub_button" class="btn btn-primary" type="submit" formaction="/login">Log på</button>
 
-            <label for="email"></label><br>
-            <input type="email" id="email" name="email" placeholder="Emailadresse" required/><br>
-
-            <label for="password"></label><br>
-            <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
-
-            <!--Der skal nok oprettes en html glemt kode side?-->
-            <p class="glemt-kode"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
-            </p>
-
-            <button id="sub_button" class="btn btn-primary" type="submit" formaction="/login">Log på</button>
-
-        </form>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 </body>
