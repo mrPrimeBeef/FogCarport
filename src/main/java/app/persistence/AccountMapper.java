@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 import app.entities.Account;
 import app.exceptions.AccountCreationException;
+import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 
 public class AccountMapper {
 
-    public static Account login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM account WHERE email=? AND password=?";
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -21,19 +23,13 @@ public class AccountMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
-                String name = rs.getString("name");
-                String address = rs.getString("address");
-                //int zip = rs.getInt("zip");
-                String phone = rs.getString("phone");
-                String Email = rs.getString("email");
                 String role = rs.getString("role");
-                return new Account(accountId, name, address, phone, Email, password, role);
-            } else {
-                throw new DatabaseException("Forkert email eller kode, prøv igen."); //TODO skal enten have sin egen AccountLoginException eller ændre AccountCreationException til AccountException.
+                account = new Account(accountId, role);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i login." , "an error happend in login.", e.getMessage());
+            throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
         }
+        return account;
     }
 
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
