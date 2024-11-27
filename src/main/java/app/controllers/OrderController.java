@@ -15,7 +15,7 @@ import app.persistence.OrderMapper;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
     }
@@ -29,7 +29,7 @@ public class OrderController {
         String notes = ctx.formParam("bemaerkninger");
 
         String name = ctx.formParam("navn");
-        String address  = ctx.formParam("adresse");
+        String address = ctx.formParam("adresse");
         int zip = Integer.parseInt(ctx.formParam("postnummer"));
         String city = ctx.formParam("by");
         String phone = ctx.formParam("telefon");
@@ -45,7 +45,7 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
-        ctx.render("tak.html");
+        showThankYouPage(name, email, ctx);
     }
 
     private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
@@ -65,5 +65,11 @@ public class OrderController {
             return accountId;
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+    }
+
+    private static void showThankYouPage(String name, String email, Context ctx) {
+        ctx.attribute("navn", name);
+        ctx.attribute("email", email);
+        ctx.render("tak.html");
     }
 }
