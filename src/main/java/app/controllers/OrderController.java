@@ -19,8 +19,6 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
-        //app.get("tak", ctx -> ctx.render("tak.html"));
-        //app.post("tak", ctx -> showThankYouPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -48,9 +46,7 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
-        // ctx.render("tak.html");
         showThankYouPage(name, email, ctx);
-
     }
 
     private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
