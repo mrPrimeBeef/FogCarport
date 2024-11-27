@@ -12,16 +12,16 @@
 </head>
 <body class="bg-light">
 <header th:replace="fragments :: headerCustomer"></header>
-<main class="mb-5">
+<main class="mb-5 mt-5">
     <div class="container text-center py-5">
 
         <h1 class="fw-bold"> Tak for din henveldelse </h1>
-        <h1 class="fx-bold" th:text=" ${navn} + ' på'"></h1>
+        <h1 class="fx-bold" th:text="${navn}"></h1>
         <h2 class="mt-3">Quick-Byg carport</h2>
-        <p class="mt-3"
+        <p class="mt-3 mb-2"
            th:text="'Vi sender din kvittering til ' +${email} + ' også vender vi tilbage ligeså snart vi har kigget på den'"></p>
 
-        <a class="nav-link" href="#" th:href="@{/index}" aria-current="page">Tilbage til forsiden</a>
+        <a class="nav-link mb-1" href="#" th:href="@{/}" aria-current="page">Tilbage til forsiden</a>
 
         <img src="/images/carportpic.png" th:src="@{/images/carportpic.png}" class="img-fluid">
     </div>

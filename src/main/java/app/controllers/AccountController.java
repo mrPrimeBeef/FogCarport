@@ -10,7 +10,7 @@ import app.persistence.AccountMapper;
 
 public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("login", ctx -> ctx.render("login.html"));
+        app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
     }
 

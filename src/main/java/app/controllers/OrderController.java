@@ -6,7 +6,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.EmailReceipt;
-import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
@@ -16,7 +15,7 @@ import app.persistence.OrderMapper;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
     }
