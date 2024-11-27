@@ -1,11 +1,10 @@
 package app.services.svgEngine;
 
-import app.services.StructureCalculationEngine.Entities.Carport;
-import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
-
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.List;
+
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
 
 public class CarportSvg {
 
@@ -14,7 +13,7 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportHeightCm = carport.getHeight();
 
-        Svg svg = new Svg("-100", "-100", "" + (carportLengthCm + 200), "-100 -100 " + (carportLengthCm + 200) + " " + (carportHeightCm + 200));
+        Svg svg = new Svg("-100", "-100", "100%", "-100 -100 " + (carportLengthCm + 200) + " " + (carportHeightCm + 200));
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "stroke: black; fill: lightblue");
 
@@ -31,7 +30,7 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportWidthCm = carport.getWidth();
 
-        Svg svg = new Svg("-100", "-100", "" + (carportLengthCm + 200), "-100 -100 " + (carportLengthCm + 200) + " " + (carportWidthCm + 200));
+        Svg svg = new Svg("-100", "-100", "100%", "-100 -100 " + (carportLengthCm + 200) + " " + (carportWidthCm + 200));
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "stroke: black; fill: lightblue");
 
