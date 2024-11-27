@@ -26,7 +26,7 @@ public class AccountController {
             }
             //TODO skal henvise til en kunde index side i ctx.render.
             if (account.getRole().equals("customer")) {
-                ctx.render("/");
+                ctx.render("/index");
                 return;
             }
 
