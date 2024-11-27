@@ -9,6 +9,19 @@ import java.util.List;
 
 public class CarportSvg {
 
+    public static String sideView(Carport carport) {
+
+        int carportLengthCm = carport.getLength();
+        int carportHeightCm = carport.getHeight();
+
+        Svg svg = new Svg("-100", "-100", ""+(carportLengthCm+200),"-100 -100 " + (carportLengthCm+200) + " " + (carportHeightCm+200));
+        svg.addRectangle(-100, -100, carportLengthCm+200, carportHeightCm+200,"fill: lightgreen");
+        svg.addRectangle(0, 0, carportLengthCm, carportHeightCm,"fill: lightblue");
+        return svg.toString();
+
+    }
+
+
     public static String topView(Carport carport) throws SQLException {
 
         int carportLengthCm = carport.getLength();

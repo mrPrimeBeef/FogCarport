@@ -31,6 +31,7 @@ public class OrderController {
         System.out.println(carport.getHeight());
 
         try {
+            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
         }
         catch(SQLException e) {
