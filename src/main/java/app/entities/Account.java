@@ -20,7 +20,12 @@ public class Account {
         this.role = role;
     }
 
-    public int getMemberId() {
+    public Account(int accountId, String role) {
+        this.accountId = accountId;
+        this.role = role;
+    }
+
+    public int getAccountId() {
         return accountId;
     }
 
@@ -28,15 +33,15 @@ public class Account {
         return name;
     }
 
-    public String getAddress(){
+    public String getAddress() {
         return address;
     }
 
-    public int getZip(){
+    public int getZip() {
         return zip;
     }
 
-    public String getPhone(){
+    public String getPhone() {
         return phone;
     }
 
