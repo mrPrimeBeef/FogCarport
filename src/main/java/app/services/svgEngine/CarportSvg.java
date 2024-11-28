@@ -6,8 +6,6 @@ import app.services.StructureCalculationEngine.Entities.Carport;
 
 public class CarportSvg {
 
-    private static final int MARGIN_CM = 100;
-
     public static String sideView(Carport carport) {
 
         int carportLengthCm = carport.getLength();
@@ -18,7 +16,7 @@ public class CarportSvg {
 //        Svg svg = new Svg(-SPACING, -SPACING, "100%", viewBox);
 
         // TODO: Check at den nye constructor rent faktisk giver mening
-        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, carportLengthCm + MARGIN_CM, carportHeightCm + MARGIN_CM);
+        Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
 
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
@@ -41,7 +39,7 @@ public class CarportSvg {
 //        String viewBox = String.format("%d %d %d %d", -MARGIN_CM, -MARGIN_CM, carportLengthCm + 2 * MARGIN_CM, carportWidthCm + 2 * MARGIN_CM);
 //        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, "100%", viewBox);
 
-        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, carportLengthCm + MARGIN_CM, carportWidthCm + MARGIN_CM);
+        Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
