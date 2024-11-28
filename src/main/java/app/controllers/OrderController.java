@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -9,7 +8,6 @@ import io.javalin.http.Context;
 import app.persistence.ConnectionPool;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
-import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
 
 public class OrderController {
 

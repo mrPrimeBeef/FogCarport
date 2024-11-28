@@ -15,7 +15,7 @@ public class CarportSvg {
 
         Svg svg = new Svg("-100", "-100", "100%", "-100 -100 " + (carportLengthCm + 200) + " " + (carportHeightCm + 200));
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
-        svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "stroke: black; fill: lightblue");
+        svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
 
         svg.addDimensionLine(0, carportHeightCm + 50, carportLengthCm, carportHeightCm + 50);
         svg.addDimensionLine(-50, 0, -50, carportHeightCm);
@@ -32,49 +32,45 @@ public class CarportSvg {
 
         Svg svg = new Svg("-100", "-100", "100%", "-100 -100 " + (carportLengthCm + 200) + " " + (carportWidthCm + 200));
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
-        svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "stroke: black; fill: lightblue");
+        svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
         svg.addDimensionLine(0, carportWidthCm + 50, carportLengthCm, carportWidthCm + 50);
         svg.addDimensionLine(-50, 0, -50, carportWidthCm);
-
-        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
-        for (PlacedMaterial placedMaterial : placedMaterials) {
-            double x = placedMaterial.getX();
-            double y = placedMaterial.getY();
-            float length = placedMaterial.getMaterial().getLengthCm();
-            float height = placedMaterial.getMaterial().getHeightMm();
-            String itemType = placedMaterial.getMaterial().getItemType();
-
-            if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
-            } else {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
-            }
-
-        }
-
-//        svg.addText(String.format("%.2f", 0.01*carportLengthCm), carportLengthCm / 2 + 100, carportWidthCm + 30, 0);
-//        svg.addText(String.format("%.2f", 0.01*carportWidthCm), 50, 50, -10);
         svg.addText(String.format("%.2f", 0.01*carportLengthCm), 0.5*carportLengthCm, carportWidthCm+30, 0);
         svg.addText(String.format("%.2f", 0.01*carportWidthCm), -60, 0.5*carportWidthCm, -90);
 
-//        // Spær
-//        for (int x = 0; x < carportLengthCm; x += 55) {
-//            svg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+//        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
+//        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
+//        for (PlacedMaterial placedMaterial : placedMaterials) {
+//            double x = placedMaterial.getX();
+//            double y = placedMaterial.getY();
+//            float length = placedMaterial.getMaterial().getLengthCm();
+//            float height = placedMaterial.getMaterial().getHeightMm();
+//            String itemType = placedMaterial.getMaterial().getItemType();
+//
+//            if (itemType.equalsIgnoreCase("stolpe")) {
+//                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
+//            } else {
+//                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
+//            }
 //        }
-//
-//        // Remme
-//        svg.addRectangle(0, 35, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//        svg.addRectangle(0, 565, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//
-//        // Stolper
-//        svg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//
-//        // Pile til mål i meter
-//        svg.addDimensionLine(100, 100, 400, 400);
-//
-//        // Et hulbånd
-//        svg.addLine(600, 300, 300, 500, "stroke:black; stroke-dasharray: 5 5");
+
+
+
+        // Hardcoded Spær
+        for (int x = 0; x < carportLengthCm; x += 55) {
+            svg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+        }
+
+        // Hardcoded Remme
+        svg.addRectangle(0, 35, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+        svg.addRectangle(0, 565, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+
+        // Hardcoded Stolper
+        svg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:2px; stroke:black; fill: none");
+
+        // Hardcoded hulbånd
+        svg.addLine(120, 35, 745, 565, "stroke:black; stroke-dasharray: 5 5");
 
         return svg.toString();
     }
