@@ -18,10 +18,11 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
-    private static final double SPACING_DIM_LINE = 50;
+//    private static final double SPACING_DIM_LINE = 50;
     private static final double SPACING_DIM_TEXT = 10;
     private static final double SPACING_HELP_LINE = 20;
     private static final double SPACING_ARROW = 6;
+    private static final double DEFAULT_OFFSET_DISTANCE = 50;
 
     private final StringBuilder svg = new StringBuilder();
 
@@ -59,11 +60,18 @@ public class Svg {
         return s;
     }
 
-    public void addDimension(double x1, double y1, double x2, double y2, Offset direction) {
+
+
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection) {
+
+        addDimension(x1, y1, x2, y2, offsetDirection, DEFAULT_OFFSET_DISTANCE);
+
+    }
+
+
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance) {
 
         double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
-
-//        double degrees = Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
 
         double X1 = 0;
         double Y1 = 0;
@@ -84,11 +92,11 @@ public class Svg {
         double hBy2 = 0;
 
 
-        if (direction == Offset.DOWN) {
+        if (offsetDirection == OffsetDirection.DOWN) {
             X1 = x1;
-            Y1 = y1 + SPACING_DIM_LINE;
+            Y1 = y1 + offsetDistance;
             X2 = x2;
-            Y2 = y2 + SPACING_DIM_LINE;
+            Y2 = y2 + offsetDistance;
             xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
             rotationText = 0;
@@ -104,11 +112,11 @@ public class Svg {
             hBy2 = Y2 + SPACING_ARROW;
 
         }
-        if (direction == Offset.UP) {
+        if (offsetDirection == OffsetDirection.UP) {
             X1 = x1;
-            Y1 = y1 - SPACING_DIM_LINE;
+            Y1 = y1 - offsetDistance;
             X2 = x2;
-            Y2 = y2 - SPACING_DIM_LINE;
+            Y2 = y2 - offsetDistance;
             xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
             rotationText = 0;
@@ -124,10 +132,10 @@ public class Svg {
             hBy2 = Y2 - SPACING_ARROW;
         }
 
-        if (direction == Offset.LEFT) {
-            X1 = x1 - SPACING_DIM_LINE;
+        if (offsetDirection == OffsetDirection.LEFT) {
+            X1 = x1 - offsetDistance;
             Y1 = y1;
-            X2 = x2 - SPACING_DIM_LINE;
+            X2 = x2 - offsetDistance;
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
             yText = 0.5 * (y1 + y2);
@@ -144,10 +152,10 @@ public class Svg {
             hBy2 = Y2;
         }
 
-        if (direction == Offset.RIGHT) {
-            X1 = x1 + SPACING_DIM_LINE;
+        if (offsetDirection == OffsetDirection.RIGHT) {
+            X1 = x1 + offsetDistance;
             Y1 = y1;
-            X2 = x2 + SPACING_DIM_LINE;
+            X2 = x2 + offsetDistance;
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
             yText = 0.5 * (y1 + y2);

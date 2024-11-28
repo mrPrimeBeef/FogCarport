@@ -15,9 +15,9 @@ public class CarportSvg {
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
 
-        svg.addDimension(0, 0, 0, carportHeightCm, Offset.LEFT);
-        svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, Offset.RIGHT);
-        svg.addDimension(carportLengthCm, carportHeightCm, 0, carportHeightCm, Offset.DOWN);
+        svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
+        svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
+        svg.addDimension(carportLengthCm, carportHeightCm, 0, carportHeightCm, OffsetDirection.DOWN);
 
         return svg.close();
 
@@ -33,8 +33,9 @@ public class CarportSvg {
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
-        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, Offset.DOWN);
-        svg.addDimension(0, carportWidthCm, 0, 0, Offset.LEFT);
+        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
+        svg.addDimension(0, carportWidthCm, 0, 0, OffsetDirection.LEFT, 70);
+        svg.addDimension(0, carportWidthCm-35, 0, 35, OffsetDirection.LEFT, 30);
 
 //        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
 //        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
@@ -56,7 +57,7 @@ public class CarportSvg {
         // Hardcoded Spær og deres dimensions
         for (int x = 0; x < carportLengthCm; x += 55) {
             svg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-            svg.addDimension(x, 0, x + 55, 0, Offset.UP);
+            svg.addDimension(x, 0, x + 55, 0, OffsetDirection.UP);
         }
 
         // Hardcoded Remme

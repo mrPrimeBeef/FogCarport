@@ -1,5 +1,5 @@
 package app.services.svgEngine;
 
-public enum Offset {
+public enum OffsetDirection {
     UP, DOWN, LEFT, RIGHT;
 }
