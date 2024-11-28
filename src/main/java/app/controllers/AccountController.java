@@ -39,12 +39,10 @@ public class AccountController {
     }
 
     private static void showKundeside(Context ctx) {
-        Account activeAccount = ctx.sessionAttribute("account");
-        System.out.println(activeAccount);
+        Account activeAccount = ctx.sessionAttribute("customer");
         if (activeAccount.getRole().equals("customer")) {
             ctx.sessionAttribute("loggedIn", true);
             ctx.sessionAttribute("userEmail", activeAccount.getEmail());
-            System.out.println(activeAccount.getEmail());
             ctx.render("/kundeside");
         } else{
             ctx.sessionAttribute("loggedIn", false);
