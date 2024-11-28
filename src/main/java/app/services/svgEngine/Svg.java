@@ -54,27 +54,39 @@ public class Svg {
 
         double distance = calculateDistance(x1, y1, x2, y2);
 
+        double degrees = Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
 
+        double X1 = 0;
+        double Y1 = 0;
+        double X2 = 0;
+        double Y2 = 0;
 
-        double degrees = Math.toDegrees(Math.atan((y2-y1)/(x2-x1)));
-
-        double X1=0;
-        double Y1=0;
-        double X2=0;
-        double Y2=0;
-
-        if(direction == Direction.DOWN) {
+        if (direction == Direction.DOWN) {
             X1 = x1;
-            Y1 = y1+50;
+            Y1 = y1 + 50;
             X2 = x2;
-            Y2 = y2+50;
-            addText(String.format("%.2f", 0.01*distance), 0.5*(x1+x2), y1+40,degrees);
+            Y2 = y2 + 50;
+            addText(String.format("%.2f", 0.01 * distance), 0.5 * (x1 + x2), y1 + 40, degrees);
         }
-        if(direction == Direction.UP) {
+        if (direction == Direction.UP) {
             X1 = x1;
-            Y1 = y1-50;
+            Y1 = y1 - 50;
             X2 = x2;
-            Y2 = y2-50;
+            Y2 = y2 - 50;
+        }
+
+        if (direction == Direction.LEFT) {
+            X1 = x1 - 50;
+            Y1 = y1;
+            X2 = x2 - 50;
+            Y2 = y2;
+        }
+
+        if (direction == Direction.RIGHT) {
+            X1 = x1 + 50;
+            Y1 = y1;
+            X2 = x2 + 50;
+            Y2 = y2;
         }
 
         addDimensionLine(X1, Y1, X2, Y2);
@@ -84,8 +96,6 @@ public class Svg {
     public String close() {
         return svg.append("</svg>").toString();
     }
-
-
 
 
     private static double calculateDistance(double x1, double y1, double x2, double y2) {
