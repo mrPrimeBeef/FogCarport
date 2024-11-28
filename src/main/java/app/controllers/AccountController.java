@@ -1,6 +1,9 @@
 package app.controllers;
 
+import app.entities.Order;
 import app.exceptions.AccountException;
+import app.exceptions.OrderException;
+import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.entities.Account;
@@ -12,7 +15,7 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
-        app.get("kundeside", ctx -> showKundeside(ctx));
+        app.get("kundeside", ctx -> showKundeside(ctx, connectionPool));
         app.get("logout",ctx->logout(ctx));
     }
 
@@ -30,7 +33,7 @@ public class AccountController {
                 ctx.sessionAttribute("loggedIn", true);
                 ctx.sessionAttribute("userEmail", email);
                 ctx.sessionAttribute("customer", account);
-                ctx.render("/kundeside");
+                showKundeside(ctx, connectionPool);
             }
 
         } catch (AccountException e) {
@@ -39,7 +42,7 @@ public class AccountController {
         }
     }
 
-    private static void showKundeside(Context ctx) {
+    private static void showKundeside(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("customer");
         if (activeAccount == null) {
             ctx.sessionAttribute("loggedIn", false);
@@ -50,6 +53,13 @@ public class AccountController {
         if (activeAccount.getRole().equals("customer")) {
             ctx.sessionAttribute("loggedIn", true);
             ctx.sessionAttribute("userEmail", activeAccount.getEmail());
+            try {
+                Order order = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
+                ctx.attribute("showOrder", order);
+            } catch (OrderException e) {
+                ctx.attribute(e.getMessage());
+                ctx.render("/error");
+            }
             ctx.render("/kundeside");
         }
     }

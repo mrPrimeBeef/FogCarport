@@ -45,13 +45,16 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:each="OverviewOrderAccountDtos: ${OverviewOrderAccountDtos}">
-                    <td th:text="${OverviewOrderAccountDtos.orderId}"></td>
-                    <td th:text="${OverviewOrderAccountDtos.datePlaced}"></td>
-                    <td th:text="${OverviewOrderAccountDtos.dateCompleted}"></td>
-                    <td th:text="${OverviewOrderAccountDtos.datePaid}"></td>
-                    <td th:text="${OverviewOrderAccountDtos.salesPrice}"></td>
-                    <td th:text="${OverviewOrderAccountDtos.status}"></td>
+                <tr th:if="${showOrder == null}">
+                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                </tr>
+                <tr th:each="order : ${showOrder}">
+                    <td th:text="${order.orderr_Id}"></td>
+                    <td th:text="${order.datePlaced}"></td>
+                    <td th:text="${order.dateCompleted}"></td>
+                    <td th:text="${order.datePaid}"></td>
+                    <td th:text="${order.salePrice}"></td>
+                    <td th:text="${order.status}"></td>
                 </tr>
                 </tbody>
             </table>
