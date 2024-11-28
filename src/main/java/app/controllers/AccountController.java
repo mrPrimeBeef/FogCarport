@@ -21,7 +21,7 @@ public class AccountController {
         try {
             Account account = AccountMapper.login(email, password, connectionPool);
             if (account.getRole().equals("salesrep")) {
-                ctx.render("saelgeralleorder");
+                ctx.render("saelgeralleordrer");
                 return;
             }
             //TODO skal henvise til en kunde index side i ctx.render.
