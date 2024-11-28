@@ -6,7 +6,7 @@ public class Svg {
 
     private static final String SVG_OPEN_TAG_TEMPLATE = "<svg version=\"1.1\" x=\"%s\" y=\"%s\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
     private static final String SVG_RECTANGLE_TEMPLATE = "<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"%s\"/>";
-    private static final String SVG_TEXT_TEMPLATE = "<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" alignment-baseline=\"middle\" transform=\"rotate(%d %f %f)\">%s</text>";
+    private static final String SVG_TEXT_TEMPLATE = "<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" alignment-baseline=\"middle\" transform=\"rotate(%f %f %f)\">%s</text>";
     private static final String SVG_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"%s\"/>";
     private static final String SVG_DIMENSION_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" marker-start=\"url(#beginArrow)\" marker-end=\"url(#endArrow)\"/>";
     private static final String SVG_ARROW_DEFS = "<defs>\n" +
@@ -32,7 +32,7 @@ public class Svg {
         return s;
     }
 
-    public String addText(String text, double x, double y, int rotation) {
+    public String addText(String text, double x, double y, double rotation) {
         String s = String.format(SVG_TEXT_TEMPLATE, x, y, rotation, x, y, text);
         svg.append(s);
         return s;
@@ -52,6 +52,12 @@ public class Svg {
 
     public void addDimension(double x1, double y1, double x2, double y2, Direction direction) {
 
+        double distance = calculateDistance(x1, y1, x2, y2);
+
+
+
+        double degrees = Math.toDegrees(Math.atan((y2-y1)/(x2-x1)));
+
         double X1=0;
         double Y1=0;
         double X2=0;
@@ -62,7 +68,7 @@ public class Svg {
             Y1 = y1+50;
             X2 = x2;
             Y2 = y2+50;
-            addText("hallo", 0.5*(x1+x2), y1+40,0);
+            addText(String.format("%.2f", 0.01*distance), 0.5*(x1+x2), y1+40,degrees);
         }
         if(direction == Direction.UP) {
             X1 = x1;
@@ -78,5 +84,15 @@ public class Svg {
     public String close() {
         return svg.append("</svg>").toString();
     }
+
+
+
+
+    private static double calculateDistance(double x1, double y1, double x2, double y2) {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
 
 }

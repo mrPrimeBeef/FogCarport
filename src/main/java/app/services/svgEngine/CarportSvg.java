@@ -39,11 +39,12 @@ public class CarportSvg {
 //        svg.addLine(0, carportWidthCm + 56, 0, carportWidthCm + 20, "stroke:black");
 //        svg.addLine(carportLengthCm, carportWidthCm + 56, carportLengthCm, carportWidthCm + 20, "stroke:black");
 
-        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm-200, Direction.DOWN);
-//        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, Direction.UP);
+//        svg.addDimension(0,carportWidthCm,carportLengthCm,carportWidthCm-200,Direction.DOWN);
+        svg.addDimension(0,carportWidthCm,0,0,Direction.DOWN);
 
-        svg.addText(String.format("%.2f", 0.01 * carportWidthCm), -60, 0.5 * carportWidthCm, -90);
+        svg.addText(String.format("%.2f", 0.01*carportWidthCm), -60, 0.5*carportWidthCm, -90);
         svg.addDimensionLine(-50, 0, -50, carportWidthCm);
+
 
 
 //        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
@@ -61,6 +62,7 @@ public class CarportSvg {
 //                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
 //            }
 //        }
+
 
 
         // Hardcoded Spær
