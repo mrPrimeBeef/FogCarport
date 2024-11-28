@@ -57,40 +57,15 @@ public class Account {
         return city;
     }
 
+    public String getRole() {
+        return role;
+    }
+
 
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
     }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public int getZip() {
-        return zip;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
 
     @Override
     public String toString() {

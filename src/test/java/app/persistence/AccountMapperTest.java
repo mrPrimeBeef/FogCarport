@@ -9,11 +9,11 @@ import app.entities.Account;
 import app.exceptions.AccountException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
-import app.entities.Account;
 
 class AccountMapperTest {
 
@@ -228,7 +228,18 @@ class AccountMapperTest {
 
 
         actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
-        assertNotEquals(0,actual);
+        assertNotEquals(0, actual);
+    }
+
+    @Test
+    void getAllAccounts() throws DatabaseException {
+        ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
+        String actual = accounts.get(2).getName();
+
+        assertEquals("Test Testersen", actual);
+        assertEquals(3, accounts.size());
+
+        assertNotEquals("Test Testersen", accounts.get(1).getName());
     }
 
     @Test
@@ -242,26 +253,13 @@ class AccountMapperTest {
     }
 
     @Test
-
-    void getAllAccounts() throws DatabaseException {
-        ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
-        String actual = accounts.get(0).getName();
-
-        assertEquals("Test Testersen", actual);
-        assertEquals(3, accounts.size());
-
-        assertNotEquals("Test Testersen", accounts.get(1).getName());
-    }
-                         
-    @Test
-    void login() throws AccountException{
+    void login() throws AccountException {
         Account account;
-        account = AccountMapper.login("test@test.dk","1234",connectionPool);
-        assertEquals(1,account.getAccountId());
-        assertEquals("customer",account.getRole());
+        account = AccountMapper.login("test@test.dk", "1234", connectionPool);
+        assertEquals(1, account.getAccountId());
+        assertEquals("customer", account.getRole());
 
-        assertNotEquals(2,account.getAccountId());
-        assertNotEquals("admin",account.getRole());
+        assertNotEquals(2, account.getAccountId());
+        assertNotEquals("admin", account.getRole());
     }
 }
-
