@@ -22,9 +22,9 @@ public class PasswordGenerator {
         password.append(getRandomChar(NUMBER_CHARS));
         password.append(getRandomChar(SPECIAL_CHARS));
 
-        // password length 6, so 2 is the remaining
+        //  password length should be 6, so add 2 more characters
         for (int i = 0; i < 2; i++) {
-            password.append(ALL_CHARS);
+            password.append(getRandomChar(ALL_CHARS));
         }
 
         return shufflechars(password.toString());
