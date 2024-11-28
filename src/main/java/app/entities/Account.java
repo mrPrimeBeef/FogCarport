@@ -4,8 +4,8 @@ public class Account {
     private int accountId;
     private String name;
     private String address;
-    private String city;
     private int zip;
+    private String city;
     private String phone;
     private String email;
     private String role;

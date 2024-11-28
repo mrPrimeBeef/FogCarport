@@ -2,17 +2,18 @@ package app.controllers;
 
 import java.util.ArrayList;
 
-import app.entities.Account;
-import app.persistence.AccountMapper;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
+import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
 import app.persistence.OrderMapper;
+import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 
 
@@ -22,7 +23,7 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
-        app.get("saelgeralleorder", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
+        app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -51,8 +52,8 @@ public class OrderController {
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-        Account account = ctx.sessionAttribute("account");
-        if (account == null || !account.getRole().equals("salesrep")) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
@@ -61,7 +62,7 @@ public class OrderController {
         try {
             ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
             ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
-            ctx.render("saelgeralleorder.html");
+            ctx.render("saelgeralleordrer.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");

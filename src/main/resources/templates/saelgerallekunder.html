@@ -12,7 +12,6 @@
 <body class="bg-light">
 <header th:replace="fragments :: headerAdmin"></header>
 <main class=" text-center">
-
     <h2 class="mt-5">Alle kunder</h2>
     <div class="d-flex flex-column justify-content-around p-0 m-5">
         <table class="table table-striped table-bordered">
@@ -24,12 +23,12 @@
                 <th>Postnummer</th>
             </tr>
             <tbody class="table-group-divider">
-            <tr th:each="accounts: ${accounts}">
-                <td><a href="saelgerordre.html" th:text="${accounts.email}" th:href="@{/saelgerkunde(email=${accounts.email})}"></a></td>
-                <td th:text="${accounts.name}"></td>
-                <td th:text="${accounts.phone}"></td>
-                <td th:text="${accounts.city}"></td>
-                <td th:text="${accounts.zip}"></td>
+            <tr th:each="account: ${accounts}">
+                <td><a href="saelgerordre.html" th:text="${account.email}" th:href="@{/saelgerkunde(email=${account.email})}"></a></td>
+                <td th:text="${account.name}"></td>
+                <td th:text="${account.phone}"></td>
+                <td th:text="${account.city}"></td>
+                <td th:text="${account.zip}"></td>
             </tr>
             </tbody>
         </table>

@@ -5,13 +5,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import app.entities.Account;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
+import app.entities.Account;
 
 class AccountMapperTest {
 

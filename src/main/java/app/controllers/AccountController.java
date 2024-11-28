@@ -1,13 +1,14 @@
 package app.controllers;
 
+import java.util.ArrayList;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+
 import app.entities.Account;
 import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
-import java.util.ArrayList;
 
 public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -15,8 +16,8 @@ public class AccountController {
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-        Account account = ctx.sessionAttribute("account");
-        if (account == null || !account.getRole().equals("salesrep")) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
