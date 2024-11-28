@@ -20,6 +20,8 @@ public class Svg {
 
     private static final double SPACING_DIM_LINE = 50;
     private static final double SPACING_DIM_TEXT = 10;
+    private static final double SPACING_HELP_LINE = 20;
+    private static final double SPACING_ARROW = 6;
 
     private final StringBuilder svg = new StringBuilder();
 
@@ -27,6 +29,10 @@ public class Svg {
         Locale.setDefault(new Locale("US"));
         svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, x, y, width, viewBox));
         svg.append(SVG_ARROW_DEFS);
+    }
+
+    public String close() {
+        return svg.append("</svg>").toString();
     }
 
     public String addRectangle(double x, double y, double width, double height, String style) {
@@ -53,11 +59,11 @@ public class Svg {
         return s;
     }
 
-    public void addDimension(double x1, double y1, double x2, double y2, Direction direction) {
+    public void addDimension(double x1, double y1, double x2, double y2, Offset direction) {
 
-        double distanceInMeter = 0.01*calculateDistance(x1, y1, x2, y2);
+        double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
 
-        double degrees = Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
+//        double degrees = Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
 
         double X1 = 0;
         double Y1 = 0;
@@ -67,55 +73,103 @@ public class Svg {
         double yText = 0;
         double rotationText = 0;
 
-        if (direction == Direction.DOWN) {
+        double hAx1 = 0;
+        double hAy1 = 0;
+        double hAx2 = 0;
+        double hAy2 = 0;
+
+        double hBx1 = 0;
+        double hBy1 = 0;
+        double hBx2 = 0;
+        double hBy2 = 0;
+
+
+        if (direction == Offset.DOWN) {
             X1 = x1;
             Y1 = y1 + SPACING_DIM_LINE;
             X2 = x2;
             Y2 = y2 + SPACING_DIM_LINE;
-            xText = 0.5*(x1+x2);
+            xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
             rotationText = 0;
+
+            hAx1 = x1;
+            hAy1 = y1 + SPACING_HELP_LINE;
+            hAx2 = X1;
+            hAy2 = Y1 + SPACING_ARROW;
+
+            hBx1 = x2;
+            hBy1 = y2 + SPACING_HELP_LINE;
+            hBx2 = X2;
+            hBy2 = Y2 + SPACING_ARROW;
+
         }
-        if (direction == Direction.UP) {
+        if (direction == Offset.UP) {
             X1 = x1;
             Y1 = y1 - SPACING_DIM_LINE;
             X2 = x2;
             Y2 = y2 - SPACING_DIM_LINE;
-            xText = 0.5*(x1+x2);
+            xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
             rotationText = 0;
+
+            hAx1 = x1;
+            hAy1 = y1 - SPACING_HELP_LINE;
+            hAx2 = X1;
+            hAy2 = Y1 - SPACING_ARROW;
+
+            hBx1 = x2;
+            hBy1 = y2 - SPACING_HELP_LINE;
+            hBx2 = X2;
+            hBy2 = Y2 - SPACING_ARROW;
         }
 
-        if (direction == Direction.LEFT) {
+        if (direction == Offset.LEFT) {
             X1 = x1 - SPACING_DIM_LINE;
             Y1 = y1;
             X2 = x2 - SPACING_DIM_LINE;
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
-            yText = 0.5*(y1+y2);
+            yText = 0.5 * (y1 + y2);
             rotationText = -90;
+
+            hAx1 = x1 - SPACING_HELP_LINE;
+            hAy1 = y1;
+            hAx2 = X1 - SPACING_ARROW;
+            hAy2 = Y1;
+
+            hBx1 = x2 - SPACING_HELP_LINE;
+            hBy1 = y2;
+            hBx2 = X2 - SPACING_ARROW;
+            hBy2 = Y2;
         }
 
-        if (direction == Direction.RIGHT) {
+        if (direction == Offset.RIGHT) {
             X1 = x1 + SPACING_DIM_LINE;
             Y1 = y1;
             X2 = x2 + SPACING_DIM_LINE;
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
-            yText = 0.5*(y1+y2);
+            yText = 0.5 * (y1 + y2);
             rotationText = -90;
+
+            hAx1 = x1 + SPACING_HELP_LINE;
+            hAy1 = y1;
+            hAx2 = X1 + SPACING_ARROW;
+            hAy2 = Y1;
+
+            hBx1 = x2 + SPACING_HELP_LINE;
+            hBy1 = y2;
+            hBx2 = X2 + SPACING_ARROW;
+            hBy2 = Y2;
         }
 
         addText(String.format("%.2f", distanceInMeter), xText, yText, rotationText);
-
         addDimensionLine(X1, Y1, X2, Y2);
+        addLine(hAx1, hAy1, hAx2, hAy2, "stroke: black");
+        addLine(hBx1, hBy1, hBx2, hBy2, "stroke: black");
 
     }
-
-    public String close() {
-        return svg.append("</svg>").toString();
-    }
-
 
     private static double calculateDistance(double x1, double y1, double x2, double y2) {
         double dx = x2 - x1;
