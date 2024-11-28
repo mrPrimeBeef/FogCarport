@@ -33,6 +33,29 @@
                 </tbody>
             </table>
         </div>
+        <h2 class="mt-5">Dine ordrer</h2>
+        <div class="d-flex flex-column justify-content-around p-0 m-5">
+            <table class="table table-striped table-bordered">
+                <tr class="justify-content-around">
+                    <th>Ordrenr.</th>
+                    <th>Henvendelse</th>
+                    <th>Dato betalt</th>
+                    <th>Dato færdig</th>
+                    <th>Pris</th>
+                    <th>Status</th>
+                </tr>
+                <tbody class="table-group-divider">
+                <tr th:each="OverviewOrderAccountDtos: ${OverviewOrderAccountDtos}">
+                    <td th:text="${OverviewOrderAccountDtos.orderId}"></td>
+                    <td th:text="${OverviewOrderAccountDtos.datePlaced}"></td>
+                    <td th:text="${OverviewOrderAccountDtos.dateCompleted}"></td>
+                    <td th:text="${OverviewOrderAccountDtos.datePaid}"></td>
+                    <td th:text="${OverviewOrderAccountDtos.salesPrice}"></td>
+                    <td th:text="${OverviewOrderAccountDtos.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 <footer th:replace="fragments :: footer"></footer>
