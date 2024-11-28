@@ -25,7 +25,7 @@ public class AccountController {
                 return;
             }
             if (account.getRole().equals("customer")) {
-                ctx.sessionAttribute("customer", account);
+                ctx.attribute("customer", account);
                 ctx.render("/kundeside");
             }
 

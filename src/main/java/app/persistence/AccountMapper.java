@@ -12,7 +12,7 @@ public class AccountMapper {
 
     public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, name, role, address, city, phone FROM account WHERE email=? AND password=?";
+        String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

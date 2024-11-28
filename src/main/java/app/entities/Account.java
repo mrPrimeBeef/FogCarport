@@ -22,19 +22,18 @@ public class Account {
     }
 
     public Account(int accountId, String name, String role, String address, String city, String phone) {
-    this.accountId = accountId;
-    this.name = name;
-    this.role = role;
-    this.address = address;
-    this.city = city;
-    this.phone = phone;
+        this.accountId = accountId;
+        this.name = name;
+        this.role = role;
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
     }
 
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
     }
-
 
 
     public int getAccountId() {
@@ -47,6 +46,10 @@ public class Account {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public int getZip() {
