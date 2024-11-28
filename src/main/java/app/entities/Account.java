@@ -10,6 +10,7 @@ public class Account {
     private String email;
     private String role;
 
+
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
         this.name = name;
@@ -56,7 +57,51 @@ public class Account {
         return city;
     }
 
+
+    public Account(int accountId, String role) {
+        this.accountId = accountId;
+        this.role = role;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public String getRole() {
         return role;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberId=" + accountId +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", zip='" + zip + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

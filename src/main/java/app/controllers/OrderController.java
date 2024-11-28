@@ -2,7 +2,6 @@ package app.controllers;
 
 import java.util.ArrayList;
 
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -15,12 +14,12 @@ import app.exceptions.OrderCreationException;
 import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-
+import app.persistence.AccountMapper;
 
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
@@ -49,11 +48,13 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
+        showThankYouPage(name, email, ctx);
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
@@ -86,5 +87,11 @@ public class OrderController {
             return accountId;
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+    }
+
+    private static void showThankYouPage(String name, String email, Context ctx) {
+        ctx.attribute("navn", name);
+        ctx.attribute("email", email);
+        ctx.render("tak.html");
     }
 }

@@ -20,8 +20,6 @@ package app {
     + static void createAccount(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowCustomerPage(Context ctx, ConnectionPool connectionPool)
-
-
       }
     class OrderController{
     + static void addRoutes(Javalin app, ConnectionPool connectionPool)
@@ -50,8 +48,8 @@ package app {
     }
     class OrderMapper{
     + static boolean createOrder(int carportWidth, int carportLength,(rest of caport info), Context ctx, ConnectionPool connectionPool)
-    + static OrderAccountDto getOrderAccountDtoByOrderId(int orderId, Context ctx, ConnectionPool connectionPool)
-    + static List<OrderAccountDto> getAllOrderAccountDto(Context ctx, ConnectionPool connectionPool)
+    + static OverviewOrderAccountDto getOverviewOrderAccountDtoByOrderId(int orderId, Context ctx, ConnectionPool connectionPool)
+    + static List<OverviewOrderAccountDto> getAllOverviewOrderAccountDto(Context ctx, ConnectionPool connectionPool)
     + TAG STILLING IMORGEN: static updateOrder(Context ctx, ConnectionPool connectionPool)
     + static boolean updateOrderStatus(String status, Context ctx, ConnectionPool connectionPool)
     + static List<Order> getAllOrdersByAccountId(int accountId, Context ctx, ConnectionPool connectionPool)
@@ -138,7 +136,7 @@ package app {
 
   package dto {
 
-    class OrderAccountDto {
+    class OverviewOrderAccountDto {
        - int orderId
        - String name
        - String address
@@ -150,8 +148,6 @@ package app {
        - int carportLengthCm
        - int shedWidthCm
        - int shedLengthCm
-       + OrderAccountDto((with shed))
-       + OrderAccountDto((without shed))
        }
 
   }
@@ -173,7 +169,7 @@ package app {
 
     AccountController --> AccountMapper : uses
     OrderController --> OrderMapper : uses
-    OrderMapper --> OrderAccountDto
+    OrderMapper --> OverviewOrderAccountDto
 
     AccountMapper --> entities : uses
     OrderMapper --> entities : uses

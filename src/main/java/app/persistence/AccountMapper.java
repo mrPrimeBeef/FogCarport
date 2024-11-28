@@ -5,9 +5,11 @@ import java.util.ArrayList;
 
 import app.entities.Account;
 import app.exceptions.AccountCreationException;
+import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 
 public class AccountMapper {
+
     public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
 
@@ -17,6 +19,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
+          
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -32,6 +35,30 @@ public class AccountMapper {
         } catch (SQLException e) {
         throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
         }
+    }
+  
+  public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+    
+     try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+       
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+       
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String role = rs.getString("role");
+                account = new Account(accountId, role);
+            }
+       
+        } catch (SQLException e) {
+            throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
+        }
+        return account;
     }
 
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
@@ -70,7 +97,6 @@ public class AccountMapper {
         } catch (SQLException e) {
             throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
         }
-
         return accountId;
     }
 
