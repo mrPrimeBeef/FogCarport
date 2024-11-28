@@ -7,6 +7,7 @@ import app.entities.Account;
 import app.exceptions.AccountCreationException;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
+import app.services.PasswordGenerator;
 
 public class AccountMapper {
 
@@ -104,11 +105,14 @@ public class AccountMapper {
         int accountId;
         String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?) ";
+
+        String password = PasswordGenerator.generatePassword();
+
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, email);
-            ps.setString(2, "1234");
+            ps.setString(2, password);
             ps.setString(3, name);
             ps.setString(4, "Kunde");
             ps.setString(5, adress);
