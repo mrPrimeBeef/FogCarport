@@ -6,7 +6,7 @@ import app.services.StructureCalculationEngine.Entities.Carport;
 
 public class CarportSvg {
 
-    private static final int SPACING = 100;
+    private static final int MARGIN_CM = 100;
 
     public static String sideView(Carport carport) {
 
@@ -14,8 +14,12 @@ public class CarportSvg {
         int carportHeightCm = carport.getHeight();
 
 
-        String viewBox = String.format("%d %d %d %d", -SPACING, -SPACING, carportLengthCm + 2 * SPACING, carportHeightCm + 2 * SPACING);
-        Svg svg = new Svg(-SPACING, -SPACING, "100%", viewBox);
+//        String viewBox = String.format("%d %d %d %d", -SPACING, -SPACING, carportLengthCm + 2 * SPACING, carportHeightCm + 2 * SPACING);
+//        Svg svg = new Svg(-SPACING, -SPACING, "100%", viewBox);
+
+        // TODO: Check at den nye constructor rent faktisk giver mening
+        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, carportLengthCm + MARGIN_CM, carportHeightCm + MARGIN_CM);
+
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
 
@@ -34,9 +38,10 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportWidthCm = carport.getWidth();
 
-        String viewBox = String.format("%d %d %d %d", -SPACING, -SPACING, carportLengthCm + 2 * SPACING, carportWidthCm + 2 * SPACING);
-        // Svg svg = new Svg(-SPACING, -SPACING, "100%", "-100 -100 " + (carportLengthCm + 200) + " " + (carportWidthCm + 200));
-        Svg svg = new Svg(-SPACING, -SPACING, "100%", viewBox);
+//        String viewBox = String.format("%d %d %d %d", -MARGIN_CM, -MARGIN_CM, carportLengthCm + 2 * MARGIN_CM, carportWidthCm + 2 * MARGIN_CM);
+//        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, "100%", viewBox);
+
+        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, carportLengthCm + MARGIN_CM, carportWidthCm + MARGIN_CM);
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 

@@ -31,6 +31,14 @@ public class Svg {
         svg.append(SVG_ARROW_DEFS);
     }
 
+
+    public Svg(int xMin, int yMin, int xMax, int yMax) {
+        Locale.setDefault(new Locale("US"));
+        String viewBox = String.format("%d %d %d %d", xMin, yMin, xMax - xMin, yMax - yMin);
+        svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, xMin, yMin, "100%", viewBox));
+        svg.append(SVG_ARROW_DEFS);
+    }
+
     public String close() {
         return svg.append("</svg>").toString();
     }
