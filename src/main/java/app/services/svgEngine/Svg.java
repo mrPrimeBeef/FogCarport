@@ -65,6 +65,9 @@ public class Svg {
         addDimension(x1, y1, x2, y2, offsetDirection, DEFAULT_OFFSET_DISTANCE, "");
     }
 
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance) {
+        addDimension(x1, y1, x2, y2, offsetDirection, offsetDistance, "");
+    }
 
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
 
@@ -74,7 +77,7 @@ public class Svg {
         double Y2 = 0;
         double xText = 0;
         double yText = 0;
-        double rotationText = 0;
+        double textRotation = 0;
 
         double hAx1 = 0;
         double hAy1 = 0;
@@ -94,7 +97,6 @@ public class Svg {
             Y2 = y2 + offsetDistance;
             xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
-            rotationText = 0;
 
             hAx1 = x1;
             hAy1 = y1 + SPACING_HELP_LINE;
@@ -114,7 +116,6 @@ public class Svg {
             Y2 = y2 - offsetDistance;
             xText = 0.5 * (x1 + x2);
             yText = Y1 - SPACING_DIM_TEXT;
-            rotationText = 0;
 
             hAx1 = x1;
             hAy1 = y1 - SPACING_HELP_LINE;
@@ -134,7 +135,8 @@ public class Svg {
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
             yText = 0.5 * (y1 + y2);
-            rotationText = -90;
+
+            textRotation = -90;
 
             hAx1 = x1 - SPACING_HELP_LINE;
             hAy1 = y1;
@@ -154,7 +156,8 @@ public class Svg {
             Y2 = y2;
             xText = X1 - SPACING_DIM_TEXT;
             yText = 0.5 * (y1 + y2);
-            rotationText = -90;
+
+            textRotation = -90;
 
             hAx1 = x1 + SPACING_HELP_LINE;
             hAy1 = y1;
@@ -175,7 +178,7 @@ public class Svg {
 
         String text = String.format("%.2f", distanceInMeter) + stars;
 
-        addText(text, xText, yText, rotationText);
+        addText(text, xText, yText, textRotation);
 
 
     }
