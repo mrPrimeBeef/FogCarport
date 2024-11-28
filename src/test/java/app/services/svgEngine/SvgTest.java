@@ -40,5 +40,4 @@ public class SvgTest {
         assertEquals(expected, actual);
     }
 
-
 }

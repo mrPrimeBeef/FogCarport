@@ -50,6 +50,31 @@ public class Svg {
         return s;
     }
 
+    public void addDimension(double x1, double y1, double x2, double y2, Direction direction) {
+
+        double X1=0;
+        double Y1=0;
+        double X2=0;
+        double Y2=0;
+
+        if(direction == Direction.DOWN) {
+            X1 = x1;
+            Y1 = y1+50;
+            X2 = x2;
+            Y2 = y2+50;
+            addText("hallo", 0.5*(x1+x2), y1+40,0);
+        }
+        if(direction == Direction.UP) {
+            X1 = x1;
+            Y1 = y1-50;
+            X2 = x2;
+            Y2 = y2-50;
+        }
+
+        addDimensionLine(X1, Y1, X2, Y2);
+
+    }
+
     public String close() {
         return svg.append("</svg>").toString();
     }

@@ -34,14 +34,16 @@ public class CarportSvg {
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
-        svg.addText(String.format("%.2f", 0.01*carportLengthCm), 0.5*carportLengthCm, carportWidthCm+30, 0);
-        svg.addDimensionLine(0, carportWidthCm + 50, carportLengthCm, carportWidthCm + 50);
-        svg.addLine(0, carportWidthCm + 56, 0, carportWidthCm + 20, "stroke:black");
-        svg.addLine(carportLengthCm, carportWidthCm + 56, carportLengthCm, carportWidthCm + 20, "stroke:black");
+//        svg.addText(String.format("%.2f", 0.01*carportLengthCm), 0.5*carportLengthCm, carportWidthCm+30, 0);
+//        svg.addDimensionLine(0, carportWidthCm + 50, carportLengthCm, carportWidthCm + 50);
+//        svg.addLine(0, carportWidthCm + 56, 0, carportWidthCm + 20, "stroke:black");
+//        svg.addLine(carportLengthCm, carportWidthCm + 56, carportLengthCm, carportWidthCm + 20, "stroke:black");
 
-        svg.addText(String.format("%.2f", 0.01*carportWidthCm), -60, 0.5*carportWidthCm, -90);
+        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm-200, Direction.DOWN);
+//        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, Direction.UP);
+
+        svg.addText(String.format("%.2f", 0.01 * carportWidthCm), -60, 0.5 * carportWidthCm, -90);
         svg.addDimensionLine(-50, 0, -50, carportWidthCm);
-
 
 
 //        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
@@ -59,7 +61,6 @@ public class CarportSvg {
 //                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
 //            }
 //        }
-
 
 
         // Hardcoded Spær
