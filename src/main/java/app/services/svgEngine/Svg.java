@@ -18,7 +18,6 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
-    //    private static final double SPACING_DIM_LINE = 50;
     private static final double SPACING_DIM_TEXT = 10;
     private static final double SPACING_HELP_LINE = 20;
     private static final double SPACING_ARROW = 6;
@@ -75,8 +74,8 @@ public class Svg {
         double Y1 = 0;
         double X2 = 0;
         double Y2 = 0;
-        double xText = 0;
-        double yText = 0;
+        double textX = 0;
+        double textY = 0;
         double textRotation = 0;
 
         double hAx1 = 0;
@@ -95,8 +94,8 @@ public class Svg {
             Y1 = y1 + offsetDistance;
             X2 = x2;
             Y2 = y2 + offsetDistance;
-            xText = 0.5 * (x1 + x2);
-            yText = Y1 - SPACING_DIM_TEXT;
+            textX = 0.5 * (x1 + x2);
+            textY = Y1 - SPACING_DIM_TEXT;
 
             hAx1 = x1;
             hAy1 = y1 + SPACING_HELP_LINE;
@@ -114,8 +113,8 @@ public class Svg {
             Y1 = y1 - offsetDistance;
             X2 = x2;
             Y2 = y2 - offsetDistance;
-            xText = 0.5 * (x1 + x2);
-            yText = Y1 - SPACING_DIM_TEXT;
+            textX = 0.5 * (x1 + x2);
+            textY = Y1 - SPACING_DIM_TEXT;
 
             hAx1 = x1;
             hAy1 = y1 - SPACING_HELP_LINE;
@@ -133,8 +132,8 @@ public class Svg {
             Y1 = y1;
             X2 = x2 - offsetDistance;
             Y2 = y2;
-            xText = X1 - SPACING_DIM_TEXT;
-            yText = 0.5 * (y1 + y2);
+            textX = X1 - SPACING_DIM_TEXT;
+            textY = 0.5 * (y1 + y2);
 
             textRotation = -90;
 
@@ -154,8 +153,8 @@ public class Svg {
             Y1 = y1;
             X2 = x2 + offsetDistance;
             Y2 = y2;
-            xText = X1 - SPACING_DIM_TEXT;
-            yText = 0.5 * (y1 + y2);
+            textX = X1 - SPACING_DIM_TEXT;
+            textY = 0.5 * (y1 + y2);
 
             textRotation = -90;
 
@@ -178,7 +177,7 @@ public class Svg {
 
         String text = String.format("%.2f", distanceInMeter) + stars;
 
-        addText(text, xText, yText, textRotation);
+        addText(text, textX, textY, textRotation);
 
 
     }
