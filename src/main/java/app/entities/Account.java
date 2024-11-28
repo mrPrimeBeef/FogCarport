@@ -1,7 +1,6 @@
 package app.entities;
 
 public class Account {
-
     private int accountId;
     private String name;
     private String address;
@@ -10,7 +9,8 @@ public class Account {
     private String email;
     private String role;
 
-    public Account(int accountId, String name, String address, int zip, String phone, String email, String password, String role) {
+
+    public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
         this.name = name;
         this.address = address;
@@ -19,6 +19,7 @@ public class Account {
         this.email = email;
         this.role = role;
     }
+
 
     public Account(int accountId, String role) {
         this.accountId = accountId;
