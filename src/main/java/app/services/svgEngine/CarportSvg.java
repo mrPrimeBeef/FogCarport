@@ -20,7 +20,7 @@ public class CarportSvg {
         svg.addDimensionLine(0, carportHeightCm + 50, carportLengthCm, carportHeightCm + 50);
         svg.addDimensionLine(-50, 0, -50, carportHeightCm);
 
-        return svg.toString();
+        return svg.close();
 
     }
 
@@ -77,7 +77,7 @@ public class CarportSvg {
         // Hardcoded hulbånd
         svg.addLine(120, 35, 745, 565, "stroke:black; stroke-dasharray: 5 5");
 
-        return svg.toString();
+        return svg.close();
     }
 
 

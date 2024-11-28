@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class Svg {
 
-    private static final String SVG_START_TAG_TEMPLATE = "<svg version=\"1.1\" x=\"%s\" y=\"%s\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
+    private static final String SVG_OPEN_TAG_TEMPLATE = "<svg version=\"1.1\" x=\"%s\" y=\"%s\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
     private static final String SVG_RECTANGLE_TEMPLATE = "<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"%s\"/>";
     private static final String SVG_TEXT_TEMPLATE = "<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" alignment-baseline=\"middle\" transform=\"rotate(%d %f %f)\">%s</text>";
     private static final String SVG_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"%s\"/>";
@@ -18,16 +18,18 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
-    private StringBuilder svg = new StringBuilder();
+    private final StringBuilder svg = new StringBuilder();
 
     public Svg(String x, String y, String width, String viewBox) {
         Locale.setDefault(new Locale("US"));
-        svg.append(String.format(SVG_START_TAG_TEMPLATE, x, y, width, viewBox));
+        svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, x, y, width, viewBox));
         svg.append(SVG_ARROW_DEFS);
     }
 
-    public void addRectangle(double x, double y, double width, double height, String style) {
-        svg.append(String.format(SVG_RECTANGLE_TEMPLATE, x, y, width, height, style));
+    public String addRectangle(double x, double y, double width, double height, String style) {
+        String s = String.format(SVG_RECTANGLE_TEMPLATE, x, y, width, height, style);
+        svg.append(s);
+        return s;
     }
 
     public String addText(String text, double x, double y, int rotation) {
@@ -48,12 +50,7 @@ public class Svg {
         return s;
     }
 
-    public void addSvg(Svg innerSvg) {
-        svg.append(innerSvg.toString());
-    }
-
-    @Override
-    public String toString() {
+    public String close() {
         return svg.append("</svg>").toString();
     }
 
