@@ -18,7 +18,7 @@ import app.persistence.AccountMapper;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
@@ -47,6 +47,7 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
+        showThankYouPage(name, email, ctx);
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
@@ -84,5 +85,11 @@ public class OrderController {
             return accountId;
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+    }
+
+    private static void showThankYouPage(String name, String email, Context ctx) {
+        ctx.attribute("navn", name);
+        ctx.attribute("email", email);
+        ctx.render("tak.html");
     }
 }
