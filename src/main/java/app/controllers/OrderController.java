@@ -52,7 +52,7 @@ public class OrderController {
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
+        Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");

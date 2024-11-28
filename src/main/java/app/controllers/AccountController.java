@@ -19,7 +19,7 @@ public class AccountController {
     }
   
   public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
+        Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
@@ -41,8 +41,9 @@ public class AccountController {
 
         try {
             Account account = AccountMapper.login(email, password, connectionPool);
+            ctx.sessionAttribute("activeAccount", account);
             if (account.getRole().equals("salesrep")) {
-                ctx.render("saelgeralleordrer");
+                salesrepShowAllCustomersPage(ctx,connectionPool);
                 return;
             }
             //TODO skal henvise til en kunde index side i ctx.render.
