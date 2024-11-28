@@ -17,8 +17,12 @@ public class CarportSvg {
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
 
-        svg.addDimensionLine(0, carportHeightCm + 50, carportLengthCm, carportHeightCm + 50);
-        svg.addDimensionLine(-50, 0, -50, carportHeightCm);
+//        svg.addDimensionLine(0, carportHeightCm + 50, carportLengthCm, carportHeightCm + 50);
+//        svg.addDimensionLine(-50, 0, -50, carportHeightCm);
+
+        svg.addDimension(0, 0, 0, carportHeightCm, Direction.LEFT);
+        svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, Direction.RIGHT);
+        svg.addDimension(carportLengthCm, carportHeightCm, 0,carportHeightCm, Direction.DOWN);
 
         return svg.close();
 
@@ -39,14 +43,13 @@ public class CarportSvg {
 //        svg.addLine(0, carportWidthCm + 56, 0, carportWidthCm + 20, "stroke:black");
 //        svg.addLine(carportLengthCm, carportWidthCm + 56, carportLengthCm, carportWidthCm + 20, "stroke:black");
 
-        svg.addDimension(0,carportWidthCm,carportLengthCm,carportWidthCm,Direction.DOWN);
-        svg.addDimension(0,carportWidthCm,carportLengthCm,carportWidthCm,Direction.UP);
-        svg.addDimension(0,carportWidthCm,0,0,Direction.LEFT);
-        svg.addDimension(0,carportWidthCm,0,0,Direction.RIGHT);
+        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, Direction.DOWN);
+        svg.addDimension(0, 0, carportLengthCm, 0, Direction.UP);
+        svg.addDimension(0, carportWidthCm, 0, 0, Direction.LEFT);
+//        svg.addDimension(0, carportWidthCm, 0, 0, Direction.RIGHT);
 
 //        svg.addText(String.format("%.2f", 0.01*carportWidthCm), -60, 0.5*carportWidthCm, -90);
 //        svg.addDimensionLine(-50, 0, -50, carportWidthCm);
-
 
 
 //        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
@@ -64,7 +67,6 @@ public class CarportSvg {
 //                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
 //            }
 //        }
-
 
 
         // Hardcoded Spær

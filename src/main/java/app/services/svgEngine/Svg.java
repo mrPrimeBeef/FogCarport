@@ -18,6 +18,9 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
+    private static final double SPACING_DIM_LINE = 50;
+    private static final double SPACING_DIM_TEXT = 10;
+
     private final StringBuilder svg = new StringBuilder();
 
     public Svg(String x, String y, String width, String viewBox) {
@@ -52,7 +55,7 @@ public class Svg {
 
     public void addDimension(double x1, double y1, double x2, double y2, Direction direction) {
 
-        double distance = calculateDistance(x1, y1, x2, y2);
+        double distanceInMeter = 0.01*calculateDistance(x1, y1, x2, y2);
 
         double degrees = Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
 
@@ -60,34 +63,50 @@ public class Svg {
         double Y1 = 0;
         double X2 = 0;
         double Y2 = 0;
+        double xText = 0;
+        double yText = 0;
+        double rotationText = 0;
 
         if (direction == Direction.DOWN) {
             X1 = x1;
-            Y1 = y1 + 50;
+            Y1 = y1 + SPACING_DIM_LINE;
             X2 = x2;
-            Y2 = y2 + 50;
-            addText(String.format("%.2f", 0.01 * distance), 0.5 * (x1 + x2), y1 + 40, degrees);
+            Y2 = y2 + SPACING_DIM_LINE;
+            xText = 0.5*(x1+x2);
+            yText = Y1 - SPACING_DIM_TEXT;
+            rotationText = 0;
         }
         if (direction == Direction.UP) {
             X1 = x1;
-            Y1 = y1 - 50;
+            Y1 = y1 - SPACING_DIM_LINE;
             X2 = x2;
-            Y2 = y2 - 50;
+            Y2 = y2 - SPACING_DIM_LINE;
+            xText = 0.5*(x1+x2);
+            yText = Y1 - SPACING_DIM_TEXT;
+            rotationText = 0;
         }
 
         if (direction == Direction.LEFT) {
-            X1 = x1 - 50;
+            X1 = x1 - SPACING_DIM_LINE;
             Y1 = y1;
-            X2 = x2 - 50;
+            X2 = x2 - SPACING_DIM_LINE;
             Y2 = y2;
+            xText = X1 - SPACING_DIM_TEXT;
+            yText = 0.5*(y1+y2);
+            rotationText = -90;
         }
 
         if (direction == Direction.RIGHT) {
-            X1 = x1 + 50;
+            X1 = x1 + SPACING_DIM_LINE;
             Y1 = y1;
-            X2 = x2 + 50;
+            X2 = x2 + SPACING_DIM_LINE;
             Y2 = y2;
+            xText = X1 - SPACING_DIM_TEXT;
+            yText = 0.5*(y1+y2);
+            rotationText = -90;
         }
+
+        addText(String.format("%.2f", distanceInMeter), xText, yText, rotationText);
 
         addDimensionLine(X1, Y1, X2, Y2);
 
