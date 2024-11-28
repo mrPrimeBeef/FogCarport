@@ -30,16 +30,22 @@ public class Svg {
         svg.append(String.format(SVG_RECTANGLE_TEMPLATE, x, y, width, height, style));
     }
 
-    public void addText(String text, double x, double y, int rotation) {
-        svg.append(String.format(SVG_TEXT_TEMPLATE, x, y, rotation, x, y, text));
+    public String addText(String text, double x, double y, int rotation) {
+        String s = String.format(SVG_TEXT_TEMPLATE, x, y, rotation, x, y, text);
+        svg.append(s);
+        return s;
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String style) {
-        svg.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
+    public String addLine(double x1, double y1, double x2, double y2, String style) {
+        String s = String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style);
+        svg.append(s);
+        return s;
     }
 
-    public void addDimensionLine(double x1, double y1, double x2, double y2) {
-        svg.append(String.format(SVG_DIMENSION_LINE_TEMPLATE, x1, y1, x2, y2));
+    public String addDimensionLine(double x1, double y1, double x2, double y2) {
+        String s = String.format(SVG_DIMENSION_LINE_TEMPLATE, x1, y1, x2, y2);
+        svg.append(s);
+        return s;
     }
 
     public void addSvg(Svg innerSvg) {
