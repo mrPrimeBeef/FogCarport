@@ -34,8 +34,8 @@ public class CarportSvg {
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
-        svg.addDimension(0, carportWidthCm, 0, 0, OffsetDirection.LEFT, 70);
-        svg.addDimension(0, carportWidthCm-35, 0, 35, OffsetDirection.LEFT, 30);
+        svg.addDimension(0, carportWidthCm, 0, 0, OffsetDirection.LEFT, 70, "");
+        svg.addDimension(0, carportWidthCm-35, 0, 35, OffsetDirection.LEFT, 30, "*");
 
 //        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
 //        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();

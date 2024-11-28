@@ -18,7 +18,7 @@ public class Svg {
             "        </marker>\n" +
             "    </defs>";
 
-//    private static final double SPACING_DIM_LINE = 50;
+    //    private static final double SPACING_DIM_LINE = 50;
     private static final double SPACING_DIM_TEXT = 10;
     private static final double SPACING_HELP_LINE = 20;
     private static final double SPACING_ARROW = 6;
@@ -61,17 +61,12 @@ public class Svg {
     }
 
 
-
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection) {
-
-        addDimension(x1, y1, x2, y2, offsetDirection, DEFAULT_OFFSET_DISTANCE);
-
+        addDimension(x1, y1, x2, y2, offsetDirection, DEFAULT_OFFSET_DISTANCE, "");
     }
 
 
-    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance) {
-
-        double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
 
         double X1 = 0;
         double Y1 = 0;
@@ -172,10 +167,16 @@ public class Svg {
             hBy2 = Y2;
         }
 
-        addText(String.format("%.2f", distanceInMeter), xText, yText, rotationText);
         addDimensionLine(X1, Y1, X2, Y2);
         addLine(hAx1, hAy1, hAx2, hAy2, "stroke: black");
         addLine(hBx1, hBy1, hBx2, hBy2, "stroke: black");
+
+        double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
+
+        String text = String.format("%.2f", distanceInMeter) + stars;
+
+        addText(text, xText, yText, rotationText);
+
 
     }
 
