@@ -13,6 +13,7 @@ public class AccountController {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
         app.get("kundeside", ctx -> showKundeside(ctx));
+        app.get("logout",ctx->logout(ctx));
     }
 
     public static void login(Context ctx, ConnectionPool connectionPool) {

@@ -40,6 +40,11 @@
                        th:text="${session.userEmail}">
                         Bruger Email
                     </a>
+                    <a class="nav-link active btn-sm ms-2"
+                       th:if="${session.loggedIn}"
+                       th:href="@{/logout}">
+                        Log ud
+                    </a>
                     <a class="nav-link active"
                        th:unless="${session.loggedIn}"
                        th:href="@{/login}">
