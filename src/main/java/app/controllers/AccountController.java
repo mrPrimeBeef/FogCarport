@@ -40,14 +40,16 @@ public class AccountController {
 
     private static void showKundeside(Context ctx) {
         Account activeAccount = ctx.sessionAttribute("customer");
+        if (activeAccount == null) {
+            ctx.sessionAttribute("loggedIn", false);
+            ctx.attribute("Du er ikke logget ind");
+            ctx.render("/error");
+            return;
+        }
         if (activeAccount.getRole().equals("customer")) {
             ctx.sessionAttribute("loggedIn", true);
             ctx.sessionAttribute("userEmail", activeAccount.getEmail());
             ctx.render("/kundeside");
-        } else{
-            ctx.sessionAttribute("loggedIn", false);
-            ctx.attribute("Du er ikke logget ind");
-            ctx.render("/error");
         }
     }
 
