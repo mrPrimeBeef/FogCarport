@@ -42,6 +42,7 @@ package app {
       + static boolean updatePassword(Context ctx, ConnectionPool connectionPool)
       + static boolean updateEmail(Context ctx, ConnectionPool connectionPool)
       + static Arraylist<String> getAllEmailsFromAccount(ctx, connectionPool)
+      + static Arraylist<Account> getAllAccounts(ctx, connectionPool)
       + static int getIdFromAccountEmail(email, ctx, connectionPool)
 
     }

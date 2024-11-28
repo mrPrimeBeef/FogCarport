@@ -12,6 +12,7 @@ import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
 import app.persistence.OrderMapper;
+import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 
@@ -51,8 +52,9 @@ public class OrderController {
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-        Account account = ctx.sessionAttribute("account");
-        if (account == null || !account.getRole().equals("salesrep")) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;

@@ -25,16 +25,16 @@
                 <th>Status</th>
             </tr>
             <tbody class="table-group-divider">
-            <tr th:each="OverviewOrderAccountDtos: ${OverviewOrderAccountDtos}">
-                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(order_id=${OverviewOrderAccountDtos.orderId})}"
-                       th:text="${OverviewOrderAccountDtos.orderId}"></a></td>
-                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(account_id=${OverviewOrderAccountDtos.accountId})}"
-                       th:text="${OverviewOrderAccountDtos.email}"></a></td>
-                <td th:text="${OverviewOrderAccountDtos.datePlaced}"></td>
-                <td th:text="${OverviewOrderAccountDtos.dateCompleted}"></td>
-                <td th:text="${OverviewOrderAccountDtos.datePaid}"></td>
-                <td th:text="${OverviewOrderAccountDtos.salesPrice}"></td>
-                <td th:text="${OverviewOrderAccountDtos.status}"></td>
+            <tr th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
+                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(order_id=${OverviewOrderAccountDto.orderId})}"
+                       th:text="${OverviewOrderAccountDto.orderId}"></a></td>
+                <td><a href="saelgerkunde.html" th:href="@{/saelgerkunde(account_id=${OverviewOrderAccountDto.accountId})}"
+                       th:text="${OverviewOrderAccountDto.email}"></a></td>
+                <td th:text="${OverviewOrderAccountDto.datePlaced}"></td>
+                <td th:text="${OverviewOrderAccountDto.dateCompleted}"></td>
+                <td th:text="${OverviewOrderAccountDto.datePaid}"></td>
+                <td th:text="${OverviewOrderAccountDto.salesPrice}"></td>
+                <td th:text="${OverviewOrderAccountDto.status}"></td>
             </tr>
             </tbody>
         </table>

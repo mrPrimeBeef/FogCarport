@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import app.exceptions.AccountCreationException;
 import app.exceptions.DatabaseException;
+import app.entities.Account;
 
 class AccountMapperTest {
 
@@ -241,6 +242,18 @@ class AccountMapperTest {
     }
 
     @Test
+
+    void getAllAccounts() throws DatabaseException {
+        ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
+        String actual = accounts.get(0).getName();
+
+        assertEquals("Test Testersen", actual);
+        assertEquals(3, accounts.size());
+
+        assertNotEquals("Test Testersen", accounts.get(1).getName());
+    }
+                         
+    @Test
     void login() throws AccountException{
         Account account;
         account = AccountMapper.login("test@test.dk","1234",connectionPool);
@@ -251,3 +264,4 @@ class AccountMapperTest {
         assertNotEquals("admin",account.getRole());
     }
 }
+

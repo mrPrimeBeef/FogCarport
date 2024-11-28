@@ -10,22 +10,51 @@ import app.exceptions.DatabaseException;
 
 public class AccountMapper {
 
-    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
-        Account account = null;
-        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<Account> accounts = new ArrayList<>();
+
+        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
+            ResultSet rs = ps.executeQuery();
+          
+            while (rs.next()) {
+                String mail = rs.getString("email");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                int zipCode = rs.getInt("zip_code");
+                String phone = rs.getString("phone");
+                String city = rs.getString("city");
+
+                accounts.add(new Account(name, address, zipCode, phone, mail, city));
+            }
+            return accounts;
+
+        } catch (SQLException e) {
+        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+        }
+    }
+  
+  public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+    
+     try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+       
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
+       
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String role = rs.getString("role");
                 account = new Account(accountId, role);
             }
+       
         } catch (SQLException e) {
             throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
         }
