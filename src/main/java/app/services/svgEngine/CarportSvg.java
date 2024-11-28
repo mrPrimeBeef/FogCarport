@@ -43,8 +43,9 @@ public class CarportSvg {
             double y = placedMaterial.getY();
             float length = placedMaterial.getMaterial().getLengthCm();
             float height = placedMaterial.getMaterial().getHeightMm();
+            String itemType = placedMaterial.getMaterial().getItemType();
 
-            if (placedMaterial.getMaterial().getItemType().equalsIgnoreCase("stolpe")) {
+            if (itemType.equalsIgnoreCase("stolpe")) {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
             } else {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
@@ -52,8 +53,10 @@ public class CarportSvg {
 
         }
 
-//        svg.addText("7,80", carportLengthCm / 2 + 100, carportWidthCm + 140, 0);
-//        svg.addText("6,00", 50, 50, -10);
+//        svg.addText(String.format("%.2f", 0.01*carportLengthCm), carportLengthCm / 2 + 100, carportWidthCm + 30, 0);
+//        svg.addText(String.format("%.2f", 0.01*carportWidthCm), 50, 50, -10);
+        svg.addText(String.format("%.2f", 0.01*carportLengthCm), 0.5*carportLengthCm, carportWidthCm+30, 0);
+        svg.addText(String.format("%.2f", 0.01*carportWidthCm), -60, 0.5*carportWidthCm, -90);
 
 //        // Spær
 //        for (int x = 0; x < carportLengthCm; x += 55) {
