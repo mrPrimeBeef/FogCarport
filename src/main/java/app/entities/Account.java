@@ -21,8 +21,9 @@ public class Account {
         this.role = role;
     }
 
-    public Account(int accountId, String name, String role, String address, String city, String phone) {
+    public Account(int accountId, String email, String name, String role, String address, String city, String phone) {
         this.accountId = accountId;
+        this.email = email;
         this.name = name;
         this.role = role;
         this.address = address;

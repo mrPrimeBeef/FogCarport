@@ -23,9 +23,28 @@
                     <li class="nav-item">
                         <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Byg-selv carporte</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link3</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
-                    <a class="nav-link active" th:href="@{/login}" href="login.html">Fog konto</a>
+                    <a class="nav-link active"
+                       th:if="${session.loggedIn}"
+                       th:href="@{/kundeside}"
+                       th:text="${session.userEmail}">
+                        Bruger Email
+                    </a>
+                    <a class="nav-link active"
+                       th:unless="${session.loggedIn}"
+                       th:href="@{/login}">
+                        Fog konto
+                    </a>
                 </div>
             </div>
         </div>

@@ -32,7 +32,7 @@ public class AccountMapper {
                 if (role.equals("salesrep")) {
                     account = new Account(accountId, role);
                 } else if (role.equals("customer")) {
-                    account = new Account(accountId, name, role, address, city, phone);
+                    account = new Account(accountId, email, name, role, address, city, phone);
                 }
             }
         } catch (SQLException e) {

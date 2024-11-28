@@ -12,6 +12,7 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.get("kundeside", ctx -> showKundeside(ctx));
     }
 
     public static void login(Context ctx, ConnectionPool connectionPool) {
@@ -25,13 +26,30 @@ public class AccountController {
                 return;
             }
             if (account.getRole().equals("customer")) {
-                ctx.attribute("customer", account);
+                ctx.sessionAttribute("loggedIn", true);
+                ctx.sessionAttribute("userEmail", email);
+                ctx.sessionAttribute("customer", account);
                 ctx.render("/kundeside");
             }
 
         } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
+        }
+    }
+
+    private static void showKundeside(Context ctx) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        System.out.println(activeAccount);
+        if (activeAccount.getRole().equals("customer")) {
+            ctx.sessionAttribute("loggedIn", true);
+            ctx.sessionAttribute("userEmail", activeAccount.getEmail());
+            System.out.println(activeAccount.getEmail());
+            ctx.render("/kundeside");
+        } else{
+            ctx.sessionAttribute("loggedIn", false);
+            ctx.attribute("Du er ikke logget ind");
+            ctx.render("/error");
         }
     }
 
