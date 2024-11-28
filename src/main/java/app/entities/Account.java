@@ -5,6 +5,7 @@ public class Account {
     private int accountId;
     private String name;
     private String address;
+    private String city;
     private int zip;
     private String phone;
     private String email;
@@ -20,10 +21,21 @@ public class Account {
         this.role = role;
     }
 
+    public Account(int accountId, String name, String role, String address, String city, String phone) {
+    this.accountId = accountId;
+    this.name = name;
+    this.role = role;
+    this.address = address;
+    this.city = city;
+    this.phone = phone;
+    }
+
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
     }
+
+
 
     public int getAccountId() {
         return accountId;

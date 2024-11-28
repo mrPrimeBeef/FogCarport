@@ -24,10 +24,9 @@ public class AccountController {
                 ctx.render("saelgeralleorder");
                 return;
             }
-            //TODO skal henvise til en kunde index side i ctx.render.
             if (account.getRole().equals("customer")) {
-                ctx.render("/index");
-                return;
+                ctx.sessionAttribute("customer", account);
+                ctx.render("/kundeside");
             }
 
         } catch (AccountException e) {

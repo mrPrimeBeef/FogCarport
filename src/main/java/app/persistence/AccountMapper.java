@@ -12,7 +12,7 @@ public class AccountMapper {
 
     public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+        String sql = "SELECT account_id, name, role, address, city, phone FROM account WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -23,8 +23,17 @@ public class AccountMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
+                String name = rs.getString("name");
                 String role = rs.getString("role");
-                account = new Account(accountId, role);
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                String phone = rs.getString("phone");
+
+                if (role.equals("salesrep")) {
+                    account = new Account(accountId, role);
+                } else if (role.equals("customer")) {
+                    account = new Account(accountId, name, role, address, city, phone);
+                }
             }
         } catch (SQLException e) {
             throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
