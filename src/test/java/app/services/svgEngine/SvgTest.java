@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SvgTest {
 
-    private static final Svg svg = new Svg("0", "0", "100%", "0 0 100 100");
+    private static final Svg svg = new Svg(0, 0, "100%", "0 0 100 100");
 
     // TODO: Test empty SVG
 

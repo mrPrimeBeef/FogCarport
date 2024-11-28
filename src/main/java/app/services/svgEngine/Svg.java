@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class Svg {
 
-    private static final String SVG_OPEN_TAG_TEMPLATE = "<svg version=\"1.1\" x=\"%s\" y=\"%s\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
+    private static final String SVG_OPEN_TAG_TEMPLATE = "<svg version=\"1.1\" x=\"%d\" y=\"%d\" width=\"%s\" viewBox=\"%s\" preserveAspectRatio=\"xMinYMin\">";
     private static final String SVG_RECTANGLE_TEMPLATE = "<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"%s\"/>";
     private static final String SVG_TEXT_TEMPLATE = "<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" alignment-baseline=\"middle\" transform=\"rotate(%f %f %f)\">%s</text>";
     private static final String SVG_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"%s\"/>";
@@ -25,7 +25,7 @@ public class Svg {
 
     private final StringBuilder svg = new StringBuilder();
 
-    public Svg(String x, String y, String width, String viewBox) {
+    public Svg(int x, int y, String width, String viewBox) {
         Locale.setDefault(new Locale("US"));
         svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, x, y, width, viewBox));
         svg.append(SVG_ARROW_DEFS);
@@ -70,14 +70,13 @@ public class Svg {
 
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDist, String stars) {
 
+        // TODO: Er dette en smart måde at instansire disse variable på?
         Line dimLine = null;
         Line extLine1 = null;
         Line extLine2 = null;
-
-        double textX = 0;
-        double textY = 0;
-        double textRotation = 0;
-
+        double textX = Double.NaN;
+        double textY = Double.NaN;
+        double textRotation = Double.NaN;
 
         switch (offsetDirection) {
             case UP:
@@ -86,6 +85,7 @@ public class Svg {
                 extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
                 textX = 0.5 * (x1 + x2);
                 textY = dimLine.y1 - SPACING_DIM_TEXT;
+                textRotation = 0;
                 break;
 
             case DOWN:
@@ -94,6 +94,7 @@ public class Svg {
                 extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
                 textX = 0.5 * (x1 + x2);
                 textY = dimLine.y1 - SPACING_DIM_TEXT;
+                textRotation = 0;
                 break;
 
             case LEFT:
@@ -114,45 +115,6 @@ public class Svg {
                 textRotation = -90;
                 break;
         }
-
-
-//        if (offsetDirection == OffsetDirection.DOWN) {
-//            dimLine = new Line(x1, y1 + offsetDistance, x2, y2 + offsetDistance);
-//            extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.x1, dimLine.y1 + SPACING_ARROW);
-//            extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
-//
-//            textX = 0.5 * (x1 + x2);
-//            textY = dimLine.y1 - SPACING_DIM_TEXT;
-//        }
-//        if (offsetDirection == OffsetDirection.UP) {
-//            dimLine = new Line(x1, y1 - offsetDistance, x2, y2 - offsetDistance);
-//            extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.x1, dimLine.y1 - SPACING_ARROW);
-//            extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
-//
-//            textX = 0.5 * (x1 + x2);
-//            textY = dimLine.y1 - SPACING_DIM_TEXT;
-//        }
-//        if (offsetDirection == OffsetDirection.LEFT) {
-//
-//            dimLine = new Line(x1 - offsetDistance, y1, x2 - offsetDistance, y2);
-//            extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.x1 - SPACING_ARROW, dimLine.y1);
-//            extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.x2 - SPACING_ARROW, dimLine.y2);
-//
-//            textX = dimLine.x1 - SPACING_DIM_TEXT;
-//            textY = 0.5 * (y1 + y2);
-//            textRotation = -90;
-//        }
-//        if (offsetDirection == OffsetDirection.RIGHT) {
-//
-//            dimLine = new Line(x1 + offsetDistance, y1, x2 + offsetDistance, y2);
-//            extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.x1 + SPACING_ARROW, dimLine.y1);
-//            extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.x2 + SPACING_ARROW, dimLine.y2);
-//
-//            textX = dimLine.x1 - SPACING_DIM_TEXT;
-//            textY = 0.5 * (y1 + y2);
-//
-//            textRotation = -90;
-//        }
 
         addDimensionLine(dimLine.x1, dimLine.y1, dimLine.x2, dimLine.y2);
         addLine(extLine1.x1, extLine1.y1, extLine1.x2, extLine1.y2, "stroke: black");
