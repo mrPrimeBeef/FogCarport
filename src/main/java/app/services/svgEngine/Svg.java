@@ -68,57 +68,91 @@ public class Svg {
         addDimension(x1, y1, x2, y2, offsetDirection, offsetDistance, "");
     }
 
-    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDist, String stars) {
 
-        Line dimLine = new Line();
-        Line extLine1 = new Line();
-        Line extLine2 = new Line();
+        Line dimLine = null;
+        Line extLine1 = null;
+        Line extLine2 = null;
 
         double textX = 0;
         double textY = 0;
         double textRotation = 0;
 
 
-        if (offsetDirection == OffsetDirection.DOWN) {
-            dimLine = new Line(x1, y1 + offsetDistance, x2, y2 + offsetDistance);
-            extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.x1, dimLine.y1 + SPACING_ARROW);
-            extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
+        switch (offsetDirection) {
+            case UP:
+                dimLine = new Line(x1, y1 - offsetDist, x2, y2 - offsetDist);
+                extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.x1, dimLine.y1 - SPACING_ARROW);
+                extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
+                textX = 0.5 * (x1 + x2);
+                textY = dimLine.y1 - SPACING_DIM_TEXT;
+                break;
 
-            textX = 0.5 * (x1 + x2);
-            textY = dimLine.y1 - SPACING_DIM_TEXT;
+            case DOWN:
+                dimLine = new Line(x1, y1 + offsetDist, x2, y2 + offsetDist);
+                extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.x1, dimLine.y1 + SPACING_ARROW);
+                extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
+                textX = 0.5 * (x1 + x2);
+                textY = dimLine.y1 - SPACING_DIM_TEXT;
+                break;
+
+            case LEFT:
+                dimLine = new Line(x1 - offsetDist, y1, x2 - offsetDist, y2);
+                extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.x1 - SPACING_ARROW, dimLine.y1);
+                extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.x2 - SPACING_ARROW, dimLine.y2);
+                textX = dimLine.x1 - SPACING_DIM_TEXT;
+                textY = 0.5 * (y1 + y2);
+                textRotation = -90;
+                break;
+
+            case RIGHT:
+                dimLine = new Line(x1 + offsetDist, y1, x2 + offsetDist, y2);
+                extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.x1 + SPACING_ARROW, dimLine.y1);
+                extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.x2 + SPACING_ARROW, dimLine.y2);
+                textX = dimLine.x1 - SPACING_DIM_TEXT;
+                textY = 0.5 * (y1 + y2);
+                textRotation = -90;
+                break;
         }
-        if (offsetDirection == OffsetDirection.UP) {
-            dimLine = new Line(x1, y1 - offsetDistance, x2, y2 - offsetDistance);
-            extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.x1, dimLine.y1 - SPACING_ARROW);
-            extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
 
-            textX = 0.5 * (x1 + x2);
-            textY = dimLine.y1 - SPACING_DIM_TEXT;
-        }
 
-        if (offsetDirection == OffsetDirection.LEFT) {
-
-            dimLine = new Line(x1 - offsetDistance, y1, x2 - offsetDistance, y2);
-            extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.x1 - SPACING_ARROW, dimLine.y1);
-            extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.x2 - SPACING_ARROW, dimLine.y2);
-
-            textX = dimLine.x1 - SPACING_DIM_TEXT;
-            textY = 0.5 * (y1 + y2);
-            textRotation = -90;
-        }
-
-        if (offsetDirection == OffsetDirection.RIGHT) {
-
-            dimLine = new Line(x1 + offsetDistance, y1, x2 + offsetDistance, y2);
-            extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.x1 + SPACING_ARROW, dimLine.y1);
-            extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.x2 + SPACING_ARROW, dimLine.y2);
-
-            textX = dimLine.x1 - SPACING_DIM_TEXT;
-            textY = 0.5 * (y1 + y2);
-
-            textRotation = -90;
-
-        }
+//        if (offsetDirection == OffsetDirection.DOWN) {
+//            dimLine = new Line(x1, y1 + offsetDistance, x2, y2 + offsetDistance);
+//            extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.x1, dimLine.y1 + SPACING_ARROW);
+//            extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
+//
+//            textX = 0.5 * (x1 + x2);
+//            textY = dimLine.y1 - SPACING_DIM_TEXT;
+//        }
+//        if (offsetDirection == OffsetDirection.UP) {
+//            dimLine = new Line(x1, y1 - offsetDistance, x2, y2 - offsetDistance);
+//            extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.x1, dimLine.y1 - SPACING_ARROW);
+//            extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
+//
+//            textX = 0.5 * (x1 + x2);
+//            textY = dimLine.y1 - SPACING_DIM_TEXT;
+//        }
+//        if (offsetDirection == OffsetDirection.LEFT) {
+//
+//            dimLine = new Line(x1 - offsetDistance, y1, x2 - offsetDistance, y2);
+//            extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.x1 - SPACING_ARROW, dimLine.y1);
+//            extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.x2 - SPACING_ARROW, dimLine.y2);
+//
+//            textX = dimLine.x1 - SPACING_DIM_TEXT;
+//            textY = 0.5 * (y1 + y2);
+//            textRotation = -90;
+//        }
+//        if (offsetDirection == OffsetDirection.RIGHT) {
+//
+//            dimLine = new Line(x1 + offsetDistance, y1, x2 + offsetDistance, y2);
+//            extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.x1 + SPACING_ARROW, dimLine.y1);
+//            extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.x2 + SPACING_ARROW, dimLine.y2);
+//
+//            textX = dimLine.x1 - SPACING_DIM_TEXT;
+//            textY = 0.5 * (y1 + y2);
+//
+//            textRotation = -90;
+//        }
 
         addDimensionLine(dimLine.x1, dimLine.y1, dimLine.x2, dimLine.y2);
         addLine(extLine1.x1, extLine1.y1, extLine1.x2, extLine1.y2, "stroke: black");
