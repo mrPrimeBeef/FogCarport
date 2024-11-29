@@ -65,9 +65,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
             // testingPillars(carport, pillarMaterial);
 
-            System.out.println(carport.getWidth());
-            System.out.println(carport.getLength());
-
 
         } catch (DatabaseException e) {
             e.printStackTrace();
@@ -90,36 +87,86 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     void calculatePillars(Carport carport, Material pillarMaterial) {
 
-        int amountOfPillarsX = (carport.getWidth() - defaultOverhangX * 2) / maxPillarDistance % maxPillarDistance + 1;
-        int amountOfPillarsY = (carport.getLength() - defaultOverhangY * 2) / maxPillarDistance % maxPillarDistance;
 
-        for (int i = 0; i <= amountOfPillarsY; i++) {
-            for (int j = 0; j <= amountOfPillarsX; j++) {
-                float x = j * ((float) carport.getLength() / amountOfPillarsX - 2 * defaultOverhangX) - pillarMaterial.getWidthCm() / 20 + defaultOverhangX;
-                float y = i * ((float) (carport.getWidth() - 2 * defaultOverhangY) / amountOfPillarsY) + defaultOverhangY - pillarMaterial.getWidthCm() / 20;
+        for(int i = 0; i < 4; i++){
+            Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
+            PlacedMaterial placedPillar = null;
+            System.out.println(i);
+            if(i == 0){
+                placedPillar = new PlacedMaterial(clonedMaterial, defaultOverhangX - pillarMaterial.getWidthCm()/20, defaultOverhangY - pillarMaterial.getWidthCm()/20, 0);
+            }else if(i == 1){
+                placedPillar = new PlacedMaterial(clonedMaterial, carport.getLength() - defaultOverhangX - pillarMaterial.getWidthCm()/20, defaultOverhangY - pillarMaterial.getWidthCm()/20, 0);
+            }else if(i == 2){
+                placedPillar = new PlacedMaterial(clonedMaterial, defaultOverhangX - pillarMaterial.getWidthCm()/20, carport.getWidth() - defaultOverhangY - pillarMaterial.getWidthCm()/20, 0);
+            }else if(i == 3){
+                placedPillar = new PlacedMaterial(clonedMaterial, carport.getLength() - defaultOverhangX - pillarMaterial.getWidthCm()/20, carport.getWidth() - defaultOverhangY - pillarMaterial.getWidthCm()/20, 0);
+            }
+            rotateAroundY(clonedMaterial);
+            placedMaterialList.add(placedPillar);
+        }
+
+
+        /*
+        int amountOfPillarsX = Math.max(2, (carport.getLength() - 2 * defaultOverhangX) / maxPillarDistance + 1);
+        int amountOfPillarsY = Math.max(2, (carport.getWidth() - 2 * defaultOverhangY) / maxPillarDistance + 1);
+
+        System.out.println("Amount of Pillars on X: " + amountOfPillarsX);
+        System.out.println("Amount of Pillars on Y: " + amountOfPillarsY);
+
+        for (int i = 0; i < amountOfPillarsY; i++) {
+            for (int j = 0; j < amountOfPillarsX; j++) {
+                float y = defaultOverhangX + j * (float) (carport.getLength() - 2 * defaultOverhangX) / (amountOfPillarsX - 1);
+                float x = defaultOverhangY + i * (float) (carport.getWidth() - 2 * defaultOverhangY) / (amountOfPillarsY - 1);
 
                 // Clones the material for each pillar
                 Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
+                System.out.println("Pillar x: " + x);
+                System.out.println("Pillar y: " + y);
                 PlacedMaterial placedPillar = new PlacedMaterial(clonedMaterial, x, y, 0);
 
                 rotateAroundY(clonedMaterial);
                 placedMaterialList.add(placedPillar);
             }
         }
+
+        */
     }
+
 
     private void calculateBeams(Carport carport, Material beamMaterial) {
 
-        int amountOfBeamsY = (carport.getLength() - defaultOverhangY * 2) / maxPillarDistance % maxPillarDistance;
-
-        for (int j = 0; j <= amountOfBeamsY; j++) {
-            float y = j * ((float) carport.getWidth() / amountOfBeamsY - 2 * defaultOverhangY) - beamMaterial.getWidthCm()/20+defaultOverhangY;
+        for(int i = 0; i < 4; i++){
             Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
+            PlacedMaterial placedPillar = null;
+            System.out.println(i);
+            if(i == 0){
+                placedPillar = new PlacedMaterial(clonedMaterial, 0, defaultOverhangY - beamMaterial.getWidthCm()/20, 0);
+            }else if(i == 1){
+                placedPillar = new PlacedMaterial(clonedMaterial, 0, defaultOverhangY - beamMaterial.getWidthCm()/20, 0);
+            }else if(i == 2){
+                placedPillar = new PlacedMaterial(clonedMaterial, 0, carport.getWidth() - defaultOverhangY - beamMaterial.getWidthCm()/20, 0);
+            }else if(i == 3){
+                placedPillar = new PlacedMaterial(clonedMaterial, 0, carport.getWidth() - defaultOverhangY - beamMaterial.getWidthCm()/20, 0);
+            }
+            rotateAroundX(clonedMaterial);
+            placedMaterialList.add(placedPillar);
+        }
+
+        /*
+        int amountOfBeamsY = (carport.getLength() - 2 * defaultOverhangY) / maxPillarDistance % maxPillarDistance + 1;
+
+        System.out.println("Amount of Beams: " + amountOfBeamsY);
+
+        for (int j = 0; j < amountOfBeamsY; j++) {
+            float y = j * ((float) carport.getLength() / amountOfBeamsY - 2 * defaultOverhangY) - beamMaterial.getWidthCm()/20+defaultOverhangY;
+            Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
+            System.out.println("Beam y: " + y);
             PlacedMaterial placedBeam = new PlacedMaterial(clonedMaterial, 0, y, carport.getHeight());
 
             rotateAroundX(clonedMaterial);
             placedMaterialList.add(placedBeam);
         }
+        */
     }
 
     private void calculateRafters(Carport carport, Material rafterMaterial){
@@ -132,6 +179,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
             Material clonedMaterial = rafterMaterial.cloneMaterial(rafterMaterial);
             PlacedMaterial placedRafter = new PlacedMaterial(clonedMaterial, x, 0, 0);
+            System.out.println("Rafter: " + x);
 
             rotateAroundZ(clonedMaterial);
             rotateAroundY(clonedMaterial);

@@ -54,8 +54,6 @@ public class Carport extends Structure{
         this.width = alignToNearest30(width);
         this.height = alignToNearest30(height);
 
-
-        System.out.println(this.width + " width");
         // Sets Roof Type based on hasRaisedRoof
         if(hasRaisedRoof){
             roofType = RoofType.RAISED;
