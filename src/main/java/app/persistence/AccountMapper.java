@@ -106,10 +106,10 @@ public class AccountMapper {
         String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
-        String password = PasswordGenerator.generatePassword();
-
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            String password = PasswordGenerator.generatePassword();
 
             ps.setString(1, email);
             ps.setString(2, password);

@@ -73,8 +73,7 @@ public class OrderController {
     private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
         int accountId;
         boolean allreadyUser = false;
-        ArrayList<String> emails;
-        emails = AccountMapper.getAllAccountEmails(connectionPool);
+        ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
         for (String mail : emails) {
             if (mail.equals(email)) {
@@ -83,8 +82,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
-            return accountId;
+            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
