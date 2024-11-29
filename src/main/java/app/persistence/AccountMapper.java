@@ -20,7 +20,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-          
+
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -34,28 +34,28 @@ public class AccountMapper {
             return accounts;
 
         } catch (SQLException e) {
-        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+            throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
-  
-  public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
         String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
-    
-     try (Connection connection = connectionPool.getConnection();
+
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-       
+
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-       
+
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String role = rs.getString("role");
                 account = new Account(accountId, role);
             }
-       
+
         } catch (SQLException e) {
             throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
         }
@@ -135,5 +135,27 @@ public class AccountMapper {
             throw new AccountCreationException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
         }
         return accountId;
+    }
+
+    public static String getPasswordByEmail(String email, ConnectionPool connectionPool) throws AccountException {
+        String password = null;
+        String sql = "SELECT password FROM account WHERE email=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                password = rs.getString("password"); // Hent adgangskoden fra resultatsættet
+            } else {
+                throw new AccountException("E-mail findes ikke i databasen.", "Email not found.");
+            }
+
+        } catch (SQLException e) {
+            throw new AccountException("Fejl ved hentning af adgangskode.", "An error occurred while fetching the password.", e.getMessage());
+        }
+        return password;
     }
 }

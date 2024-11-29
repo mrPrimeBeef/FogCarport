@@ -15,10 +15,12 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.get("glemtKode", ctx -> ctx.render("glemtKode"));
+        app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
-  
-  public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -43,7 +45,7 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("activeAccount", account);
             if (account.getRole().equals("salesrep")) {
-                salesrepShowAllCustomersPage(ctx,connectionPool);
+                salesrepShowAllCustomersPage(ctx, connectionPool);
                 return;
             }
             //TODO skal henvise til en kunde index side i ctx.render.
@@ -61,5 +63,16 @@ public class AccountController {
     private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
+    }
+
+    public static void forgotPassword(Context ctx, ConnectionPool connectionPool) throws AccountException {
+        String email = ctx.formParam("email");
+        try {
+            String password = AccountMapper.getPasswordByEmail(email, connectionPool);
+            System.out.println("Adgangskoden for " + email + " er: " + password);
+
+        } catch (AccountException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
