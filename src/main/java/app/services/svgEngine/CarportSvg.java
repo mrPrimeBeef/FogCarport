@@ -1,45 +1,109 @@
 package app.services.svgEngine;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
+
 public class CarportSvg {
 
-    public static String topView(int carportLengthCm, int carportWidthCm) {
+    public static String sideView(Carport carport) throws SQLException {
 
-        // outerSvg which is the size of the carport in cm plus 100 cm on each side for dimensions
-        Svg outerSvg = new Svg("0", "0", "100%","0 0 " + (carportLengthCm+200) + " " + (carportWidthCm+200));
-        outerSvg.addRectangle(0,0,carportLengthCm+200, carportWidthCm+200, "fill: green");
-        outerSvg.addDimensionLine(100,carportWidthCm+150, carportLengthCm+100, carportWidthCm+150);
+        int carportLengthCm = carport.getLength();
+        int carportHeightCm = carport.getHeight();
+
+        // TODO: Check at den nye constructor rent faktisk giver mening
+        Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
+
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
+        svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
+
+        svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
+        svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
+        svg.addDimension(carportLengthCm, carportHeightCm, 0, carportHeightCm, OffsetDirection.DOWN);
 
 
-        // innerSvg which is the size of the carport in cm
-        Svg innerSvg = new Svg("100", "100", ""+carportLengthCm,"0 0 " + carportLengthCm + " " + carportWidthCm);
-        innerSvg.addRectangle(0,0,carportLengthCm, carportWidthCm, "fill: blue");
+        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
+        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
+        for (PlacedMaterial placedMaterial : placedMaterials) {
+            double x = placedMaterial.getX();
+            double y = placedMaterial.getZ();
+            float length = placedMaterial.getMaterial().getLengthCm();
+            float height = placedMaterial.getMaterial().getWidthCm();
+            String itemType = placedMaterial.getMaterial().getItemType();
 
-        // Spær
-        for (int x = 0; x < carportLengthCm; x += 55) {
-            innerSvg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+            if (itemType.equalsIgnoreCase("stolpe")) {
+                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
+            } else {
+                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
+            }
         }
 
-        // Remme
-        innerSvg.addRectangle(0, 35, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-        innerSvg.addRectangle(0, 565, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
 
-        // Stolper
-        innerSvg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-
-        // Mål i meter
-        innerSvg.addText(20, 20, 0, "5,50m");
-
-        // Pile til mål i meter
-        innerSvg.addDimensionLine(100, 100, 400, 400);
-
-        // En linje
-        innerSvg.addLine(600, 300, 300, 500);
+//        // DRAW DIMENSIONS FOR COLUMNS
+//        for (PlacedMaterial placedMaterial : placedMaterials) {
+//            String itemType = placedMaterial.getMaterial().getItemType();
+//
+//            if (itemType.equalsIgnoreCase("stolpe")) {
+//                double x = placedMaterial.getX();
+//                svg.addDimension();
+//            }
+//        }
 
 
-        // Tilføjelse af innerSvg til outerSvg
-        outerSvg.addSvg(innerSvg);
+        return svg.close();
 
-
-        return outerSvg.toString();
     }
+
+
+    public static String topView(Carport carport) throws SQLException {
+
+        int carportLengthCm = carport.getLength();
+        int carportWidthCm = carport.getWidth();
+
+        Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
+        svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
+
+        svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
+        svg.addDimension(0, carportWidthCm, 0, 0, OffsetDirection.LEFT);
+
+        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
+        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
+        for (PlacedMaterial placedMaterial : placedMaterials) {
+            double x = placedMaterial.getX();
+            double y = placedMaterial.getY();
+            float length = placedMaterial.getMaterial().getLengthCm();
+            float height = placedMaterial.getMaterial().getHeightCm();
+            String itemType = placedMaterial.getMaterial().getItemType();
+
+            if (itemType.equalsIgnoreCase("stolpe")) {
+                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
+            } else {
+                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
+            }
+        }
+
+
+//        // Hardcoded Spær og deres dimensions
+//        for (int x = 0; x < carportLengthCm; x += 55) {
+//            svg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+//            svg.addDimension(x, 0, x + 55, 0, OffsetDirection.UP);
+//        }
+//
+//        // Hardcoded Remme
+//        svg.addRectangle(0, 35, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+//        svg.addRectangle(0, 565, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+//
+//        // Hardcoded Stolper
+//        svg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:2px; stroke:black; fill: none");
+//
+//        // Hardcoded hulbånd
+//        svg.addLine(120, 35, 745, 565, "stroke:black; stroke-dasharray: 5 5");
+
+        return svg.close();
+    }
+
+
 }
