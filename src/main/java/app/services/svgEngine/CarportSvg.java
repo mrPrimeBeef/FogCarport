@@ -1,7 +1,9 @@
 package app.services.svgEngine;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
@@ -21,8 +23,6 @@ public class CarportSvg {
 
         svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
         svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
-        svg.addDimension(carportLengthCm, carportHeightCm, 0, carportHeightCm, OffsetDirection.DOWN);
-
 
         // DRAWING REAL CARPORT FROM CALCULATION ENGINE
         List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
@@ -41,16 +41,23 @@ public class CarportSvg {
         }
 
 
-//        // DRAW DIMENSIONS FOR COLUMNS
-//        for (PlacedMaterial placedMaterial : placedMaterials) {
-//            String itemType = placedMaterial.getMaterial().getItemType();
-//
-//            if (itemType.equalsIgnoreCase("stolpe")) {
-//                double x = placedMaterial.getX();
-//                svg.addDimension();
-//            }
-//        }
+        // DRAW DIMENSIONS FOR COLUMNS
+        List<Double> columnX = new ArrayList<Double>();
+        for (PlacedMaterial placedMaterial : placedMaterials) {
+            String itemType = placedMaterial.getMaterial().getItemType();
 
+            if (itemType.equalsIgnoreCase("stolpe")) {
+                columnX.add(placedMaterial.getX());
+            }
+        }
+
+//        Collections.sort(columnX);
+        System.out.println("columnX: " + columnX);
+
+//        svg.addDimension(0, carportHeightCm, columnX.get(0), carportHeightCm, OffsetDirection.DOWN);
+//        svg.addDimension(columnX.get(0), carportHeightCm, columnX.get(1), carportHeightCm, OffsetDirection.DOWN);
+
+        svg.addDimension(95, carportHeightCm, 675, carportHeightCm, OffsetDirection.DOWN);
 
         return svg.close();
 
