@@ -3,6 +3,11 @@ package app.services.StructureCalculationEngine.Entities;
 import app.persistence.ConnectionPool;
 import app.services.StructureCalculationEngine.CarportCalculationStrategy;
 import app.services.StructureCalculationEngine.RoofType;
+import app.services.StructureCalculationEngine.ShedCalculationStrategy;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Carport extends Structure{
 
@@ -40,34 +45,40 @@ public class Carport extends Structure{
 
     public Carport(int width, int length, int height, Shed shed, boolean hasRaisedRoof, int angle, ConnectionPool connectionPool) {
         super(new CarportCalculationStrategy(connectionPool));
-        this.width = width;
-        this.length = length;
         this.shed = shed;
         this.hasRaisedRoof = hasRaisedRoof;
         this.angle = angle;
 
         // Sets height to 210 if initial height is lower, also makes height a multiple of 30 if it is not already
-        this.height = Math.max(height, 210);
-        if(this.height % 30 != 0){
-            this.height = (this.height / 30) * 30 + ((this.height % 30 >= 15) ? 30 : 0);
-        }
+        this.length = alignToNearest30(length);
+        this.width = alignToNearest30(width);
+        this.height = alignToNearest30(height);
 
-        this.length = Math.max(length, 240);
-        if(this.length % 30 != 0){
-            this.length = (this.length / 30) * 30 + ((this.length % 30 >= 15) ? 30 : 0);
-        }
 
-        this.width = Math.max(width, 240);
-        if(this.width % 30 != 0){
-            this.width = (this.width / 30) * 30 + ((this.width % 30 >= 15) ? 30 : 0);
-        }
-
+        System.out.println(this.width + " width");
         // Sets Roof Type based on hasRaisedRoof
         if(hasRaisedRoof){
             roofType = RoofType.RAISED;
         }else{
             roofType = RoofType.FLAT;
         }
+    }
+
+    @Override
+    public List<PlacedMaterial> getPlacedMaterials() throws SQLException {
+        // Get carport's own materials
+        List<PlacedMaterial> allMaterials = new ArrayList<>(super.getPlacedMaterials());
+
+        // If a shed is attached, add its materials
+        if (shed != null) {
+            allMaterials.addAll(shed.getPlacedMaterials());
+        }
+
+        return allMaterials;
+    }
+
+    public void attachShed(Shed shed) {
+        this.shed = shed;
     }
 
 
@@ -90,7 +101,8 @@ public class Carport extends Structure{
         return this.height;
     }
 
-    public void setShedHeight(){
-        shed.setHeight(height);
+    private int alignToNearest30(int value) {
+        value = Math.max(value, 210);
+        return (value / 30) * 30 + ((value % 30 >= 15) ? 30 : 0);
     }
 }

@@ -16,10 +16,13 @@ public abstract class Structure {
         return strategy;
     }
 
+    public void setCalculationStrategy(CalculationStrategy strategy) {
+        this.strategy = strategy;
+    }
+
     public List<PlacedMaterial> getPlacedMaterials() throws SQLException {
         return strategy.calculateStructure(this);
     }
-
 
     public abstract int getWidth();
     public abstract int getLength();
