@@ -48,6 +48,7 @@ public class Carport extends Structure{
         this.shed = shed;
         this.hasRaisedRoof = hasRaisedRoof;
         this.angle = angle;
+        
 
         // Sets height to 210 if initial height is lower, also makes height a multiple of 30 if it is not already
         this.length = alignToNearest30(length);
