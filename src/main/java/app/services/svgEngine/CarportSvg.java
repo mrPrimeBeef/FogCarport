@@ -11,10 +11,6 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportHeightCm = carport.getHeight();
 
-
-//        String viewBox = String.format("%d %d %d %d", -SPACING, -SPACING, carportLengthCm + 2 * SPACING, carportHeightCm + 2 * SPACING);
-//        Svg svg = new Svg(-SPACING, -SPACING, "100%", viewBox);
-
         // TODO: Check at den nye constructor rent faktisk giver mening
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
 
@@ -35,9 +31,6 @@ public class CarportSvg {
 
         int carportLengthCm = carport.getLength();
         int carportWidthCm = carport.getWidth();
-
-//        String viewBox = String.format("%d %d %d %d", -MARGIN_CM, -MARGIN_CM, carportLengthCm + 2 * MARGIN_CM, carportWidthCm + 2 * MARGIN_CM);
-//        Svg svg = new Svg(-MARGIN_CM, -MARGIN_CM, "100%", viewBox);
 
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
