@@ -87,22 +87,6 @@ public class ItemMapper {
         return null;
     }
 
-    public static List<Material> getAllItems(ConnectionPool pool) throws DatabaseException {
-
-        String sql = "SELECT * FROM item";
-        List<Material> materials = new ArrayList<>();
-        try (Connection connection = pool.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                materials.add(mapRowToMaterial(rs));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-        return materials;
-    }
-
     // Convert a result from DB to an instance of a material, and return it.
     private static Material mapRowToMaterial(ResultSet rs) throws SQLException {
         return new Material(

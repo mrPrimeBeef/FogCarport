@@ -7,6 +7,7 @@ public class Shed extends Structure{
     int width;
     int length;
     int height;
+    boolean hasRoof;
     private Carport attachedCarport;
 
     public Shed(int width, int length, int height) {
@@ -14,10 +15,6 @@ public class Shed extends Structure{
         this.width = width;
         this.length = length;
         this.height = height;
-    }
-
-    public void attachToCarport(Carport carport){
-        this.attachedCarport = carport;
     }
 
     public Carport getAttachedCarport(){

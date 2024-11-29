@@ -7,8 +7,8 @@ public class Material {
     private String description;
     private String itemType;
     private float lengthCm;
-    private float widthMm;
-    private float heightMm;
+    private float widthCm;
+    private float heightCm;
     private int packageAmount;
     private String packageType;
     private float costPrice;
@@ -20,8 +20,8 @@ public class Material {
         this.description = description;
         this.itemType = itemType;
         this.lengthCm = lengthCm;
-        this.widthMm = widthMm;
-        this.heightMm = heightMm;
+        this.widthCm = widthMm;
+        this.heightCm = heightMm;
         this.packageAmount = packageAmount;
         this.packageType = packageType;
         this.costPrice = costPrice;
@@ -52,8 +52,8 @@ public class Material {
                 original.itemType,
                 original.materialType.name(),
                 original.lengthCm,
-                original.widthMm,
-                original.heightMm,
+                original.widthCm/10,
+                original.heightCm/10,
                 original.packageAmount,
                 original.packageType,
                 original.costPrice
@@ -81,12 +81,12 @@ public class Material {
         return lengthCm;
     }
 
-    public float getWidthMm() {
-        return widthMm;
+    public float getWidthCm() {
+        return widthCm;
     }
 
-    public float getHeightMm() {
-        return heightMm;
+    public float getHeightCm() {
+        return heightCm;
     }
 
     public int getPackageAmount() {
@@ -101,12 +101,12 @@ public class Material {
         return costPrice;
     }
 
-    public void setHeightMm(float heightMm) {
-        this.heightMm = heightMm;
+    public void setHeightCm(float heightCm) {
+        this.heightCm = heightCm;
     }
 
-    public void setWidthMm(float widthMm) {
-        this.widthMm = widthMm;
+    public void setWidthCm(float widthCm) {
+        this.widthCm = widthCm;
     }
 
     public void setLengthCm(float lengthCm) {

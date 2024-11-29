@@ -3,7 +3,6 @@ package app.services.StructureCalculationEngine.Entities;
 public class PlacedMaterial {
     Material material;
     double x, y, z;
-    double rotationX, rotationY, rotationZ;
 
     public PlacedMaterial(Material material, double x, double y, double z) {
         this.material = material;
