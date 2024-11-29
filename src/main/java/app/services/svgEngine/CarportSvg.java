@@ -41,6 +41,16 @@ public class CarportSvg {
         }
 
 
+//        // DRAW DIMENSIONS FOR COLUMNS
+//        for (PlacedMaterial placedMaterial : placedMaterials) {
+//            String itemType = placedMaterial.getMaterial().getItemType();
+//
+//            if (itemType.equalsIgnoreCase("stolpe")) {
+//                double x = placedMaterial.getX();
+//                svg.addDimension();
+//            }
+//        }
+
 
         return svg.close();
 
