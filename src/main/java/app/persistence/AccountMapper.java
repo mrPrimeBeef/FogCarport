@@ -148,13 +148,13 @@ public class AccountMapper {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                password = rs.getString("password"); // Hent adgangskoden fra resultatsættet
+                password = rs.getString("password");
             } else {
-                throw new AccountException("E-mail findes ikke i databasen.", "Email not found.");
+                throw new AccountException("Den indtastede email findes ikke i databasen.", "Email not found.");
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl ved hentning af adgangskode.", "An error occurred while fetching the password.", e.getMessage());
+            throw new AccountException("Fejl ved hentning af adgangskoden.", "An error in getPasswordByEmail.", e.getMessage());
         }
         return password;
     }
