@@ -87,11 +87,9 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     void calculatePillars(Carport carport, Material pillarMaterial) {
 
-
         for(int i = 0; i < 4; i++){
             Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
             PlacedMaterial placedPillar = null;
-            System.out.println(i);
             if(i == 0){
                 placedPillar = new PlacedMaterial(clonedMaterial, defaultOverhangX - pillarMaterial.getWidthCm()/20, defaultOverhangY - pillarMaterial.getWidthCm()/20, 0);
             }else if(i == 1){
@@ -138,7 +136,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         for(int i = 0; i < 4; i++){
             Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
             PlacedMaterial placedPillar = null;
-            System.out.println(i);
             if(i == 0){
                 placedPillar = new PlacedMaterial(clonedMaterial, 0, defaultOverhangY - beamMaterial.getWidthCm()/20, 0);
             }else if(i == 1){
@@ -179,7 +176,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
             Material clonedMaterial = rafterMaterial.cloneMaterial(rafterMaterial);
             PlacedMaterial placedRafter = new PlacedMaterial(clonedMaterial, x, 0, 0);
-            System.out.println("Rafter: " + x);
 
             rotateAroundZ(clonedMaterial);
             rotateAroundY(clonedMaterial);
@@ -199,10 +195,10 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     void rotateAroundY(Material material){
 
         float width = material.getWidthCm();
-        float height = material.getHeightCm();
+        float length = material.getLengthCm();
 
-        material.setHeightCm(height);
         material.setLengthCm(width);
+        material.setWidthCm(length);
     }
 
     void rotateAroundZ(Material material){
