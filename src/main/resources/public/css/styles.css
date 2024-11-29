@@ -1,16 +1,8 @@
-/* Stylesheet for the application */
-
 h1 {
     color: #369;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 3rem;
 }
-
-
-#carport-side-view {
-    max-width: 800px;
-}
-
-#carport-top-view {
-    max-width: 800px;
+main{
+    min-height: calc(100vh - 172px);
 }

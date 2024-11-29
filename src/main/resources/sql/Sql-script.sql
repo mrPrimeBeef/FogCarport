@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public.account
 CREATE TABLE IF NOT EXISTS public.orderr
 (
     orderr_id serial NOT NULL,
-    date_placed date,
+    date_placed date DEFAULT CURRENT_DATE,
     date_completed date,
     account_id integer NOT NULL,
     status character varying NOT NULL,
@@ -1508,13 +1508,13 @@ VALUES
 INSERT INTO public.account (email, password, name, role, address, zip_code, phone)
 VALUES
     ('a@a.a', '1234', 'John Doe', 'customer', 'Hovedgaden 1', 2800, 12345678),
-    ('b@b.b', '1234', 'Jane Smith', 'admin', 'Østergade 2', 2100, 87654321),
+    ('b@b.b', '1234', 'Jane Smith', 'salesrep', 'Østergade 2', 2100, 87654321),
     ('user3@example.com', '1234', 'Alice Johnson', 'customer', 'Nørregade 3', 8000, 11223344),
     ('user4@example.com', '1234', 'Bob Brown', 'customer', 'Vestergade 4', 5000, 44332211),
     ('user5@example.com', '1234', 'Charlie Davis', 'customer', 'Søndergade 5', 6000, 55667788),
     ('user6@example.com', '1234', 'Diana Wilson', 'customer', 'Skovvej 6', 4000, 88776655),
-    ('user7@example.com', '1234', 'Ethan Moore', 'admin', 'Strandvejen 7', 2900, 99887766),
-    ('user8@example.com', '1234', 'Fiona Clark', 'admin', 'Bakkevej 8', 3400, 66778899),
+    ('user7@example.com', '1234', 'Ethan Moore', 'salesrep', 'Strandvejen 7', 2900, 99887766),
+    ('user8@example.com', '1234', 'Fiona Clark', 'salesrep', 'Bakkevej 8', 3400, 66778899),
     ('user9@example.com', '1234', 'George Harris', 'customer', 'Kirkegade 9', 8800, 77889900),
     ('user10@example.com', '1234', 'Hannah Martin', 'customer', 'Engvej 10', 6400, 88990011);
 
