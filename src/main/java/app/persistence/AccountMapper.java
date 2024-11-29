@@ -34,15 +34,15 @@ public class AccountMapper {
             return accounts;
 
         } catch (SQLException e) {
-            throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
 
-    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+  public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
         String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
 
-        try (Connection connection = connectionPool.getConnection();
+     try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, email);

@@ -67,6 +67,14 @@ public class AccountController {
 
     public static void forgotPassword(Context ctx, ConnectionPool connectionPool) throws AccountException {
         String email = ctx.formParam("email");
+        Account activeAccount = ctx.sessionAttribute("activeAccount");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+
         try {
             String password = AccountMapper.getPasswordByEmail(email, connectionPool);
             System.out.println("Adgangskoden for " + email + " er: " + password);
