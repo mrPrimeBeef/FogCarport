@@ -31,6 +31,8 @@ public class CarportSvg {
             float height = placedMaterial.getMaterial().getWidthCm();
             String itemType = placedMaterial.getMaterial().getItemType();
 
+            System.out.println("itemType: " + itemType);
+
             if (itemType.equalsIgnoreCase("stolpe")) {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
             } else {
@@ -38,23 +40,20 @@ public class CarportSvg {
             }
         }
 
-        // DRAW DIMENSIONS FOR COLUMNS
-        List<Double> columnX = new ArrayList<Double>();
-        for (PlacedMaterial placedMaterial : placedMaterials) {
-            String itemType = placedMaterial.getMaterial().getItemType();
-
-            if (itemType.equalsIgnoreCase("stolpe")) {
-                columnX.add(placedMaterial.getX());
-            }
-        }
-
+//        // DRAW DIMENSIONS FOR COLUMNS
+//        List<Double> columnX = new ArrayList<Double>();
+//        for (PlacedMaterial placedMaterial : placedMaterials) {
+//            String itemType = placedMaterial.getMaterial().getItemType();
+//
+//            if (itemType.equalsIgnoreCase("stolpe")) {
+//                columnX.add(placedMaterial.getX());
+//            }
+//        }
 //        Collections.sort(columnX);
-        System.out.println("columnX: " + columnX);
-
 //        svg.addDimension(0, carportHeightCm, columnX.get(0), carportHeightCm, OffsetDirection.DOWN);
 //        svg.addDimension(columnX.get(0), carportHeightCm, columnX.get(1), carportHeightCm, OffsetDirection.DOWN);
 
-        svg.addDimension(95, carportHeightCm, 675, carportHeightCm, OffsetDirection.DOWN);
+        svg.addDimension(120, carportHeightCm, 600, carportHeightCm, OffsetDirection.DOWN);
 
         return svg.close();
 
@@ -66,15 +65,13 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportWidthCm = carport.getWidth();
 
-
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
-
-
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
-        svg.addDimension(0, carportWidthCm, 0, 0, OffsetDirection.LEFT);
+        svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
+        svg.addDimension(0, 100, 0, carportWidthCm - 100, OffsetDirection.LEFT, 40, "*");
 
         // DRAWING REAL CARPORT FROM CALCULATION ENGINE
         List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();

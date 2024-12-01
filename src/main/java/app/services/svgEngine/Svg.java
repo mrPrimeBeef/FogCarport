@@ -46,7 +46,6 @@ public class Svg {
         svg.append(String.format(LOCALE_US, SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
     }
 
-
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection) {
         addDimension(x1, y1, x2, y2, offsetDirection, DEFAULT_OFFSET_DISTANCE, "");
     }
