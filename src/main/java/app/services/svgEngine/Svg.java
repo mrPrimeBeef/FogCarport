@@ -67,44 +67,44 @@ public class Svg {
         switch (offsetDirection) {
             case UP:
                 dimLine = new Line(x1, y1 - offsetDist, x2, y2 - offsetDist);
-                extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.x1, dimLine.y1 - SPACING_ARROW);
-                extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.x2, dimLine.y2 - SPACING_ARROW);
+                extLine1 = new Line(x1, y1 - SPACING_HELP_LINE, dimLine.getX1(), dimLine.getY1() - SPACING_ARROW);
+                extLine2 = new Line(x2, y2 - SPACING_HELP_LINE, dimLine.getX2(), dimLine.getY2() - SPACING_ARROW);
                 textX = 0.5 * (x1 + x2);
-                textY = dimLine.y1 - SPACING_DIM_TEXT;
+                textY = dimLine.getY1() - SPACING_DIM_TEXT;
                 textRotation = 0;
                 break;
 
             case DOWN:
                 dimLine = new Line(x1, y1 + offsetDist, x2, y2 + offsetDist);
-                extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.x1, dimLine.y1 + SPACING_ARROW);
-                extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.x2, dimLine.y2 + SPACING_ARROW);
+                extLine1 = new Line(x1, y1 + SPACING_HELP_LINE, dimLine.getX1(), dimLine.getY1() + SPACING_ARROW);
+                extLine2 = new Line(x2, y2 + SPACING_HELP_LINE, dimLine.getX2(), dimLine.getY2 ()+ SPACING_ARROW);
                 textX = 0.5 * (x1 + x2);
-                textY = dimLine.y1 - SPACING_DIM_TEXT;
+                textY = dimLine.getY1() - SPACING_DIM_TEXT;
                 textRotation = 0;
                 break;
 
             case LEFT:
                 dimLine = new Line(x1 - offsetDist, y1, x2 - offsetDist, y2);
-                extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.x1 - SPACING_ARROW, dimLine.y1);
-                extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.x2 - SPACING_ARROW, dimLine.y2);
-                textX = dimLine.x1 - SPACING_DIM_TEXT;
+                extLine1 = new Line(x1 - SPACING_HELP_LINE, y1, dimLine.getX1() - SPACING_ARROW, dimLine.getY1());
+                extLine2 = new Line(x2 - SPACING_HELP_LINE, y2, dimLine.getX2() - SPACING_ARROW, dimLine.getY2());
+                textX = dimLine.getX1() - SPACING_DIM_TEXT;
                 textY = 0.5 * (y1 + y2);
                 textRotation = -90;
                 break;
 
             case RIGHT:
                 dimLine = new Line(x1 + offsetDist, y1, x2 + offsetDist, y2);
-                extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.x1 + SPACING_ARROW, dimLine.y1);
-                extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.x2 + SPACING_ARROW, dimLine.y2);
-                textX = dimLine.x1 - SPACING_DIM_TEXT;
+                extLine1 = new Line(x1 + SPACING_HELP_LINE, y1, dimLine.getX1() + SPACING_ARROW, dimLine.getY1());
+                extLine2 = new Line(x2 + SPACING_HELP_LINE, y2, dimLine.getX2() + SPACING_ARROW, dimLine.getY2());
+                textX = dimLine.getX1() - SPACING_DIM_TEXT;
                 textY = 0.5 * (y1 + y2);
                 textRotation = -90;
                 break;
         }
 
-        addDimensionLine(dimLine.x1, dimLine.y1, dimLine.x2, dimLine.y2);
-        addLine(extLine1.x1, extLine1.y1, extLine1.x2, extLine1.y2, "stroke: black");
-        addLine(extLine2.x1, extLine2.y1, extLine2.x2, extLine2.y2, "stroke: black");
+        addDimensionLine(dimLine.getX1(), dimLine.getY1(), dimLine.getX2(), dimLine.getY2());
+        addLine(extLine1.getX1(), extLine1.getY1(), extLine1.getX2(), extLine1.getY2(), "stroke: black");
+        addLine(extLine2.getX1(), extLine2.getY1(), extLine2.getX2(), extLine2.getY2(), "stroke: black");
 
         double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
         String text = String.format(LOCALE_DK, "%.2f", distanceInMeter) + stars;
