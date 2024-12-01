@@ -46,17 +46,9 @@ public class Svg {
         svg.append(String.format(LOCALE_US, SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
     }
 
-    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection) {
-        addDimension(x1, y1, x2, y2, offsetDirection, DIM_LINE_OFFSET_ORIGIN, "");
-    }
-
-    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance) {
-        addDimension(x1, y1, x2, y2, offsetDirection, offsetDistance, "");
-    }
-
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
 
-        // TODO: Er dette en smart måde at instansire disse variable på?
+        // TODO: Is this a smart way to instanticate these variables?
         Line dimLine = null;
         Line extLine1 = null;
         Line extLine2 = null;
@@ -112,6 +104,14 @@ public class Svg {
         String text = String.format(LOCALE_DK, "%.2f", lengthInMeter) + stars;
         addText(text, textX, textY, textRotation);
 
+    }
+
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance) {
+        addDimension(x1, y1, x2, y2, offsetDirection, offsetDistance, "");
+    }
+
+    public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection) {
+        addDimension(x1, y1, x2, y2, offsetDirection, DIM_LINE_OFFSET_ORIGIN, "");
     }
 
     private void addText(String text, double x, double y, double rotation) {
