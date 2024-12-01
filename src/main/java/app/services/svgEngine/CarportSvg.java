@@ -22,6 +22,8 @@ public class CarportSvg {
         svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
         svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
 
+        System.out.println("--- SVG sideView placedMaterials ---");
+
         // DRAWING REAL CARPORT FROM CALCULATION ENGINE
         List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
         for (PlacedMaterial placedMaterial : placedMaterials) {
@@ -73,6 +75,8 @@ public class CarportSvg {
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
         svg.addDimension(0, 100, 0, carportWidthCm - 100, OffsetDirection.LEFT, 40, "*");
 
+        System.out.println("--- SVG topView placedMaterials ---");
+
         // DRAWING REAL CARPORT FROM CALCULATION ENGINE
         List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
         for (PlacedMaterial placedMaterial : placedMaterials) {
@@ -81,6 +85,8 @@ public class CarportSvg {
             float length = placedMaterial.getMaterial().getLengthCm();
             float height = placedMaterial.getMaterial().getHeightCm();
             String itemType = placedMaterial.getMaterial().getItemType();
+
+            System.out.println("itemType: " + itemType);
 
             if (itemType.equalsIgnoreCase("stolpe")) {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
