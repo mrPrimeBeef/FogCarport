@@ -15,9 +15,7 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportHeightCm = carport.getHeight();
 
-        // TODO: Check at den nye constructor rent faktisk giver mening
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
-
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
 
@@ -39,7 +37,6 @@ public class CarportSvg {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
             }
         }
-
 
         // DRAW DIMENSIONS FOR COLUMNS
         List<Double> columnX = new ArrayList<Double>();
@@ -69,7 +66,10 @@ public class CarportSvg {
         int carportLengthCm = carport.getLength();
         int carportWidthCm = carport.getWidth();
 
+
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
+
+
         svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
         svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
 

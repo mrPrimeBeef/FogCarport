@@ -20,7 +20,7 @@ public class OrderController {
 
         int carportLengthCm = 780;
         int carportWidthCm = 600;
-        int carportHeightCm = 600;
+        int carportHeightCm = 210;
 
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 

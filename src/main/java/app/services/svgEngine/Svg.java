@@ -23,19 +23,14 @@ public class Svg {
     private static final double SPACING_ARROW = 6;
     private static final double DEFAULT_OFFSET_DISTANCE = 50;
 
+    private static final Locale LOCALE_US = new Locale("us", "US");
+    private static final Locale LOCALE_DK = new Locale("da", "DK");
+
     private final StringBuilder svg = new StringBuilder();
 
-    public Svg(int x, int y, String width, String viewBox) {
-        Locale.setDefault(new Locale("US"));
-        svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, x, y, width, viewBox));
-        svg.append(SVG_ARROW_DEFS);
-    }
-
-
     public Svg(int xMin, int yMin, int xMax, int yMax) {
-        Locale.setDefault(new Locale("US"));
-        String viewBox = String.format("%d %d %d %d", xMin, yMin, xMax - xMin, yMax - yMin);
-        svg.append(String.format(SVG_OPEN_TAG_TEMPLATE, xMin, yMin, "100%", viewBox));
+        String viewBox = String.format(LOCALE_US, "%d %d %d %d", xMin, yMin, xMax - xMin, yMax - yMin);
+        svg.append(String.format(LOCALE_US, SVG_OPEN_TAG_TEMPLATE, xMin, yMin, "100%", viewBox));
         svg.append(SVG_ARROW_DEFS);
     }
 
@@ -43,28 +38,12 @@ public class Svg {
         return svg.append("</svg>").toString();
     }
 
-    public String addRectangle(double x, double y, double width, double height, String style) {
-        String s = String.format(SVG_RECTANGLE_TEMPLATE, x, y, width, height, style);
-        svg.append(s);
-        return s;
+    public void addRectangle(double x, double y, double width, double height, String style) {
+        svg.append(String.format(LOCALE_US, SVG_RECTANGLE_TEMPLATE, x, y, width, height, style));
     }
 
-    public String addText(String text, double x, double y, double rotation) {
-        String s = String.format(SVG_TEXT_TEMPLATE, x, y, rotation, x, y, text);
-        svg.append(s);
-        return s;
-    }
-
-    public String addLine(double x1, double y1, double x2, double y2, String style) {
-        String s = String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style);
-        svg.append(s);
-        return s;
-    }
-
-    public String addDimensionLine(double x1, double y1, double x2, double y2) {
-        String s = String.format(SVG_DIMENSION_LINE_TEMPLATE, x1, y1, x2, y2);
-        svg.append(s);
-        return s;
+    public void addLine(double x1, double y1, double x2, double y2, String style) {
+        svg.append(String.format(LOCALE_US, SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
     }
 
 
@@ -129,7 +108,7 @@ public class Svg {
         addLine(extLine2.x1, extLine2.y1, extLine2.x2, extLine2.y2, "stroke: black");
 
         double distanceInMeter = 0.01 * calculateDistance(x1, y1, x2, y2);
-        String text = String.format("%.2f", distanceInMeter) + stars;
+        String text = String.format(LOCALE_DK, "%.2f", distanceInMeter) + stars;
         addText(text, textX, textY, textRotation);
 
     }
@@ -140,5 +119,12 @@ public class Svg {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    private void addText(String text, double x, double y, double rotation) {
+        svg.append(String.format(LOCALE_US, SVG_TEXT_TEMPLATE, x, y, rotation, x, y, text));
+    }
+
+    private void addDimensionLine(double x1, double y1, double x2, double y2) {
+        svg.append(String.format(LOCALE_US, SVG_DIMENSION_LINE_TEMPLATE, x1, y1, x2, y2));
+    }
 
 }
