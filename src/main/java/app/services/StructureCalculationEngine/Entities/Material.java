@@ -20,8 +20,8 @@ public class Material {
         this.description = description;
         this.itemType = itemType;
         this.lengthCm = lengthCm;
-        this.widthCm = widthMm;
-        this.heightCm = heightMm;
+        this.widthCm = widthMm / 10;
+        this.heightCm = heightMm / 10;
         this.packageAmount = packageAmount;
         this.packageType = packageType;
         this.costPrice = costPrice;
@@ -52,8 +52,8 @@ public class Material {
                 original.itemType,
                 original.materialType.name(),
                 original.lengthCm,
-                original.widthCm/10,
-                original.heightCm/10,
+                original.widthCm * 10,
+                original.heightCm * 10,
                 original.packageAmount,
                 original.packageType,
                 original.costPrice
