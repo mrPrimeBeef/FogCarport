@@ -19,6 +19,9 @@ public class Carport extends Structure{
     RoofType roofType;
     int angle;
 
+    // Cache for placed materials
+    private List<PlacedMaterial> cachedMaterials;
+
     // ***** Temporary comment for integrating carport into other classes: *****
     // Only the Carport class needs to be imported.
     // Carport carport = new Carport(width, length, height, shed, hasRaisedRoof, angle);
@@ -48,32 +51,26 @@ public class Carport extends Structure{
         this.shed = shed;
         this.hasRaisedRoof = hasRaisedRoof;
         this.angle = angle;
-        
-
-        // Sets height to 210 if initial height is lower, also makes height a multiple of 30 if it is not already
-        this.length = alignToNearest30(length);
-        this.width = alignToNearest30(width);
-        this.height = alignToNearest30(height);
+        this.length = length;
+        this.width = width;
+        this.height = height;
 
         // Sets Roof Type based on hasRaisedRoof
-        if(hasRaisedRoof){
-            roofType = RoofType.RAISED;
-        }else{
-            roofType = RoofType.FLAT;
-        }
+        this.roofType = hasRaisedRoof ? RoofType.RAISED : RoofType.FLAT;
     }
 
     @Override
     public List<PlacedMaterial> getPlacedMaterials() throws SQLException {
-        // Get carport's own materials
-        List<PlacedMaterial> allMaterials = new ArrayList<>(super.getPlacedMaterials());
+        // Calculate materials only if they haven't been calculated yet.
+        // This ensures that if we call getPlacedMaterials, we don't get duplicate materials
+        if (cachedMaterials == null) {
+            cachedMaterials = new ArrayList<>(super.getPlacedMaterials());
 
-        // If a shed is attached, add its materials
-        if (shed != null) {
-            allMaterials.addAll(shed.getPlacedMaterials());
+            if (shed != null) {
+                cachedMaterials.addAll(shed.getPlacedMaterials());
+            }
         }
-
-        return allMaterials;
+        return cachedMaterials;
     }
 
     public void attachShed(Shed shed) {
@@ -100,8 +97,4 @@ public class Carport extends Structure{
         return this.height;
     }
 
-    private int alignToNearest30(int value) {
-        value = Math.max(value, 210);
-        return (value / 30) * 30 + ((value % 30 >= 15) ? 30 : 0);
-    }
 }
