@@ -20,8 +20,6 @@ package app {
     + static void createAccount(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool)
     + static void salesrepShowCustomerPage(Context ctx, ConnectionPool connectionPool)
-
-
       }
     class OrderController{
     + static void addRoutes(Javalin app, ConnectionPool connectionPool)
@@ -31,7 +29,7 @@ package app {
     + static void customerShowOrderPage(Context ctx, ConnectionPool connectionPool)
     + static void salesrepPostCalculation(Context ctx, ConnectionPool connectionPool)
     - static void showThankYouPage(Context ctx, ConnectionPool connectionPool)
-    - static int createOrGetAccountId(String email, String name, String adress, int zip, String phone, Context ctx, ConnectionPool connectionPool)
+    - static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool)
     }
   }
 
@@ -44,13 +42,14 @@ package app {
       + static boolean updatePassword(Context ctx, ConnectionPool connectionPool)
       + static boolean updateEmail(Context ctx, ConnectionPool connectionPool)
       + static Arraylist<String> getAllEmailsFromAccount(ctx, connectionPool)
+      + static Arraylist<Account> getAllAccounts(ctx, connectionPool)
       + static int getIdFromAccountEmail(email, ctx, connectionPool)
 
     }
     class OrderMapper{
     + static boolean createOrder(int carportWidth, int carportLength,(rest of caport info), Context ctx, ConnectionPool connectionPool)
-    + static OrderAccountDto getOrderAccountDtoByOrderId(int orderId, Context ctx, ConnectionPool connectionPool)
-    + static List<OrderAccountDto> getAllOrderAccountDto(Context ctx, ConnectionPool connectionPool)
+    + static OverviewOrderAccountDto getOverviewOrderAccountDtoByOrderId(int orderId, Context ctx, ConnectionPool connectionPool)
+    + static List<OverviewOrderAccountDto> getAllOverviewOrderAccountDto(Context ctx, ConnectionPool connectionPool)
     + TAG STILLING IMORGEN: static updateOrder(Context ctx, ConnectionPool connectionPool)
     + static boolean updateOrderStatus(String status, Context ctx, ConnectionPool connectionPool)
     + static List<Order> getAllOrdersByAccountId(int accountId, Context ctx, ConnectionPool connectionPool)
@@ -67,10 +66,17 @@ package app {
   }
   package Calculator{
   class calculaterEngien{
-
   }
-
   }
+  class PasswordGenerator{
+    - static final String UPPERCASE_CHARS
+    - static final String LOWERCASE_CHARS
+    - static final String NUMBER_CHARS
+    - static final String SPECIAL_CHARS
+    + static String generatePassword()
+    - static char getRandomChar(String charSet)
+    - static String shufflechars(String input)
+    }
   }
 
   package entities{
@@ -137,7 +143,7 @@ package app {
 
   package dto {
 
-    class OrderAccountDto {
+    class OverviewOrderAccountDto {
        - int orderId
        - String name
        - String address
@@ -149,8 +155,6 @@ package app {
        - int carportLengthCm
        - int shedWidthCm
        - int shedLengthCm
-       + OrderAccountDto((with shed))
-       + OrderAccountDto((without shed))
        }
 
   }
@@ -172,7 +176,7 @@ package app {
 
     AccountController --> AccountMapper : uses
     OrderController --> OrderMapper : uses
-    OrderMapper --> OrderAccountDto
+    OrderMapper --> OverviewOrderAccountDto
 
     AccountMapper --> entities : uses
     OrderMapper --> entities : uses

@@ -3,13 +3,15 @@ package app.persistence;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.exceptions.DatabaseException;
+import app.dto.OverviewOrderAccountDto;
 import app.exceptions.OrderCreationException;
+import app.exceptions.DatabaseException;
 
 class OrderMapperTest {
     private static final String USER = "postgres";
@@ -203,7 +205,16 @@ class OrderMapperTest {
 
     @Test
     void createOrder() throws OrderCreationException, DatabaseException {
-        boolean actual = OrderMapper.createOrder(1,200,200,200,200, connectionPool);
+        boolean actual = OrderMapper.createOrder(1, 200, 200, 200, 200, connectionPool);
         assertTrue(actual);
+    }
+
+    @Test
+    void getOverviewOrderAccountDtos() throws DatabaseException {
+        ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+
+        assertEquals(3, OverviewOrderAccountDtos.size());
+        assertEquals(1, OverviewOrderAccountDtos.get(1).getAccountId());
+        assertNotEquals(1, OverviewOrderAccountDtos.size());
     }
 }

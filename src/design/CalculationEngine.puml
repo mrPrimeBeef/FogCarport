@@ -1,0 +1,87 @@
+@startuml
+
+abstract class Structure {
+    - CalculationStrategy
+    + List<PlacedMaterial> getPlacedMaterials()
+    + getStrategy()
+    + setStrategy()
+    + int getWidth()
+    + int getLength()
+    + int getHeight()
+}
+
+class Carport {
+    - int width
+    - int length
+    - int height
+    + attachShed(Shed shed)
+    + getShed()
+    + setShedHeight()
+}
+
+class Shed {
+    - int width
+    - int length
+    - int height
+    + Carport getAttachedCarport()
+}
+
+interface CalculationStrategy {
+    + List<PlacedMaterial> calculateStructure(Structure structure)
+}
+
+class CarportCalculationStrategy {
+    + calculatePillars(Carport carport, Material pillarMaterial)
+    + calculateBeams(Carport carport Material beamMaterial)
+    + calculateRafters(Carport carport Material beamMaterial)
+}
+
+class ShedCalculationStrategy {
+    + calculatePillars(Shed shed, Material pillarMaterial)
+    + calculateFacadePanels(Shed shed, Material boardMaterial)
+}
+
+class Material {
+    - int materialId
+    - String name
+    - String description
+    - MaterialType materialType
+    - String itemType
+    - float lengthCm
+    - float widthMm
+    - heightMm;
+    - int packageAmount
+    - String packageType
+    - float costPrice
+    + Material cloneMaterial()
+    //getters and Setters
+}
+
+class PlacedMaterial {
+    - Material material
+    - double x
+    - double y
+    - double z
+    - rotationAroundX
+    - rotationAroundY
+    - rotationAroundZ
+    + Material getMaterial()
+}
+
+enum MaterialType {
+    TRYKIMP_TRAE,
+    UBH_TRAE,
+    PLASTIK,
+    METAL,
+    UNKNOWN;
+}
+
+Structure <|-- Carport
+Structure <|-- Shed
+Structure <-- CalculationStrategy
+CalculationStrategy <|.. CarportCalculationStrategy
+CalculationStrategy <|.. ShedCalculationStrategy
+Material --> MaterialType
+PlacedMaterial o-- Material
+
+@enduml

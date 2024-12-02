@@ -1,75 +1,42 @@
 package app.controllers;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import app.entities.EmailReceipt;
-import app.exceptions.AccountCreationException;
-import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
-import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-import app.persistence.OrderMapper;
+import app.services.svgEngine.CarportSvg;
+import app.services.StructureCalculationEngine.Entities.Carport;
 
 public class OrderController {
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index"));
-        app.get("fladttag", ctx -> ctx.render("fladttag"));
-        app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
+        app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
     }
 
-    private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
-        int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
-        int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        String trapeztag = ctx.formParam("trapeztag");
-        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
-        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
-        String notes = ctx.formParam("bemaerkninger");
+    // TODO: Fix the exception handling
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
-        String name = ctx.formParam("navn");
-        String address = ctx.formParam("adresse");
-        int zip = Integer.parseInt(ctx.formParam("postnummer"));
-        String city = ctx.formParam("by");
-        String phone = ctx.formParam("telefon");
-        String email = ctx.formParam("email");
+        int carportLengthCm = 752;
+        int carportWidthCm = 600;
+        int carportHeightCm = 210;
+
+        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
+        System.out.println(carport.getLength());
+        System.out.println(carport.getWidth());
+        System.out.println(carport.getHeight());
 
         try {
-            int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
-            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
-
-            new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
-
-        } catch (AccountCreationException | OrderCreationException | DatabaseException e) {
-            ctx.attribute("ErrorMessage", e.getMessage());
-            ctx.render("error.html");
+            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
         }
-        showThankYouPage(name, email, ctx);
-    }
-
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
-        int accountId;
-        boolean allreadyUser = false;
-        ArrayList<String> emails;
-        emails = AccountMapper.getAllAccountEmails(connectionPool);
-
-        for (String mail : emails) {
-            if (mail.equals(email)) {
-                allreadyUser = true;
-            }
+        catch(SQLException e) {
+            e.printStackTrace();
         }
 
-        if (!allreadyUser) {
-            accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
-            return accountId;
-        }
-        return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+        ctx.render("saelgerordre.html");
     }
 
-    private static void showThankYouPage(String name, String email, Context ctx) {
-        ctx.attribute("navn", name);
-        ctx.attribute("email", email);
-        ctx.render("tak.html");
-    }
 }
