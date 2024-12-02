@@ -3,7 +3,6 @@ package app.entities;
 public class EmailReceipt {
     private int carportWidth;
     private int carportLength;
-    private String trapeztag;
     private int shedWidth;
     private int shedLength;
     private String notes;
@@ -14,11 +13,10 @@ public class EmailReceipt {
     private String phone;
     private String email;
 
-    public EmailReceipt(int carportWidth, int carportLength, String trapeztag, int shedWidth, int shedLength,
+    public EmailReceipt(int carportWidth, int carportLength, int shedWidth, int shedLength,
                         String notes, String name, String address, int zip, String city, String mobil, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
-        this.trapeztag = trapeztag;
         this.shedWidth = shedWidth;
         this.shedLength = shedLength;
         this.notes = notes;
@@ -45,7 +43,6 @@ public class EmailReceipt {
         System.out.println("Carport dimensioner:");
         System.out.println("bredde: " + carportWidth + " cm");
         System.out.println("længde: " + carportLength + " cm");
-        System.out.println("trapeztag: " + trapeztag);
         System.out.println();
 
         System.out.println("Redskabsrum dimensioner:");

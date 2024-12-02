@@ -6,6 +6,7 @@ import io.javalin.rendering.template.JavalinThymeleaf;
 import app.controllers.AccountController;
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
+import app.controllers.AccountController;
 import app.persistence.ConnectionPool;
 
 public class Main {

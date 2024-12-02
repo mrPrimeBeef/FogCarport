@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public.account
 CREATE TABLE IF NOT EXISTS public.orderr
 (
     orderr_id serial NOT NULL,
-    date_placed date,
+    date_placed date DEFAULT CURRENT_DATE,
     date_completed date,
     account_id integer NOT NULL,
     status character varying NOT NULL,

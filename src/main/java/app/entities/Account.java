@@ -1,17 +1,17 @@
 package app.entities;
 
 public class Account {
-
     private int accountId;
     private String name;
     private String address;
     private String city;
     private int zip;
+    private String city;
     private String phone;
     private String email;
     private String role;
 
-    public Account(int accountId, String name, String address, int zip, String phone, String email, String password, String role) {
+    public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
         this.name = name;
         this.address = address;
@@ -34,8 +34,6 @@ public class Account {
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
-    }
-
 
     public int getAccountId() {
         return accountId;
@@ -65,10 +63,19 @@ public class Account {
         return email;
     }
 
+    public String getCity() {
+        return city;
+    }
+
     public String getRole() {
         return role;
     }
 
+
+    public Account(int accountId, String role) {
+        this.accountId = accountId;
+        this.role = role;
+    }
 
     @Override
     public String toString() {

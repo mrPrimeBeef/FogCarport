@@ -5,25 +5,28 @@ import java.util.ArrayList;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
-import app.exceptions.AccountCreationException;
+import app.entities.Account;
+import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
+import app.exceptions.OrderException;
+import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-import app.persistence.OrderMapper;
 
 public class OrderController {
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
+        app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        String trapeztag = ctx.formParam("trapeztag");
         int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
         int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
         String notes = ctx.formParam("bemaerkninger");
@@ -34,25 +37,41 @@ public class OrderController {
         String city = ctx.formParam("by");
         String phone = ctx.formParam("telefon");
         String email = ctx.formParam("email");
-
         try {
             int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
 
-            new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
-
-        } catch (AccountCreationException | OrderCreationException | DatabaseException e) {
+            new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
+        } catch (AccountException | OrderException | DatabaseException e) {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
         showThankYouPage(name, email, ctx);
     }
 
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
+    static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("activeAccount");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+            ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
+            ctx.render("saelgeralleordrer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
+    }
+
+    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
         int accountId;
         boolean allreadyUser = false;
-        ArrayList<String> emails;
-        emails = AccountMapper.getAllAccountEmails(connectionPool);
+        ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
         for (String mail : emails) {
             if (mail.equals(email)) {
@@ -61,8 +80,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
-            return accountId;
+            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
