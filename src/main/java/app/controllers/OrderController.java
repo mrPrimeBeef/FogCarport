@@ -12,6 +12,9 @@ import app.services.StructureCalculationEngine.Entities.Carport;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/", ctx -> ctx.render("index"));
+        app.get("fladttag", ctx -> ctx.render("fladttag"));
+        app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
 
     }
