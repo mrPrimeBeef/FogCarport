@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
@@ -39,6 +40,41 @@ public class OrderMapper {
         }
         return OverviewOrderAccountDtos;
     }
+
+
+    public static ArrayList<DetailOrderAccountDto> getDetailOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<DetailOrderAccountDto> DetailOrderAccountDtos = new ArrayList<>();
+
+        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, sale_price, status FROM orderr JOIN account USING(account_id) ORDER BY status, date_placed";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int orderId = rs.getInt("orderr_id");
+                int accountId = rs.getInt("account_id");
+                String email = rs.getString("email");
+                String name = rs.getString("name");
+                String phone = rs.getString("phone");
+                int zip = rs.getInt("zip");
+                String city = rs.getString("city");
+                Date datePlaced = rs.getDate("date_placed");
+                Date datePaid = rs.getDate("date_paid");
+                Date dateCompleted = rs.getDate("date_completed");
+                double salesPrice = rs.getDouble("sale_price");
+                String status = rs.getString("status");
+                int carportLengthCm = rs.getInt("carport_length_cm");
+                int carportWidthCm = rs.getInt("carport_width_cm");
+                DetailOrderAccountDtos.add(new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, salesPrice, status, carportLengthCm, carportWidthCm));
+
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos", e.getMessage());
+        }
+        return DetailOrderAccountDtos;
+    }
+
 
     public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;

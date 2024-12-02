@@ -85,13 +85,16 @@
                max="780"
                required
                placeholder="Angiv et tal mellem 240 og 780 i cm">
+        <br>
 
+        <button type="submit">Kør beregning</button>
     </form>
 
     <h2>Side View</h2>
     <div class="carport-svg-view" th:utext="${carportSvgSideView}"></div>
     <h2>Top View</h2>
     <div class="carport-svg-view" th:utext="${carportSvgTopView}"></div>
+
     * Mål udvendigt på stolper<br>
     ** Afstand fra stern ved H=2,50m<br>
     *** Mål overkant rem<br>

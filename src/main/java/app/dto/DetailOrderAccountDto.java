@@ -15,8 +15,10 @@ public class DetailOrderAccountDto {
     private Date dateCompleted;
     private double salesPrice;
     private String status;
+    private int carportLengthCm;
+    private int carportWidthCm;
 
-    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double salesPrice, String status) {
+    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double salesPrice, String status, int carportLengthCm, int carportWidthCm) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
@@ -29,6 +31,8 @@ public class DetailOrderAccountDto {
         this.dateCompleted = dateCompleted;
         this.salesPrice = salesPrice;
         this.status = status;
+        this.carportLengthCm = carportLengthCm;
+        this.carportWidthCm = carportWidthCm;
     }
 
 //    public int getOrderId() {
