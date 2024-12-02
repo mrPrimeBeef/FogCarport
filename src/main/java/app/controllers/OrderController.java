@@ -8,13 +8,12 @@ import io.javalin.http.Context;
 import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
 import app.entities.Account;
-import app.exceptions.AccountCreationException;
+import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
+import app.exceptions.OrderException;
 import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-import app.persistence.AccountMapper;
 
 public class OrderController {
 
@@ -28,7 +27,6 @@ public class OrderController {
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        String trapeztag = ctx.formParam("trapeztag");
         int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
         int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
         String notes = ctx.formParam("bemaerkninger");
@@ -43,8 +41,8 @@ public class OrderController {
             int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
 
-            new EmailReceipt(carportWidth, carportLength, trapeztag, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
-        } catch (AccountCreationException | OrderCreationException | DatabaseException e) {
+            new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
+        } catch (AccountException | OrderException | DatabaseException e) {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
@@ -70,7 +68,7 @@ public class OrderController {
         }
     }
 
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountCreationException {
+    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
         int accountId;
         boolean allreadyUser = false;
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
