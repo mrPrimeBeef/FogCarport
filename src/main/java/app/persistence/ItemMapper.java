@@ -19,13 +19,17 @@ public class ItemMapper {
         StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
         List<Object> parameters = new ArrayList<>();
 
+        // Add exact match filters dynamically
         filters.forEach((key, value) -> {
-            sql.append(" AND ").append(key).append(" = ?");
+            if ("length_cm".equals(key) || "width_mm".equals(key) || "height_mm".equals(key)) {
+                sql.append(" AND ").append(key).append(" >= ?");
+            } else {
+                sql.append(" AND ").append(key).append(" = ?");
+            }
             parameters.add(value);
         });
 
-        // Limit the query to a single result
-        sql.append(" LIMIT 1");
+        sql.append(" ORDER BY length_cm ASC, width_mm ASC, height_mm ASC LIMIT 1");
 
         try (Connection connection = pool.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql.toString());
@@ -34,13 +38,12 @@ public class ItemMapper {
             }
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return mapRowToMaterial(rs); // Return the first match
+                return mapRowToMaterial(rs);
             }
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
         }
 
-        // Return null if no item is found
         return null;
     }
 
@@ -73,7 +76,7 @@ public class ItemMapper {
 
     public static Material getItemById(int id, ConnectionPool pool) throws DatabaseException {
 
-        String sql = "SELECT * FROM item WHERE id = ?";
+        String sql = "SELECT item_id FROM item WHERE id = ?";
         try (Connection connection = pool.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
