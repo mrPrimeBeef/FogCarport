@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS public.account
     email character varying(64) NOT NULL,
     password character varying(64) NOT NULL,
     name character varying,
-    role character varying DEFAULT 'customer',
+    role character varying DEFAULT 'Kunde',
     address character varying,
     zip_code integer,
     phone character varying,
@@ -1507,16 +1507,16 @@ VALUES
 --Accounts
 INSERT INTO public.account (email, password, name, role, address, zip_code, phone)
 VALUES
-    ('a@a.a', '1234', 'John Doe', 'customer', 'Hovedgaden 1', 2800, 12345678),
+    ('a@a.a', '1234', 'John Doe', 'Kunde', 'Hovedgaden 1', 2800, 12345678),
     ('b@b.b', '1234', 'Jane Smith', 'salesrep', 'Østergade 2', 2100, 87654321),
-    ('user3@example.com', '1234', 'Alice Johnson', 'customer', 'Nørregade 3', 8000, 11223344),
-    ('user4@example.com', '1234', 'Bob Brown', 'customer', 'Vestergade 4', 5000, 44332211),
-    ('user5@example.com', '1234', 'Charlie Davis', 'customer', 'Søndergade 5', 6000, 55667788),
-    ('user6@example.com', '1234', 'Diana Wilson', 'customer', 'Skovvej 6', 4000, 88776655),
+    ('user3@example.com', '1234', 'Alice Johnson', 'Kunde', 'Nørregade 3', 8000, 11223344),
+    ('user4@example.com', '1234', 'Bob Brown', 'Kunde', 'Vestergade 4', 5000, 44332211),
+    ('user5@example.com', '1234', 'Charlie Davis', 'Kunde', 'Søndergade 5', 6000, 55667788),
+    ('user6@example.com', '1234', 'Diana Wilson', 'Kunde', 'Skovvej 6', 4000, 88776655),
     ('user7@example.com', '1234', 'Ethan Moore', 'salesrep', 'Strandvejen 7', 2900, 99887766),
     ('user8@example.com', '1234', 'Fiona Clark', 'salesrep', 'Bakkevej 8', 3400, 66778899),
-    ('user9@example.com', '1234', 'George Harris', 'customer', 'Kirkegade 9', 8800, 77889900),
-    ('user10@example.com', '1234', 'Hannah Martin', 'customer', 'Engvej 10', 6400, 88990011);
+    ('user9@example.com', '1234', 'George Harris', 'Kunde', 'Kirkegade 9', 8800, 77889900),
+    ('user10@example.com', '1234', 'Hannah Martin', 'Kunde', 'Engvej 10', 6400, 88990011);
 
 END;
 
@@ -1530,7 +1530,7 @@ CREATE TABLE IF NOT EXISTS test.account
     email character varying(64) NOT NULL,
     password character varying(64) NOT NULL,
     name character varying,
-    role character varying DEFAULT 'customer',
+    role character varying DEFAULT 'Kunde',
     address character varying,
     zip_code integer,
     phone character varying,
