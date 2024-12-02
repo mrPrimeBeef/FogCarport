@@ -52,8 +52,6 @@ public class AccountController {
                 return;
             }
             if (account.getRole().equals("Kunde")) {
-                ctx.sessionAttribute("loggedIn", true);
-                ctx.sessionAttribute("userEmail", email);
                 ctx.sessionAttribute("customer", account);
                 showKundeside(ctx, connectionPool);
             }
@@ -65,16 +63,13 @@ public class AccountController {
     }
 
     private static void showKundeside(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("customer");
+        Account activeAccount = ctx.sessionAttribute("Kunde");
         if (activeAccount == null) {
-            ctx.sessionAttribute("loggedIn", false);
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
         }
-        if (activeAccount.getRole().equals("customer")) {
-            ctx.sessionAttribute("loggedIn", true);
-            ctx.sessionAttribute("userEmail", activeAccount.getEmail());
+        if (activeAccount.getRole().equals("Kunde")) {
             try {
                 Order order = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrder", order);
