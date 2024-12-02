@@ -6,7 +6,6 @@ public class Account {
     private String address;
     private String city;
     private int zip;
-    private String city;
     private String phone;
     private String email;
     private String role;
@@ -30,10 +29,20 @@ public class Account {
         this.city = city;
         this.phone = phone;
     }
+    public  Account(String name, String address, int zip, String phone, String email, String city) {
+        this.name = name;
+        this.address = address;
+        this.zip = zip;
+        this.phone = phone;
+        this.email = email;
+        this.city = city;
+    }
+
 
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
+    }
 
     public int getAccountId() {
         return accountId;
@@ -63,18 +72,8 @@ public class Account {
         return email;
     }
 
-    public String getCity() {
-        return city;
-    }
-
     public String getRole() {
         return role;
-    }
-
-
-    public Account(int accountId, String role) {
-        this.accountId = accountId;
-        this.role = role;
     }
 
     @Override
