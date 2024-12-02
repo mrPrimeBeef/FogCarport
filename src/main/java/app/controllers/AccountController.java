@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.exceptions.AccountCreationException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -16,7 +17,6 @@ public class AccountController {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
         app.get("glemtKode", ctx -> ctx.render("glemtKode"));
-        app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
 
@@ -65,22 +65,15 @@ public class AccountController {
         ctx.redirect("/");
     }
 
-    public static void forgotPassword(Context ctx, ConnectionPool connectionPool) throws AccountException {
+   /* public static void forgotPassword(Context ctx, ConnectionPool connectionPool) throws AccountException {
         String email = ctx.formParam("email");
-        Account activeAccount = ctx.sessionAttribute("activeAccount");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
-            ctx.render("error.html");
-            return;
-        }
 
         try {
-            String password = AccountMapper.getPasswordByEmail(email, connectionPool);
+            String password = String.valueOf(AccountMapper.getAccountIdFromEmail(email, connectionPool));
             System.out.println("Adgangskoden for " + email + " er: " + password);
 
-        } catch (AccountException e) {
+        } catch (AccountCreationException e) {
             System.out.println(e.getMessage());
         }
-    }
+    }*/
 }

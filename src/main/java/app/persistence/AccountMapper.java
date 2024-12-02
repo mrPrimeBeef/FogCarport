@@ -136,26 +136,4 @@ public class AccountMapper {
         }
         return accountId;
     }
-
-    public static String getPasswordByEmail(String email, ConnectionPool connectionPool) throws AccountException {
-        String password = null;
-        String sql = "SELECT password FROM account WHERE email=?";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                password = rs.getString("password");
-            } else {
-                throw new AccountException("Den indtastede email findes ikke i databasen.", "Email not found.");
-            }
-
-        } catch (SQLException e) {
-            throw new AccountException("Fejl ved hentning af adgangskoden.", "An error in getPasswordByEmail.", e.getMessage());
-        }
-        return password;
-    }
 }
