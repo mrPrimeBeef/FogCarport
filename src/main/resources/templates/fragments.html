@@ -35,18 +35,18 @@
                 </ul>
                 <div class="d-flex">
                     <a class="nav-link active"
-                       th:if="${session.loggedIn}"
+                       th:if="${session.account != null}"
                        th:href="@{/kundeside}"
-                       th:text="${session.userEmail}">
+                       th:text="${session.account.email}">
                         Bruger Email
                     </a>
                     <a class="nav-link active btn-sm ms-2"
-                       th:if="${session.loggedIn}"
+                       th:if="${session.account != null}"
                        th:href="@{/logout}">
                         Log ud
                     </a>
                     <a class="nav-link active"
-                       th:unless="${session.loggedIn}"
+                       th:unless="${session.account != null}"
                        th:href="@{/login}">
                         Fog konto
                     </a>

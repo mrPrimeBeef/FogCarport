@@ -26,10 +26,8 @@ public class AccountController {
                 ctx.render("saelgeralleorder");
                 return;
             }
-            if (account.getRole().equals("customer")) {
-                ctx.sessionAttribute("loggedIn", true);
-                ctx.sessionAttribute("userEmail", email);
-                ctx.sessionAttribute("customer", account);
+            if (account.getRole().equals("Kunde")) {
+                ctx.sessionAttribute("account", account);
                 ctx.render("/kundeside");
             }
 
@@ -40,16 +38,13 @@ public class AccountController {
     }
 
     private static void showKundeside(Context ctx) {
-        Account activeAccount = ctx.sessionAttribute("customer");
+        Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null) {
-            ctx.sessionAttribute("loggedIn", false);
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
         }
-        if (activeAccount.getRole().equals("customer")) {
-            ctx.sessionAttribute("loggedIn", true);
-            ctx.sessionAttribute("userEmail", activeAccount.getEmail());
+        if (activeAccount.getRole().equals("Kunde")) {
             ctx.render("/kundeside");
         }
     }
