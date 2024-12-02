@@ -9,7 +9,7 @@ import java.util.Date;
 
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
+import app.exceptions.OrderException;
 
 public class OrderMapper {
 
@@ -40,7 +40,7 @@ public class OrderMapper {
         return OverviewOrderAccountDtos;
     }
 
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
         String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
@@ -52,7 +52,7 @@ public class OrderMapper {
             ps.setString(2, "In progress");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 200); // carport height 200 cm
+            ps.setInt(5, 210); // carport height 200 cm
             ps.setInt(6, shedWidth);
             ps.setInt(7, shedLength);
 
@@ -61,7 +61,7 @@ public class OrderMapper {
             if (rowsAffected == 1) {
                 success = true;
             } else {
-                throw new OrderCreationException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
+                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
             }
         } catch (SQLException e) {
             throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method", e.getMessage());

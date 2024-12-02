@@ -31,59 +31,27 @@
 
         <div class="mb-3">
             <label for="carport-bredde" class="form-label">Carport bredde*</label>
-            <select class="form-select" id="carport-bredde" name="carport-bredde" required>
-
-                <option value="" disabled selected>Vælg bredde</option>
-                <option value="240">240 cm</option>
-                <option value="270">270 cm</option>
-                <option value="300">300 cm</option>
-                <option value="330">330 cm</option>
-                <option value="360">360 cm</option>
-                <option value="390">390 cm</option>
-                <option value="420">420 cm</option>
-                <option value="450">450 cm</option>
-                <option value="480">480 cm</option>
-                <option value="510">510 cm</option>
-                <option value="540">540 cm</option>
-                <option value="570">570 cm</option>
-                <option value="600">600 cm</option>
-            </select>
+            <input type="number"
+                   class="form-control"
+                   id="carport-bredde"
+                   name="carport-bredde"
+                   min="240"
+                   max="600"
+                   required
+                   placeholder="Angiv et tal mellem 240 og 600 i cm">
         </div>
 
         <div class="mb-3">
             <label for="carport-laengde" class="form-label">Carport længde*</label>
-            <select class="form-select" id="carport-laengde" name="carport-laengde" required>
-                <option value="" disabled selected>Vælg længde</option>
-                <option value="240">240 cm</option>
-                <option value="270">270 cm</option>
-                <option value="300">300 cm</option>
-                <option value="330">330 cm</option>
-                <option value="360">360 cm</option>
-                <option value="390">390 cm</option>
-                <option value="420">420 cm</option>
-                <option value="450">450 cm</option>
-                <option value="480">480 cm</option>
-                <option value="510">510 cm</option>
-                <option value="540">540 cm</option>
-                <option value="570">570 cm</option>
-                <option value="600">600 cm</option>
-                <option value="630">630 cm</option>
-                <option value="660">660 cm</option>
-                <option value="690">690 cm</option>
-                <option value="720">720 cm</option>
-                <option value="750">750 cm</option>
-                <option value="780">780 cm</option>
-            </select>
+            <input type="number"
+                   class="form-control"
+                   id="carport-laengde"
+                   name="carport-laengde"
+                   min="240"
+                   max="780"
+                   required
+                   placeholder="Angiv et tal mellem 240 og 780 i cm">
         </div>
-
-<!--        <div class="mb-3">-->
-<!--            <label for="trapeztag" class="form-label">Carport trapeztag*</label>-->
-<!--            <select class="form-select" id="trapeztag" name="trapeztag" required>-->
-<!--                <option value="" disabled selected>Vælg tag</option>-->
-<!--                <option>uden tagplader</option>-->
-<!--                <option>Plasttrapezplader</option>-->
-<!--            </select>-->
-<!--        </div>-->
 
         <div class="mb-3">
             <h4>Redskabstum</h4>
@@ -91,56 +59,27 @@
         </div>
 
         <div class="mb-3">
-            <label for="redskabsrum-bredde" class="form-label">Redskabsrum bredde*</label>
-            <select class="form-select" id="redskabsrum-bredde" name="redskabsrum-bredde">
-                <option value="" disabled selected>Vælg bredde</option>
-                <option value="0">Uden redskabsrum</option>
-                <option value="210">210 cm</option>
-                <option value="240">240 cm</option>
-                <option value="270">270 cm</option>
-                <option value="300">300 cm</option>
-                <option value="330">330 cm</option>
-                <option value="360">360 cm</option>
-                <option value="390">390 cm</option>
-                <option value="420">420 cm</option>
-                <option value="450">450 cm</option>
-                <option value="480">480 cm</option>
-                <option value="510">510 cm</option>
-                <option value="540">540 cm</option>
-                <option value="570">570 cm</option>
-                <option value="600">600 cm</option>
-                <option value="630">630 cm</option>
-                <option value="660">660 cm</option>
-                <option value="690">690 cm</option>
-                <option value="720">720 cm</option>
-            </select>
+            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>
+            <input type="number"
+                   class="form-control"
+                   id="redskabsrum-bredde"
+                   name="redskabsrum-bredde"
+                   min="0"
+                   max="720"
+                   required
+                   placeholder="Angiv et tal mellem 210 og 720 i cm og vælg 0 for intet redskabsrum">
         </div>
 
         <div class="mb-3">
-            <label for="redskabsrum-laengde" class="form-label">Redskabsrum længde*</label>
-            <select class="form-select" id="redskabsrum-laengde" name="redskabsrum-laengde">
-                <option value="" disabled selected>Vælg bredde</option>
-                <option value="0">Uden redskabsrum</option>
-                <option value="150">150 cm</option>
-                <option value="180">180 cm</option>
-                <option value="210">210 cm</option>
-                <option value="240">240 cm</option>
-                <option value="270">270 cm</option>
-                <option value="300">300 cm</option>
-                <option value="330">330 cm</option>
-                <option value="360">360 cm</option>
-                <option value="390">390 cm</option>
-                <option value="420">420 cm</option>
-                <option value="450">450 cm</option>
-                <option value="480">480 cm</option>
-                <option value="510">510 cm</option>
-                <option value="540">540 cm</option>
-                <option value="570">570 cm</option>
-                <option value="600">600 cm</option>
-                <option value="630">630 cm</option>
-                <option value="660">660 cm</option>
-                <option value="690">690 cm</option>
-            </select>
+            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>
+            <input type="number"
+                   class="form-control"
+                   id="redskabsrum-laengde"
+                   name="redskabsrum-laengde"
+                   min="0"
+                   max="690"
+                   required
+                   placeholder="Angiv et tal mellem 150 og 690 i cm og vælg 0 for intet redskabsrum">
         </div>
 
         <div class="mb-3">
@@ -162,10 +101,6 @@
             <label for="postnummer" class="form-label">Postnummer*</label>
             <input type="text" class="form-control" id="postnummer" name="postnummer" placeholder="Postnummer" required>
         </div>
-<!--        <div class="mb-3">-->
-<!--            <label for="by" class="form-label">By*</label>-->
-<!--            <input type="text" class="form-control" id="by" name="by" placeholder="Bynavn" required>-->
-<!--        </div>-->
         <div class="mb-3">
             <label for="telefon" class="form-label">Telefon</label>
             <input type="tel" class="form-control" id="telefon" name="telefon" placeholder="Telefon nummer">

@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import app.entities.Account;
-import app.exceptions.AccountCreationException;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.services.PasswordGenerator;
@@ -54,10 +53,12 @@ public class AccountMapper {
                 int accountId = rs.getInt("account_id");
                 String role = rs.getString("role");
                 account = new Account(accountId, role);
+            } else {
+                throw new AccountException("Dette er ikke en valid bruger", "Error in login");
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
+            throw new AccountException("Fejl i login.", "Error in login.", e.getMessage());
         }
         return account;
     }
@@ -81,7 +82,7 @@ public class AccountMapper {
         }
     }
 
-    public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountException {
         int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
@@ -96,12 +97,12 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
         }
         return accountId;
     }
 
-    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
         int accountId;
         String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?) ";
@@ -121,18 +122,18 @@ public class AccountMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new AccountCreationException("Fejl ved oprettelse af ny bruger.");
+                throw new AccountException("Fejl ved oprettelse af ny bruger.");
             } else {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     accountId = rs.getInt(1);
                 } else {
-                    throw new AccountCreationException("Kunne ikke hente det genererede account ID.");
+                    throw new AccountException("Kunne ikke hente det genererede account ID.");
                 }
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
+            throw new AccountException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
         }
         return accountId;
     }
