@@ -10,36 +10,11 @@ import app.services.PasswordGenerator;
 
 public class AccountMapper {
 
-    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
-        Account account = null;
-        String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
 
 
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ResultSet rs = ps.executeQuery();
-          
-            while (rs.next()) {
-                String mail = rs.getString("email");
-                String name = rs.getString("name");
-                String address = rs.getString("address");
-                int zipCode = rs.getInt("zip_code");
-                String phone = rs.getString("phone");
-                String city = rs.getString("city");
-
-                accounts.add(new Account(name, address, zipCode, phone, mail, city));
-            }
-            return accounts;
-
-        } catch (SQLException e) {
-        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
-        }
-    }
-  
   public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+            String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
     
      try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
