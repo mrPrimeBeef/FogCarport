@@ -10,31 +10,39 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
     <link rel="icon" type="image/x-icon" href="public/images/favicon-fog.png">
+    <style>
+        .bg-dark-blue, .btn-dark-blue {
+            background-color: #14488C !important;
+        }
+    </style>
 </head>
 
-<body>
-<main class="col d-flex justify-content-center">
-
-    <div class="col-2-sm">
-        <img class="logo" src="public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
-        <h2 id="log-text">Log på</h2>
-
-        <p class="mb-1 mt-1" th:text="${message}"></p>
-
-        <form id="login-form" method="post">
-
-            <label for="email"></label><br>
-            <input type="email" id="email" name="email" placeholder="Emailadresse" required/><br>
-
-            <label for="password"></label><br>
-            <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
-
-            <p class="glemt-kode"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
-            </p>
-
-            <button id="sub_button" class="btn btn-primary" type="submit" formaction="/login">Log på</button>
-
-        </form>
+<body class="bg-dark-blue">
+<main class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class=" row d-flex justify-content-center">
+        <div class="col">
+            <div class="card px-5 py-5 text-center">
+                <div clas="justify-content-center">
+                    <img class="card-img-center mb-5" src="public/images/fog-logo.png" width="60" height="60"
+                         th:src="@{/images/fog-logo.png}"/></div>
+                <div class="mb-4">
+                    <h2 id="log-text">Log på</h2>
+                </div>
+                <form id="login-form" method="post">
+                    <label for="email"></label>
+                    <input type="email" id="email" name="email" placeholder="Emailadresse" required/><br>
+                    <div class="m-2">
+                        <label for="password"></label>
+                        <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
+                    </div>
+                    <p class="m-4"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
+                    </p>
+                    <button id="sub_button" class="btn btn-dark-blue text-light" type="submit" formaction="/login">Log
+                        på
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 </body>
