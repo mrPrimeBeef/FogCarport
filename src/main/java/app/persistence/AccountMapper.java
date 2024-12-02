@@ -140,7 +140,7 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
+            throw new AccountException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
         }
         return accountId;
     }
