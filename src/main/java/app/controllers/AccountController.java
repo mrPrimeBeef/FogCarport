@@ -15,6 +15,7 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
   
@@ -62,4 +63,43 @@ public class AccountController {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
     }
+
+    public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
+        String email = ctx.formParam("email"); // Henter e-mail fra formularen
+
+        try {
+            // Hent brugerkonto baseret på e-mail
+            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
+
+            if (account == null) {
+                // Hvis e-mailen ikke findes i databasen
+                ctx.attribute("errorMessage", "Ingen konto fundet for den angivne e-mail.");
+                ctx.render("error.html");
+                return;
+            }
+
+            // Tjek brugerens rolle
+            String role = account.getRole();
+            if ("salesrep".equals(role)) {
+                // Hvis brugeren er sælger
+                ctx.attribute("message", "Sælgere kan ikke få adgang til deres adgangskode. Kontakt en administrator.");
+                ctx.render("forgotpassword.html");
+            } else if ("customer".equals(role)) {
+                // Hvis brugeren er kunde, hent og vis den autogenererede kode
+                String password = AccountMapper.getPasswordByEmail(email, connectionPool);
+                ctx.attribute("message", "Adgangskoden for " + email + " er: " + password);
+                ctx.render("forgotpassword.html");
+            } else {
+                // Hvis rollen ikke er genkendt
+                ctx.attribute("errorMessage", "Ugyldig brugertype. Kontakt support.");
+                ctx.render("error.html");
+            }
+
+        } catch (Exception e) {
+            // Generel fejlmeddelelse
+            ctx.attribute("errorMessage", "Noget gik galt: " + e.getMessage());
+            ctx.render("error.html");
+        }
+    }
+
 }
