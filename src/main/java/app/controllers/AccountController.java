@@ -2,12 +2,12 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.exceptions.AccountException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.Account;
 import app.exceptions.DatabaseException;
-import app.exceptions.AccountException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 
