@@ -19,6 +19,8 @@
         <img class="logo" src="public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
         <h2 id="log-text">Log på</h2>
 
+        <p class="mb-1 mt-1" th:text="${message}"></p>
+
         <form id="login-form" method="post">
 
             <label for="email"></label><br>
@@ -27,7 +29,6 @@
             <label for="password"></label><br>
             <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
 
-            <!--Der skal nok oprettes en html glemt kode side?-->
             <p class="glemt-kode"><a href="glemtKode.html" th:href="@{/glemtKode}">Har du glemt din adgangskode? </a>
             </p>
 
