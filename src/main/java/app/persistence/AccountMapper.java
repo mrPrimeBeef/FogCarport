@@ -10,10 +10,10 @@ import app.services.PasswordGenerator;
 
 public class AccountMapper {
 
-    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
-        ArrayList<Account> accounts = new ArrayList<>();
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
 
-        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -51,10 +51,17 @@ public class AccountMapper {
        
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
+                String name = rs.getString("name");
                 String role = rs.getString("role");
-                account = new Account(accountId, role);
-            } else {
-                throw new AccountException("Dette er ikke en valid bruger", "Error in login");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                String phone = rs.getString("phone");
+
+                if (role.equals("salesrep")) {
+                    account = new Account(accountId, role);
+                } else if (role.equals("Kunde")) {
+                    account = new Account(accountId, email, name, role, address, city, phone);
+                }
             }
        
         } catch (SQLException e) {

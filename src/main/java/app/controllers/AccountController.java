@@ -15,6 +15,8 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.get("kundeside", ctx -> showKundeside(ctx));
+        app.get("logout",ctx->logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
   
@@ -46,15 +48,26 @@ public class AccountController {
                 salesrepShowAllCustomersPage(ctx,connectionPool);
                 return;
             }
-            //TODO skal henvise til en kunde index side i ctx.render.
-            if (account.getRole().equals("customer")) {
-                ctx.render("/index");
-                return;
+            if (account.getRole().equals("Kunde")) {
+                ctx.sessionAttribute("account", account);
+                ctx.render("/kundeside");
             }
 
         } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
+        }
+    }
+
+    private static void showKundeside(Context ctx) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null) {
+            ctx.attribute("Du er ikke logget ind");
+            ctx.render("/error");
+            return;
+        }
+        if (activeAccount.getRole().equals("Kunde")) {
+            ctx.render("/kundeside");
         }
     }
 
