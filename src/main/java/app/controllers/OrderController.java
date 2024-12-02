@@ -13,9 +13,10 @@ public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
+
     }
 
-    // TODO: Fix the exception handling
+
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
         int carportLengthCm = 752;

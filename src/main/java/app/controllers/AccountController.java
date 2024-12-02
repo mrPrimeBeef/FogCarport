@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.exceptions.DatabaseException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
