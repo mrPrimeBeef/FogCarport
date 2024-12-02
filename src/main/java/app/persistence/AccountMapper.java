@@ -159,7 +159,7 @@ public class AccountMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new AccountException("Kunne ikke hente konto fra databasen: " + e.getMessage());
+            throw new AccountException("Kunne ikke hente konto fra databasen: " + "Error in getAccountByEmail" + e.getMessage());
         }
         return account;
     }
@@ -177,7 +177,7 @@ public class AccountMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new AccountException("Kunne ikke hente adgangskoden: " + e.getMessage());
+            throw new AccountException("Kunne ikke hente adgangskoden: " + "Error in getPasswordByEmail"+ e.getMessage());
         }
         if (password == null) {
             throw new AccountException("Ingen adgangskode fundet for e-mailen.");
