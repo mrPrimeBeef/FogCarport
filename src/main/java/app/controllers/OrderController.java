@@ -3,15 +3,16 @@ package app.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+
 import app.entities.EmailReceipt;
+import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
 import app.persistence.ConnectionPool;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
@@ -22,7 +23,8 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
-        app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
+        app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
+    }
 
     }
 private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -42,13 +44,13 @@ private static void postCarportCustomerInfo(Context ctx, ConnectionPool connecti
         int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
         OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
 
-        new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
-    } catch (AccountException | OrderException | DatabaseException e) {
-        ctx.attribute("ErrorMessage", e.getMessage());
-        ctx.render("error.html");
+            new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
+        } catch (AccountException | OrderException | DatabaseException e) {
+            ctx.attribute("ErrorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
+        showThankYouPage(name, email, ctx);
     }
-    showThankYouPage(name, email, ctx);
-}
 
 
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {

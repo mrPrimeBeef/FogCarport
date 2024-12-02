@@ -2,14 +2,12 @@ package app.controllers;
 
 import java.util.ArrayList;
 
-import app.exceptions.DatabaseException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.Account;
-import app.entities.Order;
+import app.exceptions.DatabaseException;
 import app.exceptions.AccountException;
-import app.exceptions.OrderException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
@@ -18,11 +16,11 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
-        app.get("kundeside", ctx -> showKundeside(ctx, connectionPool));
+        app.get("kundeside", ctx -> showKundeside(ctx));
         app.get("logout",ctx->logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
-
+  
   public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
@@ -52,8 +50,8 @@ public class AccountController {
                 return;
             }
             if (account.getRole().equals("Kunde")) {
-                ctx.sessionAttribute("customer", account);
-                showKundeside(ctx, connectionPool);
+                ctx.sessionAttribute("account", account);
+                ctx.render("/kundeside");
             }
 
         } catch (AccountException e) {

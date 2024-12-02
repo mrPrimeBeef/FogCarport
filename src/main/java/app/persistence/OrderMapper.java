@@ -13,6 +13,7 @@ import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderCreationException;
 import app.exceptions.OrderException;
+import app.exceptions.OrderException;
 
 public class OrderMapper {
 
@@ -55,7 +56,7 @@ public class OrderMapper {
             ps.setString(2, "In progress");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 200); // carport height 200 cm
+            ps.setInt(5, 210); // carport height 200 cm
             ps.setInt(6, shedWidth);
             ps.setInt(7, shedLength);
 
@@ -66,7 +67,6 @@ public class OrderMapper {
             } else {
                 throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
             }
-
         } catch (SQLException e) {
             throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method", e.getMessage());
         }

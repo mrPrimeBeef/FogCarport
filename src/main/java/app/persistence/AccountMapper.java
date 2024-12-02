@@ -4,14 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import app.entities.Account;
-import app.exceptions.AccountCreationException;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.services.PasswordGenerator;
 
 public class AccountMapper {
 
-    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws AccountException {
+    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
 
         String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
@@ -20,7 +19,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-
+          
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -65,7 +64,7 @@ public class AccountMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new AccountException("Fejl i login.", "an error happend in login.", e.getMessage());
+            throw new AccountException("Fejl i login.", "Error in login.", e.getMessage());
         }
         return account;
     }
