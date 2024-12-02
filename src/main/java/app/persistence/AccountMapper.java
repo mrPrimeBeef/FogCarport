@@ -10,7 +10,7 @@ import app.services.PasswordGenerator;
 
 public class AccountMapper {
 
-    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws AccountException {
         ArrayList<Account> accounts = new ArrayList<>();
 
         String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";

@@ -2,11 +2,12 @@ package app.controllers;
 
 import java.util.ArrayList;
 
+import app.entities.Order;
+import app.exceptions.OrderException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.entities.Account;
-import app.exceptions.DatabaseException;
 import app.exceptions.AccountException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
@@ -16,7 +17,7 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
-        app.get("kundeside", ctx -> showKundeside(ctx));
+        app.get("kundeside", ctx -> showKundeside(ctx, connectionPool));
         app.get("logout",ctx->logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }

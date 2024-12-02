@@ -6,13 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Date;
 
 import app.entities.Order;
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
-import app.exceptions.OrderCreationException;
-import app.exceptions.OrderException;
 import app.exceptions.OrderException;
 
 public class OrderMapper {

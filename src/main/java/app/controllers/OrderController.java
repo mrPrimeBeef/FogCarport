@@ -23,26 +23,24 @@ public class OrderController {
         app.get("/", ctx -> ctx.render("index"));
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
-        app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
     }
 
-    }
-private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
-    int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
-    int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-    int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
-    int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
-    String notes = ctx.formParam("bemaerkninger");
+    private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
+        int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
+        int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
+        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
+        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
+        String notes = ctx.formParam("bemaerkninger");
 
-    String name = ctx.formParam("navn");
-    String address = ctx.formParam("adresse");
-    int zip = Integer.parseInt(ctx.formParam("postnummer"));
-    String city = ctx.formParam("by");
-    String phone = ctx.formParam("telefon");
-    String email = ctx.formParam("email");
-    try {
-        int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
-        OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
+        String name = ctx.formParam("navn");
+        String address = ctx.formParam("adresse");
+        int zip = Integer.parseInt(ctx.formParam("postnummer"));
+        String city = ctx.formParam("by");
+        String phone = ctx.formParam("telefon");
+        String email = ctx.formParam("email");
+        try {
+            int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
+            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
 
             new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
         } catch (AccountException | OrderException | DatabaseException e) {
@@ -68,13 +66,13 @@ private static void postCarportCustomerInfo(Context ctx, ConnectionPool connecti
         try {
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         ctx.render("saelgerordre.html");
     }
+
     private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
         int accountId;
         boolean allreadyUser = false;
@@ -87,7 +85,7 @@ private static void postCarportCustomerInfo(Context ctx, ConnectionPool connecti
         }
 
         if (!allreadyUser) {
-            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
