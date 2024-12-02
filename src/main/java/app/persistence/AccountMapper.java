@@ -60,7 +60,7 @@ public class AccountMapper {
 
                 if (role.equals("salesrep")) {
                     account = new Account(accountId, role);
-                } else if (role.equals("customer")) {
+                } else if (role.equals("Kunde")) {
                     account = new Account(accountId, email, name, role, address, city, phone);
                 }
             }

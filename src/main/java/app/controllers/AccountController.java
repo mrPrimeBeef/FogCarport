@@ -51,7 +51,7 @@ public class AccountController {
                 salesrepShowAllCustomersPage(ctx,connectionPool);
                 return;
             }
-            if (account.getRole().equals("customer")) {
+            if (account.getRole().equals("Kunde")) {
                 ctx.sessionAttribute("loggedIn", true);
                 ctx.sessionAttribute("userEmail", email);
                 ctx.sessionAttribute("customer", account);
