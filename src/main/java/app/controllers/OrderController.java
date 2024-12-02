@@ -1,11 +1,13 @@
 package app.controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.entities.EmailReceipt;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
+import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -71,5 +73,26 @@ private static void postCarportCustomerInfo(Context ctx, ConnectionPool connecti
 
         ctx.render("saelgerordre.html");
     }
+    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
+        int accountId;
+        boolean allreadyUser = false;
+        ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
+        for (String mail : emails) {
+            if (mail.equals(email)) {
+                allreadyUser = true;
+            }
+        }
+
+        if (!allreadyUser) {
+            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+        }
+        return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+    }
+
+    private static void showThankYouPage(String name, String email, Context ctx) {
+        ctx.attribute("navn", name);
+        ctx.attribute("email", email);
+        ctx.render("tak.html");
+    }
 }

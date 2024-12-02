@@ -14,7 +14,7 @@ public class EmailReceipt {
     private String phone;
     private String email;
 
-    public EmailReceipt(int carportWidth, int carportLength, String trapeztag, int shedWidth, int shedLength,
+    public EmailReceipt(int carportWidth, int carportLength, int shedWidth, int shedLength,
                         String notes, String name, String address, int zip, String city, String mobil, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;

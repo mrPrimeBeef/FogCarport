@@ -43,7 +43,7 @@ public class OrderMapper {
         return OverviewOrderAccountDtos;
     }
 
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderCreationException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
         String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
@@ -64,7 +64,7 @@ public class OrderMapper {
             if (rowsAffected == 1) {
                 success = true;
             } else {
-                throw new OrderCreationException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
+                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
             }
 
         } catch (SQLException e) {

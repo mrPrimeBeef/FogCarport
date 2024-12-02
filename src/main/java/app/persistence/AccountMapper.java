@@ -89,7 +89,7 @@ public class AccountMapper {
         }
     }
 
-    public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountException {
         int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
@@ -104,12 +104,12 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountCreationException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
         }
         return accountId;
     }
 
-    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountCreationException {
+    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
         int accountId;
         String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?) ";
@@ -129,13 +129,13 @@ public class AccountMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new AccountCreationException("Fejl ved oprettelse af ny bruger.");
+                throw new AccountException("Fejl ved oprettelse af ny bruger.");
             } else {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     accountId = rs.getInt(1);
                 } else {
-                    throw new AccountCreationException("Kunne ikke hente det genererede account ID.");
+                    throw new AccountException("Kunne ikke hente det genererede account ID.");
                 }
             }
 
