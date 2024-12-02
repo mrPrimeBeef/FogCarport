@@ -3,13 +3,21 @@ package app.services.StructureCalculationEngine.Entities;
 import app.services.StructureCalculationEngine.CalculationStrategy;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Structure {
     private CalculationStrategy strategy;
+    private Map<String, Integer> partsList;
+
+    public abstract int getWidth();
+    public abstract int getLength();
+    public abstract int getHeight();
 
     public Structure(CalculationStrategy strategy) {
         this.strategy = strategy;
+        this.partsList = new HashMap<>();
     }
 
     public CalculationStrategy getStrategy() {
@@ -24,7 +32,18 @@ public abstract class Structure {
         return strategy.calculateStructure(this);
     }
 
-    public abstract int getWidth();
-    public abstract int getLength();
-    public abstract int getHeight();
+    // Adds the parts, and quantity of parts of the Structure, to a Hashmap. If the material is already in the map, the
+    // quantity is added with the already existing quantity.
+    public void addToPartsList(String materialName, int quantity) {
+        if (partsList.containsKey(materialName)) {
+            int existingQuantity = partsList.get(materialName);
+            partsList.put(materialName, existingQuantity + quantity);
+        } else {
+            partsList.put(materialName, quantity);
+        }
+    }
+
+    public Map<String, Integer> getPartsList() {
+        return partsList;
+    }
 }
