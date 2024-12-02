@@ -3,10 +3,11 @@ package app;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import app.controllers.AccountController;
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
+import app.controllers.AccountController;
 import app.persistence.ConnectionPool;
-
 
 public class Main {
     private static final String USER = "postgres";
@@ -23,6 +24,7 @@ public class Main {
             config.staticFiles.add("/templates");
         }).start(7070);
 
+        AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
     }
 }
