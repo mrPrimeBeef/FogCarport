@@ -35,7 +35,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
         Carport carport = (Carport) structure;
 
-
         try {
             //***** Remme *****
             getBeamAndCalculate(carport);
@@ -115,7 +114,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     private void calculateBeams(Carport carport, Material beamMaterial) {
 
-        PlacedMaterial placedBeam = null;
+        PlacedMaterial placedBeam = new PlacedMaterial(beamMaterial, 0, 0, 0);
         int totalAmount = 0;
 
         for(int i = 0; i < 2; i++){
@@ -145,10 +144,11 @@ public class CarportCalculationStrategy implements CalculationStrategy{
                 .build();
         Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
 
-        calculateRafters(carport, rafterMaterial);
+        int amount = calculateRafters(carport, rafterMaterial);
+        getRafterBracketsAndCalculate(carport, amount);
     }
 
-    private void calculateRafters(Carport carport, Material rafterMaterial){
+    private int calculateRafters(Carport carport, Material rafterMaterial){
 
         int amountOfRaftersX = carport.getLength() / 50;
         int totalAmount = 0;
@@ -167,8 +167,32 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             placedMaterialList.add(placedRafter);
             totalAmount++;
         }
-
         calculatePartsList(carport, rafterMaterial, totalAmount);
+        return totalAmount;
+    }
+
+    private void getRafterBracketsAndCalculate(Carport carport, int amount) throws DatabaseException {
+
+        ItemSearchBuilder builderRightBrackets = new ItemSearchBuilder();
+        Map<String, Object> filtersRightBrackets = builderRightBrackets
+                .setName("Universal beslag")
+                .setDescription("190 mm højre")
+                .build();
+        Material rightBracketMaterial = ItemMapper.searchSingleItem(filtersRightBrackets, pool);
+
+        ItemSearchBuilder builderLeftBrackets = new ItemSearchBuilder();
+        Map<String, Object> filtersLeftBrackets = builderLeftBrackets
+                .setName("Universal beslag")
+                .setDescription("190 mm højre")
+                .build();
+        Material leftBracketMaterial = ItemMapper.searchSingleItem(filtersLeftBrackets, pool);
+
+        calculateRafterBrackets(carport, rightBracketMaterial, amount);
+        calculateRafterBrackets(carport, leftBracketMaterial, amount);
+    }
+
+    private void calculateRafterBrackets(Carport carport, Material rafterBracket, int amount){
+        calculatePartsList(carport, rafterBracket, amount);
     }
 
     private void getFasciaEndsAndCalculate(Carport carport) throws DatabaseException {
@@ -182,8 +206,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
                 .build();
 
         Material fasciaFrontBack = ItemMapper.searchSingleItem(filterFasciaFrontBack, pool);
-        calculateFasciaEnds(carport, fasciaFrontBack);
-
         calculateFasciaEnds(carport, fasciaFrontBack);
     }
 
