@@ -326,7 +326,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     private void calculateRoofScrews(Carport carport, Material roofScrew){
 
         // 12 skruer pr. kvadratmeter
-        int quantity = carport.getWidth() * carport.getLength() * 12;
+        int quantity = (int)Math.ceil(((double)(carport.getWidth()/100) * (double)(carport.getLength()/100)) * 12 / roofScrew.getPackageAmount());
 
         calculatePartsList(carport, roofScrew, quantity);
     }
