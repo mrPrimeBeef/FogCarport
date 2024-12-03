@@ -51,6 +51,9 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             //***** Stern Brædder Ender*****
             getFasciaSidesAndCalculate(carport);
 
+            //***** Tagplader *****
+            getRoofPanelsAndCalculate(carport);
+
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
@@ -268,6 +271,41 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             totalAmount++;
         }
         calculatePartsList(carport, fasciaSide, totalAmount);
+    }
+
+    private void getRoofPanelsAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderRoofPanelsShort = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofPanelsShort = builderRoofPanelsShort
+                .setName("Plastmo Ecolite blåtonet")
+                .setItemType("Tagplade")
+                .setLengthCm(360)
+                .build();
+        Material roofPanelShort = ItemMapper.searchSingleItem(filtersRoofPanelsShort, pool);
+
+        ItemSearchBuilder builderRoofPanelsLong = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofPanelsLong = builderRoofPanelsLong
+                .setName("Plastmo Ecolite blåtonet")
+                .setItemType("Tagplade")
+                .setLengthCm(600)
+                .build();
+        Material roofPanelLong = ItemMapper.searchSingleItem(filtersRoofPanelsLong, pool);
+
+        calculateRoofPanels(carport, roofPanelShort, roofPanelLong);
+    }
+
+    void calculateRoofPanels(Carport carport, Material roofPanelShort, Material roofPanelLong){
+
+        if(carport.getLength() < 360){
+            calculatePartsList(carport, roofPanelShort, (int)Math.ceil((double) carport.getWidth() /100));
+
+        }else if(carport.getLength() < 600){
+            calculatePartsList(carport, roofPanelLong, (int)Math.ceil((double) carport.getWidth() /100));
+
+        }else{
+            calculatePartsList(carport, roofPanelShort, (int)Math.ceil((double) carport.getWidth() /100));
+            calculatePartsList(carport, roofPanelLong, (int)Math.ceil((double) carport.getWidth() /100));
+        }
     }
 
     private void calculatePartsList(Structure structure, Material material, int quantity) {
