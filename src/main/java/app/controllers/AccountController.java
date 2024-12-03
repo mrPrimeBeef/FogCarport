@@ -87,7 +87,8 @@ public class AccountController {
             try {
                 carport.getPlacedMaterials();
                 int orderrId = AccountMapper.getActiveOrderrIdFromAccountId(activeAccount.getAccountId(),connectionPool);
-                OrderlineMapper.addOrderline(carport.getPartsList(),orderrId,connectionPool);
+                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId,connectionPool);
+                OrderlineMapper.addOrderlines(carport.getPartsList(),orderrId,connectionPool);
 
                 ArrayList<Order> orders = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
