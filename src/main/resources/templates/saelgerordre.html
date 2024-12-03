@@ -51,7 +51,6 @@
             <th>Dato henvendelse</th>
             <th>Dato betalt</th>
             <th>Dato færdig</th>
-            <th>Salgspris DKK ekskl. moms</th>
             <th>Status</th>
         </tr>
         <tr>
@@ -59,7 +58,6 @@
             <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
             <td th:text="${detailOrderAccountDto.datePaid}">X</td>
             <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
-            <td th:text="${detailOrderAccountDto.marginPercentage}">X</td>
             <td th:text="${detailOrderAccountDto.status}">X</td>
         </tr>
     </table>
@@ -89,7 +87,7 @@
                min="0"
                required
                placeholder="Dækningsgrad %"
-               th:value="${markupPercentage}">
+               th:value="${marginPercentage}">
         <br>
         <button type="submit">Ændre dækningsgrad</button>
     </form>

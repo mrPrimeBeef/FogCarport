@@ -106,4 +106,24 @@ public class OrderMapper {
         return null;
     }
 
+    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
+    public static void updateMarginPercentage(int orderId, double marginPercentage, ConnectionPool connectionPool) throws DatabaseException {
+
+        String sql = "UPDATE orderr SET sale_price = ? WHERE orderr_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setDouble(1, marginPercentage);
+            ps.setInt(2, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Fejl til sælger", "Error updating margin percentage for orderId: " + orderId);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl til sælger", "Error updating margin percentage for orderId: " + orderId, e.getMessage());
+        }
+    }
+
 }

@@ -28,7 +28,7 @@ public class OrderController {
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
-        app.post("daekningsgrad", ctx -> postMarkupPercentage(ctx, connectionPool));
+        app.post("daekningsgrad", ctx -> postMarginPercentage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -101,6 +101,8 @@ public class OrderController {
     // TODO: Fix the exception handling
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
+        int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
+
         int carportLengthCm = 780;
         int carportWidthCm = 600;
         int carportHeightCm = 210;
@@ -108,13 +110,13 @@ public class OrderController {
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
         try {
-            DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(3, connectionPool);
+            DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
             System.out.println(detailOrderAccountDto.getCarportLengthCm());
             System.out.println(detailOrderAccountDto.getCarportWidthCm());
 
 
             double costPrice = 17000;
-            double marginPercentage = 40;
+            double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
             double salePriceInclVAT = 1.25 * salePrice;
 
@@ -134,10 +136,18 @@ public class OrderController {
     }
 
 
-    private static void postMarkupPercentage(Context ctx, ConnectionPool connectionPool) {
-        String markupPercentage = ctx.formParam("daekningsgrad");
-        System.out.println(markupPercentage);
-        salesrepShowOrderPage(ctx, connectionPool);
+    private static void postMarginPercentage(Context ctx, ConnectionPool connectionPool) {
+        Double marginPercentage = Double.parseDouble(ctx.formParam("daekningsgrad"));
+
+        System.out.println(marginPercentage);
+
+        try {
+            OrderMapper.updateMarginPercentage(3, marginPercentage, connectionPool);
+            salesrepShowOrderPage(ctx, connectionPool);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
