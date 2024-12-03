@@ -108,17 +108,16 @@ public class OrderController {
 
             int carportLengthCm = detailOrderAccountDto.getCarportLengthCm();
             int carportWidthCm = detailOrderAccountDto.getCarportWidthCm();
-            int carportHeightCm = 210;
+            int carportHeightCm = detailOrderAccountDto.getCarportHeightCm();
 
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
-            double costPrice = 17000;
+            double costPrice = 17000;  // TODO: Skal beregnes ved at summere cost price fra orderlines
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
             double salePriceInclVAT = 1.25 * salePrice;
 
             ctx.attribute("costPrice", costPrice);
-            ctx.attribute("marginPercentage", marginPercentage);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
 
@@ -139,13 +138,8 @@ public class OrderController {
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         Double marginPercentage = Double.parseDouble(ctx.formParam("daekningsgrad"));
 
-        System.out.println(marginPercentage);
-
         try {
             OrderMapper.updateMarginPercentage(orderId, marginPercentage, connectionPool);
-
-            System.out.println("saelgerordre?ordrenr=" + orderId);
-
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
         } catch (DatabaseException e) {
             e.printStackTrace();
