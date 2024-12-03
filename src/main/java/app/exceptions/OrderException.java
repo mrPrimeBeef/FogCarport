@@ -1,19 +1,19 @@
 package app.exceptions;
 
-public class AccountCreationException extends Exception {
+public class OrderException extends Exception {
 
-    public AccountCreationException(String userMessage) {
+    public OrderException(String userMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
     }
 
-    public AccountCreationException(String userMessage, String systemMessage) {
+    public OrderException(String userMessage, String systemMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
         System.out.println("systemMessage: " + systemMessage);
     }
 
-    public AccountCreationException(String userMessage, String developerMessage, String systemMessage) {
+    public OrderException(String userMessage, String developerMessage, String systemMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
         System.out.println("developerMessage: " + developerMessage);
