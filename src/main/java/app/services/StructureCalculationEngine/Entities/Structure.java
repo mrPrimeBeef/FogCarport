@@ -3,12 +3,14 @@ package app.services.StructureCalculationEngine.Entities;
 import app.services.StructureCalculationEngine.CalculationStrategy;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Structure {
     private CalculationStrategy strategy;
+    List<PlacedMaterial> placedMaterials;
     private Map<Material, Integer> partsList;
 
     public abstract int getWidth();
@@ -17,6 +19,7 @@ public abstract class Structure {
 
     public Structure(CalculationStrategy strategy) {
         this.strategy = strategy;
+        this.placedMaterials = new ArrayList<>();
         this.partsList = new HashMap<>();
     }
 
@@ -29,7 +32,11 @@ public abstract class Structure {
     }
 
     public List<PlacedMaterial> getPlacedMaterials() throws SQLException {
-        return strategy.calculateStructure(this);
+        if(placedMaterials == null){
+            return strategy.calculateStructure(this);
+        }else{
+            return getPlacedMaterials();
+        }
     }
 
     // Adds the parts, and quantity of parts of the Structure, to a Hashmap. If the material is already in the map, the
