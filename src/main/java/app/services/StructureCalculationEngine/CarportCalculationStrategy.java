@@ -1,5 +1,10 @@
 package app.services.StructureCalculationEngine;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.ItemMapper;
@@ -8,10 +13,6 @@ import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.StructureCalculationEngine.Entities.Material;
 import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
 import app.services.StructureCalculationEngine.Entities.Structure;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class CarportCalculationStrategy implements CalculationStrategy{
 
@@ -57,6 +58,9 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             //***** Tag Skruer *****
             getRoofScrewsAndCalculate(carport);
 
+            //***** Hulbånd *****
+            getFixingStrapAndCalculate(carport);
+
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
@@ -64,6 +68,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         return placedMaterialList;
     }
 
+    // Most calculations are broken in to parts: One part to get the required material, and another to place
+    // the material, and calculate the amount needed.
     private void getPillarsAndCalculate(Carport carport) throws DatabaseException {
 
         ItemSearchBuilder builderPillar = new ItemSearchBuilder();
@@ -326,9 +332,28 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     private void calculateRoofScrews(Carport carport, Material roofScrew){
 
         // 12 skruer pr. kvadratmeter
-        int quantity = (int)Math.ceil(((double)(carport.getWidth()/100) * (double)(carport.getLength()/100)) * 12 / roofScrew.getPackageAmount());
+        int quantity = (int) Math.ceil(((double)(carport.getWidth()/100) * (double)(carport.getLength()/100)) * 12 / roofScrew.getPackageAmount());
 
         calculatePartsList(carport, roofScrew, quantity);
+    }
+
+    private void getFixingStrapAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderFixingStrap = new ItemSearchBuilder();
+        Map<String, Object> filtersFixingStrap = builderFixingStrap
+                .setName("Hulbånd")
+                .build();
+        Material fixingStrap = ItemMapper.searchSingleItem(filtersFixingStrap, pool);
+
+        calculateFixingStrap(carport, fixingStrap);
+    }
+
+    private void calculateFixingStrap(Carport carport, Material fixingStrap) {
+
+        double fixingStrapsLength = Math.sqrt(carport.getLength()^2 + carport.getWidth()^2) * 2;
+        int quantity = (int) Math.ceil(fixingStrapsLength / 10) * 10;
+
+        calculatePartsList(carport, fixingStrap, quantity);
     }
 
     private void calculatePartsList(Structure structure, Material material, int quantity) {
