@@ -88,7 +88,7 @@ public class AccountController {
             if ("customer".equals(role)) {
                 String newPassword = PasswordGenerator.generatePassword();
 
-                System.out.println("Adgangskoden for den indtastet email: " + email + " er: " + newPassword);
+                System.out.println("Den indtastet email: " + email + "\n" + "Adgangskoden for den indtastet mail er: " + newPassword);
                 ctx.render("login.html");
                 return;
             }
