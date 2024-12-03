@@ -6,13 +6,16 @@ public class Material {
     private String name;
     private String description;
     private String itemType;
+    private MaterialType materialType;
     private float lengthCm;
+    private float drawnLengthCm;
     private float widthCm;
+    private float drawnWidthCm;
     private float heightCm;
+    private float drawnHeightCm;
     private int packageAmount;
     private String packageType;
     private float costPrice;
-    private MaterialType materialType;
 
     public Material(int materialId, String name, String description, String itemType, String strMaterialType, float lengthCm, float widthMm, float heightMm, int packageAmount, String packageType, float costPrice) {
         this.materialId = materialId;
@@ -61,55 +64,79 @@ public class Material {
     }
 
 
-    public String getName() {
+    public String getName(){
         return name;
     }
 
-    public String getDescription() {
+    public String getDescription(){
         return description;
     }
 
-    public String getItemType() {
+    public String getItemType(){
         return itemType;
     }
 
-    public MaterialType getMaterialType() {
+    public MaterialType getMaterialType(){
         return materialType;
     }
 
-    public float getLengthCm() {
+    public float getLengthCm(){
         return lengthCm;
     }
 
-    public float getWidthCm() {
+    public float getDrawnLengthCm(){
+        return drawnLengthCm;
+    }
+
+    public float getWidthCm(){
         return widthCm;
     }
 
-    public float getHeightCm() {
+    public float getDrawnWidthCm(){
+        return drawnWidthCm;
+    }
+
+    public float getHeightCm(){
         return heightCm;
     }
 
-    public int getPackageAmount() {
+    public float getDrawnHeightCm(){
+        return drawnHeightCm;
+    }
+
+    public int getPackageAmount(){
         return packageAmount;
     }
 
-    public String getPackageType() {
+    public String getPackageType(){
         return packageType;
     }
 
-    public float getCostPrice() {
+    public float getCostPrice(){
         return costPrice;
     }
 
-    public void setHeightCm(float heightCm) {
+    public void setHeightCm(float heightCm){
         this.heightCm = heightCm;
     }
 
-    public void setWidthCm(float widthCm) {
+    public void setDrawnHeightCm(float drawnHeightCm){
+        this.drawnHeightCm = drawnHeightCm;
+    }
+
+    public void setWidthCm(float widthCm){
         this.widthCm = widthCm;
     }
 
-    public void setLengthCm(float lengthCm) {
+    public void setDrawnWidthCm(float drawnWidthCm){
+        this.drawnWidthCm = drawnWidthCm;
+    }
+
+    public void setLengthCm(float lengthCm){
         this.lengthCm = lengthCm;
+    }
+
+    public void setDrawnLengthCm(float drawnLengthCm){
+        this.drawnLengthCm = drawnLengthCm;
     }
 }
