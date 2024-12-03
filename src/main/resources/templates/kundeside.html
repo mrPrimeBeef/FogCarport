@@ -64,6 +64,23 @@
                 <h2>Top View</h2>
                 <div class="mx-auto" id="carport-top-view" th:utext="${carportSvgTopView}"></div>
             </div>
+            <table class="table table-striped table-bordered mt-5">
+                <tr class="justify-content-around">
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Mængde</th>
+                </tr>
+                <tbody class="table-group-divider">
+                <tr th:if="${showOrderlines == null}">
+                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                </tr>
+                <tr th:each="orderlines : ${showOrderlines}">
+                    <td th:text="${orderlines.name}"></td>
+                    <td th:text="${orderlines.description}"></td>
+                    <td th:text="${orderlines.quantity}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </main>

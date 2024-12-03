@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import app.entities.Order;
+import app.entities.Orderline;
 import app.exceptions.OrderException;
+import app.persistence.OrderlineMapper;
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.svgEngine.CarportSvg;
 import io.javalin.Javalin;
@@ -72,19 +74,23 @@ public class AccountController {
             return;
         }
         if (activeAccount.getRole().equals("Kunde")) {
+
             // TODO fix med rigtig måde at vise?
             int carportLengthCm = 752;
             int carportWidthCm = 600;
             int carportHeightCm = 210;
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+            // TODO
+
             try {
                 ArrayList<Order> orders = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
 
+                ArrayList<Orderline> orderlines = OrderlineMapper.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(),activeAccount.getRole(), connectionPool);
+                ctx.attribute("showOrderlines", orderlines);
+
                 ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
                 ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-
-
 
             } catch (OrderException | SQLException e) {
                 ctx.attribute(e.getMessage());
