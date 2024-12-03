@@ -1,6 +1,5 @@
 package app.services.StructureCalculationEngine;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +45,10 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             //***** Stolper *****
             getPillarsAndCalculate(carport);
 
-            //***** Stern Brædder Ender*****
+            //***** Stern Brædder Ender *****
             getFasciaEndsAndCalculate(carport);
 
-            //***** Stern Brædder Ender*****
+            //***** Stern Brædder Sider *****
             getFasciaSidesAndCalculate(carport);
 
             //***** Tagplader *****
@@ -91,7 +90,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
         for (int i = 0; i < amountOfPillarsY; i++) {
             for (int j = 0; j < amountOfPillarsX; j++) {
-                float x = 0;
+                float x;
                 //if(carport.getLength() > 300) {
                     x = defaultOverhangX + j * (float) (carport.getLength() - 2 * defaultOverhangX) / (amountOfPillarsX - 1);
                 //}
@@ -108,7 +107,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
                 totalAmount++;
             }
         }
-
         calculatePartsList(carport, pillarMaterial, totalAmount);
     }
 
@@ -143,7 +141,6 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             placedMaterialList.add(placedBeam);
             totalAmount++;
         }
-
         calculatePartsList(carport, beamMaterial, totalAmount);
     }
 
@@ -350,8 +347,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     private void calculateFixingStrap(Carport carport, Material fixingStrap) {
 
-        double fixingStrapsLength = Math.sqrt(carport.getLength()^2 + carport.getWidth()^2) * 2;
-        int quantity = (int) Math.ceil(fixingStrapsLength / 10) * 10;
+        double fixingStrapsLength = Math.sqrt(Math.pow(carport.getLength(), 2) + Math.pow(carport.getWidth(), 2)) * 2;
+        int quantity = (int) (Math.ceil(fixingStrapsLength / 100) * 0.1);
 
         calculatePartsList(carport, fixingStrap, quantity);
     }
