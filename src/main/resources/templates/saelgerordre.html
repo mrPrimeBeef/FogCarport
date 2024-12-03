@@ -18,17 +18,15 @@
 <header th:replace="fragments :: headerCustomer"></header>
 
 <main>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    (filler line)<br>
-    <h1>salesrepShowOrderPage</h1>
 
-    <table style="width: 50%">
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>salesrepShowOrderPage</h1>
+    <br>
+
+    <table style="width: 40%">
         <tr>
             <th>Email</th>
             <th>Navn</th>
@@ -44,8 +42,9 @@
             <td th:text="${detailOrderAccountDto.city}">X</td>
         </tr>
     </table>
+    <br>
 
-    <table style="width: 60%">
+    <table style="width: 50%">
         <tr>
             <th>Ordrenr.</th>
             <th>Dato henvendelse</th>
@@ -62,9 +61,11 @@
         </tr>
     </table>
 
-    <h2>Beregninger</h2>
-    <h3>Beregning af dækningsgrad</h3>
-    <table style="width: 50%">
+    <br>
+    <br>
+    <h2>Dækningsgrad og salgspris</h2>
+
+    <table style="width: 40%">
         <tr>
             <th>Kostpris<br>DKK</th>
             <th>Dækningsgrad<br>%</th>
@@ -93,9 +94,10 @@
         <br>
         <button type="submit">Ændre dækningsgrad</button>
     </form>
+    <br>
+    <br>
 
-
-    <h3>Beregning af carport</h3>
+    <h2>Carport beregning</h2>
     <form method="post" action="xxx">
 
         <label for="carport-bredde">Carport bredde [cm]</label>
@@ -122,11 +124,13 @@
 
         <button type="submit">Kør beregning</button>
     </form>
+    <br>
 
-    <h2>Side View</h2>
+    <h3>Tegning fra siden</h3>
     <div class="carport-svg-view" th:utext="${carportSvgSideView}"></div>
+    <br>
 
-    <h2>Top View</h2>
+    <h3>Tegning fra oven</h3>
     <div class="carport-svg-view" th:utext="${carportSvgTopView}"></div>
 
     * Mål udvendigt på stolper<br>
@@ -135,7 +139,7 @@
     <br>
 
 
-    <h2>Stykliste</h2>
+    <h3>Stykliste</h3>
 
 </main>
 <!-- footer fragment -->
