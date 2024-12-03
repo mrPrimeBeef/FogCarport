@@ -71,6 +71,7 @@ public class OrderMapper {
     }
 
 
+    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, sale_price, status, carport_length_cm, carport_width_cm FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
@@ -91,12 +92,12 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("sale_price");
+                double marginPercentage = rs.getDouble("sale_price");
                 String status = rs.getString("status");
                 int carportLengthCm = rs.getInt("carport_length_cm");
                 int carportWidthCm = rs.getInt("carport_width_cm");
 
-                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, salePrice, status, carportLengthCm, carportWidthCm);
+                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm);
 
             }
         } catch (SQLException e) {

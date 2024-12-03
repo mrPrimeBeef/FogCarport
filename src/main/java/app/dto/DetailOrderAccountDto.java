@@ -13,12 +13,12 @@ public class DetailOrderAccountDto {
     private Date datePlaced;
     private Date datePaid;
     private Date dateCompleted;
-    private double salePrice;
+    private double marginPercentage;
     private String status;
     private int carportLengthCm;
     private int carportWidthCm;
 
-    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double salePrice, String status, int carportLengthCm, int carportWidthCm) {
+    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status, int carportLengthCm, int carportWidthCm) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
@@ -29,7 +29,7 @@ public class DetailOrderAccountDto {
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
-        this.salePrice = salePrice;
+        this.marginPercentage = marginPercentage;
         this.status = status;
         this.carportLengthCm = carportLengthCm;
         this.carportWidthCm = carportWidthCm;
@@ -75,8 +75,8 @@ public class DetailOrderAccountDto {
         return dateCompleted;
     }
 
-    public double getSalePrice() {
-        return salePrice;
+    public double getMarginPercentage() {
+        return marginPercentage;
     }
 
     public String getStatus() {

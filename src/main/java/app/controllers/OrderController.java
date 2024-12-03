@@ -28,6 +28,7 @@ public class OrderController {
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
+        app.post("daekningsgrad", ctx -> postMarkupPercentage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -86,7 +87,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
@@ -116,16 +117,32 @@ public class OrderController {
             System.out.println(detailOrderAccountDto.getCarportLengthCm());
             System.out.println(detailOrderAccountDto.getCarportWidthCm());
 
-            ctx.attribute("detailOrderAccountDto",detailOrderAccountDto);
+
+            double costPrice = 17000;
+            double marginPercentage = 40;
+            double salePrice = 100 * costPrice / (100 - marginPercentage);
+            double salePriceInclVAT = 1.25 * salePrice;
+
+            ctx.attribute("costPrice", costPrice);
+            ctx.attribute("markupPercentage", marginPercentage);
+            ctx.attribute("salePrice", salePrice);
+            ctx.attribute("salePriceInclVAT", salePriceInclVAT);
+
+            ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
             ctx.render("saelgerordre.html");
-        }
-        catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException e) {
             e.printStackTrace();
         }
 
+    }
 
+
+    private static void postMarkupPercentage(Context ctx, ConnectionPool connectionPool) {
+        String markupPercentage = ctx.formParam("daekningsgrad");
+        System.out.println(markupPercentage);
+        salesrepShowOrderPage(ctx, connectionPool);
     }
 
 }
