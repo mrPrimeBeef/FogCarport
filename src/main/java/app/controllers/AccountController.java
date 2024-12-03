@@ -23,7 +23,8 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
-        app.get("kundeside", ctx -> showKundeside(ctx, connectionPool));
+        app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
+        app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
@@ -57,7 +58,7 @@ public class AccountController {
                 return;
             }
             if (account.getRole().equals("Kunde")) {
-                showKundeside(ctx, connectionPool);
+                showCustomerOverview(ctx, connectionPool);
             }
 
         } catch (AccountException e) {
@@ -66,7 +67,7 @@ public class AccountController {
         }
     }
 
-    private static void showKundeside(Context ctx, ConnectionPool connectionPool) {
+    public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
 
         if (activeAccount == null) {
@@ -75,37 +76,60 @@ public class AccountController {
             return;
         }
         if (activeAccount.getRole().equals("Kunde")) {
-
-            // TODO fix med rigtig måde at vise?
-            int carportLengthCm = 752;
-            int carportWidthCm = 600;
-            int carportHeightCm = 210;
-            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-            // TODO
-
             try {
-                carport.getPlacedMaterials();
-                int orderrId = AccountMapper.getActiveOrderrIdFromAccountId(activeAccount.getAccountId(),connectionPool);
-                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId,connectionPool);
-                OrderlineMapper.addOrderlines(carport.getPartsList(),orderrId,connectionPool);
-
-                ArrayList<Order> orders = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
+                ArrayList<Order> orders = OrderMapper.showCustomerOrders(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
 
-                ArrayList<Orderline> orderlines = OrderlineMapper.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(),activeAccount.getRole(), connectionPool);
-                ctx.attribute("showOrderlines", orderlines);
-
-                ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-                ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-
-            } catch (OrderException | AccountException | DatabaseException | SQLException e) {
+            } catch (OrderException e) {
                 ctx.attribute(e.getMessage());
                 ctx.render("/error");
             }
             ctx.render("/kundeside");
         }
     }
+
+        public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
+            Account activeAccount = ctx.sessionAttribute("account");
+
+            if (activeAccount == null) {
+                ctx.attribute("Du er ikke logget ind");
+                ctx.render("/error");
+                return;
+            }
+
+            if (activeAccount.getRole().equals("Kunde")) {
+                // TODO fix med rigtig måde at vise?
+                int carportLengthCm = 752;
+                int carportWidthCm = 600;
+                int carportHeightCm = 210;
+                Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
+                // TODO
+
+                try {
+                    int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
+
+                    carport.getPlacedMaterials();
+                    OrderlineMapper.deleteOrderlinesFromOrderId(orderrId,connectionPool);
+                    OrderlineMapper.addOrderlines(carport.getPartsList(),orderrId,connectionPool);
+
+                    Order orders = OrderMapper.showCustomerOrder(orderrId, connectionPool);
+                    ctx.attribute("showOrder", orders);
+
+
+                    ArrayList<Orderline> orderlines = OrderlineMapper.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(),activeAccount.getRole(), connectionPool);
+                    ctx.attribute("showOrderlines", orderlines);
+
+                    ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+                    ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+
+                } catch (OrderException | DatabaseException | SQLException e) {
+                    ctx.attribute(e.getMessage());
+                    ctx.render("/error");
+                }
+                ctx.render("/kundesideordre");
+            }
+        }
 
     private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
