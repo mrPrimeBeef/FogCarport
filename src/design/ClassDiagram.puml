@@ -54,6 +54,10 @@ package app {
     + static boolean updateOrderStatus(String status, Context ctx, ConnectionPool connectionPool)
     + static List<Order> getAllOrdersByAccountId(int accountId, Context ctx, ConnectionPool connectionPool)
     }
+    class OrderlineMapper{
+
+    }
+
     class ItemMapper{
 
     }
@@ -65,7 +69,7 @@ package app {
   }
   }
   package Calculator{
-  class calculaterEngien{
+  class calculatorEngine{
   }
   }
   class PasswordGenerator{
@@ -183,11 +187,11 @@ package app {
 
     persistence -->  exceptions : uses
 
-    Calculator --> svgEngine : carport object
+    Calculator <--> OrderController : carport info in, carport object out
 
-    svgEngine --> OrderController : svg String
+    svgEngine <--> OrderController : carport object in, svg String out
 
-    Calculator <--> ItemMapper
+    Calculator <-- ItemMapper
 
-    OrderController --> Services : carport info
+    OrderController --> OrderlineMapper : uses
 @enduml
