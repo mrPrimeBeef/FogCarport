@@ -60,6 +60,9 @@ public class Material {
         );
     }
 
+    public int getMaterialId() {
+        return materialId;
+    }
 
     public String getName() {
         return name;

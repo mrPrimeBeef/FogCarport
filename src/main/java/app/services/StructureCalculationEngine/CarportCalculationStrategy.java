@@ -354,7 +354,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     }
 
     private void calculatePartsList(Structure structure, Material material, int quantity) {
-        structure.addToPartsList(material.getName(), quantity);
+        structure.addToPartsList(material, quantity);
     }
 
     private void rotateAroundX(Material material){

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import app.entities.Order;
 import app.entities.Orderline;
+import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.persistence.OrderlineMapper;
 import app.services.StructureCalculationEngine.Entities.Carport;
@@ -80,9 +81,14 @@ public class AccountController {
             int carportWidthCm = 600;
             int carportHeightCm = 210;
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
             // TODO
 
             try {
+                int orderrId = AccountMapper.getActiveOrderrIdFromAccountId(activeAccount.getAccountId(),connectionPool);
+                OrderlineMapper.addOrderline(carport.getPartsList(),orderrId,connectionPool);
+
+
                 ArrayList<Order> orders = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
 
@@ -92,7 +98,7 @@ public class AccountController {
                 ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
                 ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
 
-            } catch (OrderException | SQLException e) {
+            } catch (OrderException | AccountException | DatabaseException | SQLException e) {
                 ctx.attribute(e.getMessage());
                 ctx.render("/error");
             }
