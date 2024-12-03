@@ -28,7 +28,7 @@ public class OrderlineMapper {
                 int quantity = rs.getInt("quantity");
                 double costPrice = rs.getDouble("cost_price");
                 String name = rs.getString("name");
-                String description = rs.getString("description");
+                String description = rs.getString("description") != null ? rs.getString("description") : "";
                 if(role.equals("Kunde")){
                     orderlineList.add(new Orderline(name,description, quantity));
                 } else if(role.equals("salesrep")){

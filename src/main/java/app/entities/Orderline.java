@@ -9,11 +9,16 @@ public class Orderline {
     public Orderline(String name, String description, int quantity) {
         this.name = name;
         this.quantity = quantity;
+        this.description = description;
     }
     public Orderline(String name, int quantity, double price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getName() {
