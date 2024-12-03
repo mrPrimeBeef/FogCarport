@@ -16,7 +16,7 @@ public class OrderlineMapper {
         String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
 
         try(Connection connection = connectionPool.getConnection();
-        PreparedStatement ps = connection.prepareStatement(sql)){
+            PreparedStatement ps = connection.prepareStatement(sql)){
 
             ps.setInt(1, orderr_id);
             ResultSet rs = ps.executeQuery();
