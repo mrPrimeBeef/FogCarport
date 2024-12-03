@@ -74,7 +74,7 @@ public class OrderMapper {
     // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, sale_price, status, carport_length_cm, carport_width_cm FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, sale_price, status, carport_length_cm, carport_width_cm, carport_height_cm FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -96,8 +96,9 @@ public class OrderMapper {
                 String status = rs.getString("status");
                 int carportLengthCm = rs.getInt("carport_length_cm");
                 int carportWidthCm = rs.getInt("carport_width_cm");
+                int carportHeightCm = rs.getInt("carport_height_cm");
 
-                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm);
+                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm, carportHeightCm);
 
             }
         } catch (SQLException e) {
