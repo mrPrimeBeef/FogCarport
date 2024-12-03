@@ -107,11 +107,6 @@ public class OrderController {
 
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
-//        System.out.println(carport.getLength());
-//        System.out.println(carport.getWidth());
-//        System.out.println(carport.getHeight());
-
-
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(3, connectionPool);
             System.out.println(detailOrderAccountDto.getCarportLengthCm());
@@ -124,7 +119,7 @@ public class OrderController {
             double salePriceInclVAT = 1.25 * salePrice;
 
             ctx.attribute("costPrice", costPrice);
-            ctx.attribute("markupPercentage", marginPercentage);
+            ctx.attribute("marginPercentage", marginPercentage);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
 
