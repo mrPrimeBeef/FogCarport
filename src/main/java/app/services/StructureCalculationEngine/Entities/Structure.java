@@ -32,11 +32,7 @@ public abstract class Structure {
     }
 
     public List<PlacedMaterial> getPlacedMaterials() throws SQLException {
-        if(placedMaterials == null){
-            return strategy.calculateStructure(this);
-        }else{
-            return getPlacedMaterials();
-        }
+        return strategy.calculateStructure(this);
     }
 
     // Adds the parts, and quantity of parts of the Structure, to a Hashmap. If the material is already in the map, the
