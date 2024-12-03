@@ -45,10 +45,10 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${showOrder == null}">
+                <tr th:if="${showOrders == null}">
                     <td colspan="6" class="text-center">Ingen ordrer fundet</td>
                 </tr>
-                <tr th:each="order : ${showOrder}">
+                <tr th:each="order : ${showOrders}">
                     <td th:text="${order.orderr_Id}"></td>
                     <td th:text="${order.datePlaced}"></td>
                     <td th:text="${order.dateCompleted}"></td>
@@ -58,6 +58,12 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="container-fluid">
+                <h2>Side View</h2>
+                <div class="mx-auto" id="carport-side-view" th:utext="${carportSvgSideView}"></div>
+                <h2>Top View</h2>
+                <div class="mx-auto" id="carport-top-view" th:utext="${carportSvgTopView}"></div>
+            </div>
         </div>
     </div>
 </main>

@@ -1,9 +1,12 @@
 package app.controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import app.entities.Order;
 import app.exceptions.OrderException;
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.svgEngine.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -18,11 +21,11 @@ public class AccountController {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
         app.get("kundeside", ctx -> showKundeside(ctx, connectionPool));
-        app.get("logout",ctx->logout(ctx));
+        app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
-  
-  public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -45,14 +48,13 @@ public class AccountController {
 
         try {
             Account account = AccountMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("activeAccount", account);
+            ctx.sessionAttribute("account", account);
             if (account.getRole().equals("salesrep")) {
-                salesrepShowAllCustomersPage(ctx,connectionPool);
+                salesrepShowAllCustomersPage(ctx, connectionPool);
                 return;
             }
             if (account.getRole().equals("Kunde")) {
-                ctx.sessionAttribute("account", account);
-                ctx.render("/kundeside");
+                showKundeside(ctx, connectionPool);
             }
 
         } catch (AccountException e) {
@@ -62,17 +64,29 @@ public class AccountController {
     }
 
     private static void showKundeside(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("Kunde");
+        Account activeAccount = ctx.sessionAttribute("account");
+
         if (activeAccount == null) {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
         }
         if (activeAccount.getRole().equals("Kunde")) {
+            // TODO fix med rigtig måde at vise?
+            int carportLengthCm = 752;
+            int carportWidthCm = 600;
+            int carportHeightCm = 210;
+            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
             try {
-                Order order = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
-                ctx.attribute("showOrder", order);
-            } catch (OrderException e) {
+                ArrayList<Order> orders = OrderMapper.showCustomerOrder(activeAccount.getAccountId(), connectionPool);
+                ctx.attribute("showOrders", orders);
+
+                ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+                ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+
+
+
+            } catch (OrderException | SQLException e) {
                 ctx.attribute(e.getMessage());
                 ctx.render("/error");
             }

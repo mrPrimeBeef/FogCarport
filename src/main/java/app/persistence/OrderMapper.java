@@ -70,8 +70,8 @@ public class OrderMapper {
         return success;
     }
 
-    public static Order showCustomerOrder(int account_id, ConnectionPool connectionPool) throws OrderException {
-        Order order = null;
+    public static ArrayList<Order> showCustomerOrder(int account_id, ConnectionPool connectionPool) throws OrderException {
+        ArrayList<Order> orders = new ArrayList<>();
         String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE account_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
@@ -81,7 +81,7 @@ public class OrderMapper {
 
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 int orderr_id = rs.getInt("orderr_id");
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
@@ -89,9 +89,9 @@ public class OrderMapper {
                 double saleprice = rs.getDouble("sale_price");
                 String status = rs.getString("status");
 
-                order = new Order(orderr_id, datePlaced, datePaid, dateCompleted, saleprice, status);
+                orders.add( new Order(orderr_id, datePlaced, datePaid, dateCompleted, saleprice, status)) ;
             }
-            return order;
+            return orders;
         } catch (SQLException e) {
             throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
         }
