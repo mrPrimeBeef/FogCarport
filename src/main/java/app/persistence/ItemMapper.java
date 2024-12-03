@@ -42,10 +42,10 @@ public class ItemMapper {
                 StringBuilder offendingFields = new StringBuilder();
                 filters.forEach((key, value) -> offendingFields.append(key).append("=").append(value).append(", "));
 
-                throw new DatabaseException("Databasefejl",  "Error in ItemMapper for query: " + offendingFields);
+                throw new DatabaseException("Databasefejl",  "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Databasefejl: ingen forbindelse",  "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
         }
     }
 
