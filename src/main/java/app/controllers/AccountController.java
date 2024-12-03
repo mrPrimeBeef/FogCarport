@@ -3,6 +3,7 @@ package app.controllers;
 import java.util.ArrayList;
 
 import app.exceptions.AccountException;
+import app.services.PasswordGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -72,26 +73,30 @@ public class AccountController {
             Account account = AccountMapper.getAccountByEmail(email, connectionPool);
 
             if (account == null) {
-                ctx.attribute("errorMessage", "Ingen konto fundet for den angivne e-mail.");
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastet email.");
                 ctx.render("error.html");
                 return;
             }
-
             String role = account.getRole();
+
             if ("salesrep".equals(role)) {
-                ctx.attribute("message", "Sælgere kan ikke få adgang til deres adgangskode. Kontakt en administrator.");
+                ctx.attribute("message", "Sælgere kan ikke få adgang til deres adgangskode. Kontakt admin for at ændre adgangskoden.");
                 ctx.render("glemtKode.html");
-            } else if ("customer".equals(role)) {
-                String password = AccountMapper.getPasswordByEmail(email, connectionPool);
-                ctx.attribute("message", "Adgangskoden for " + email + " er: " + password);
-                ctx.render("glemtKode.html");
-            } else {
-                ctx.attribute("errorMessage", "Ugyldig brugertype. Kontakt support.");
-                ctx.render("error.html");
+                return;
             }
 
+            if ("customer".equals(role)) {
+                String newPassword = PasswordGenerator.generatePassword();
+
+                System.out.println("Adgangskoden for den indtastet email: " + email + " er: " + newPassword);
+                ctx.render("login.html");
+                return;
+            }
+            ctx.attribute("errorMessage", "Ugyldig brugertype.");
+            ctx.render("error.html");
+
         } catch (AccountException e) {
-            ctx.attribute("errorMessage", "Noget gik galt: " + e.getMessage());
+            ctx.attribute("errorMessage", "Error in forgotPassword " + e.getMessage());
             ctx.render("error.html");
         }
     }
