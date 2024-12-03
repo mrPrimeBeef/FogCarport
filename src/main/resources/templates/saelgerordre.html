@@ -65,88 +65,89 @@
     <br>
     <h2>Dækningsgrad og salgspris</h2>
 
-    <table style="width: 40%">
-        <tr>
-            <th>Kostpris<br>DKK</th>
-            <th>Dækningsgrad<br>%</th>
-            <th>Salgspris<br>DKK</th>
-            <th>Salgspris inkl. moms<br>DKK</th>
-        </tr>
-        <tr>
-            <td th:text="${costPrice}"></td>
-            <td th:text="${detailOrderAccountDto.marginPercentage}"></td>
-            <td th:text="${salePrice}"></td>
-            <td th:text="${salePriceInclVAT}"></td>
-        </tr>
-    </table>
-
     <form method="post" action="daekningsgrad">
+
+        <table style="width: 40%">
+            <tr>
+                <th>Kostpris<br>DKK</th>
+                <th>Dækningsgrad<br>%</th>
+                <th>Salgspris<br>DKK</th>
+                <th>Salgspris inkl. moms<br>DKK</th>
+            </tr>
+            <tr>
+                <td th:text="${costPrice}"></td>
+                <td th:text="${detailOrderAccountDto.marginPercentage}"></td>
+                <td th:text="${salePrice}"></td>
+                <td th:text="${salePriceInclVAT}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="number"
+                           id="daekningsgrad"
+                           name="daekningsgrad"
+                           min="0"
+                           step="0.1"
+                           required
+                           placeholder="Dækningsgrad %"
+                           th:value="${detailOrderAccountDto.marginPercentage}"></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
-        <label for="daekningsgrad">Dækningsgrad [%]</label>
-        <input type="number"
-               id="daekningsgrad"
-               name="daekningsgrad"
-               min="0"
-               step="0.1"
-               required
-               placeholder="Dækningsgrad %"
-               th:value="${detailOrderAccountDto.marginPercentage}">
-        <br>
+
         <button type="submit">Ændre dækningsgrad</button>
     </form>
+
+
     <br>
     <br>
 
     <h2>Carport beregning</h2>
 
-    <table style="width: 30%">
-        <tr>
-            <th>Bredde<br>cm</th>
-            <th>Længde<br>cm</th>
-            <th>Højde<br>cm</th>
-        </tr>
-        <tr>
-            <td th:text="${detailOrderAccountDto.carportWidthCm}"></td>
-            <td th:text="${detailOrderAccountDto.carportLengthCm}"></td>
-            <td th:text="${detailOrderAccountDto.carportHeightCm}"></td>
-        </tr>
-    </table>
-
-
-    <form method="post" action="xxx">
-
-        <label for="carport-bredde">Carport bredde [cm]</label>
-        <input type="number"
-               id="carport-bredde"
-               name="carport-bredde"
-               min="240"
-               max="600"
-               required
-               placeholder="Angiv et tal mellem 240 og 600 i cm"
-               th:value="${detailOrderAccountDto.carportWidthCm}">
-        <br>
-
-        <label for="carport-laengde">Carport længde [cm]</label>
-        <input type="number"
-               id="carport-laengde"
-               name="carport-laengde"
-               min="240"
-               max="780"
-               required
-               placeholder="Angiv et tal mellem 240 og 780 i cm"
-               th:value="${detailOrderAccountDto.carportLengthCm}">
-        <br>
-        <label for="carport-hoejde">Carport højde [cm]</label>
-        <!-- TODO: Set min og max for højden-->
-        <input type="number"
-               id="carport-hoejde"
-               name="carport-hoejde"
-               min="210"
-               max="500"
-               required
-               placeholder="Angiv et tal mellem 210 og 500 i cm"
-               th:value="${detailOrderAccountDto.carportLengthCm}">
-        <br>
+    <form method="post" action="carportberegning">
+        <table style="width: 30%">
+            <tr>
+                <th>Bredde<br>cm</th>
+                <th>Længde<br>cm</th>
+                <th>Højde<br>cm</th>
+            </tr>
+            <tr>
+                <td th:text="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportLengthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+            <tr>
+                <td><input type="number"
+                           id="carport-bredde"
+                           name="carport-bredde"
+                           min="240"
+                           max="600"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 600 i cm"
+                           th:value="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td><input type="number"
+                           id="carport-laengde"
+                           name="carport-laengde"
+                           min="240"
+                           max="780"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 780 i cm"
+                           th:value="${detailOrderAccountDto.carportLengthCm}"></td>
+                <!-- TODO: Set min og max for højden -->
+                <td><input type="number"
+                           id="carport-hoejde"
+                           name="carport-hoejde"
+                           min="210"
+                           max="500"
+                           required
+                           placeholder="Angiv et tal mellem 210 og 500 i cm"
+                           th:value="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
 
         <button type="submit">Kør beregning</button>
     </form>

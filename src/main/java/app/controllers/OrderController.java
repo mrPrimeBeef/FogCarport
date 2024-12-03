@@ -29,6 +29,7 @@ public class OrderController {
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
         app.post("daekningsgrad", ctx -> postMarginPercentage(ctx, connectionPool));
+        app.post("carportberegning", ctx -> salesrepPostCalculation(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -144,6 +145,22 @@ public class OrderController {
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    private static void salesrepPostCalculation(Context ctx, ConnectionPool connectionPool) {
+        int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+        int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
+        int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
+        int carportHeight = Integer.parseInt(ctx.formParam("carport-hoejde"));
+
+        System.out.println(orderId);
+        System.out.println(carportWidth);
+        System.out.println(carportLength);
+        System.out.println(carportHeight);
+
+        ctx.redirect("saelgerordre?ordrenr=" + orderId);
 
     }
 
