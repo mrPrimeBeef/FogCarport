@@ -54,6 +54,9 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             //***** Tagplader *****
             getRoofPanelsAndCalculate(carport);
 
+            //***** Tag Skruer *****
+            getRoofScrewsAndCalculate(carport);
+
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
@@ -306,6 +309,26 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             calculatePartsList(carport, roofPanelShort, (int)Math.ceil((double) carport.getWidth() /100));
             calculatePartsList(carport, roofPanelLong, (int)Math.ceil((double) carport.getWidth() /100));
         }
+    }
+
+    private void getRoofScrewsAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderRoofScrew = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofScrew = builderRoofScrew
+                .setName("Plastmo bundskruer")
+                .setItemType("Bundskrue")
+                .build();
+        Material roofScrew = ItemMapper.searchSingleItem(filtersRoofScrew, pool);
+
+        calculateRoofScrews(carport, roofScrew);
+    }
+
+    private void calculateRoofScrews(Carport carport, Material roofScrew){
+
+        // 12 skruer pr. kvadratmeter
+        int quantity = carport.getWidth() * carport.getLength() * 12;
+
+        calculatePartsList(carport, roofScrew, quantity);
     }
 
     private void calculatePartsList(Structure structure, Material material, int quantity) {
