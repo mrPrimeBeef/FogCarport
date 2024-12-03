@@ -110,24 +110,22 @@ public class OrderController {
 //        System.out.println(carport.getWidth());
 //        System.out.println(carport.getHeight());
 
+
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(3, connectionPool);
             System.out.println(detailOrderAccountDto.getCarportLengthCm());
             System.out.println(detailOrderAccountDto.getCarportWidthCm());
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-        }
 
-        try {
+            ctx.attribute("detailOrderAccountDto",detailOrderAccountDto);
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+            ctx.render("saelgerordre.html");
         }
-        catch(SQLException e) {
+        catch (DatabaseException | SQLException e) {
             e.printStackTrace();
         }
 
-        ctx.render("saelgerordre.html");
+
     }
 
 }
