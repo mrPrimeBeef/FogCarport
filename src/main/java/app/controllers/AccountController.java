@@ -96,8 +96,8 @@ public class AccountController {
             ctx.render("error.html");
 
         } catch (AccountException e) {
-            ctx.attribute("errorMessage", "Error in forgotPassword " + e.getMessage());
-            ctx.render("error.html");
+            ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
+            ctx.render("glemtKode.html");
         }
     }
 }
