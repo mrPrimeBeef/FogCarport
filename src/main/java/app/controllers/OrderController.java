@@ -3,6 +3,7 @@ package app.controllers;
 import java.util.ArrayList;
 import java.sql.SQLException;
 
+import app.dto.DetailOrderAccountDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -105,9 +106,18 @@ public class OrderController {
 
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
-        System.out.println(carport.getLength());
-        System.out.println(carport.getWidth());
-        System.out.println(carport.getHeight());
+//        System.out.println(carport.getLength());
+//        System.out.println(carport.getWidth());
+//        System.out.println(carport.getHeight());
+
+        try {
+            DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(3, connectionPool);
+            System.out.println(detailOrderAccountDto.getCarportLengthCm());
+            System.out.println(detailOrderAccountDto.getCarportWidthCm());
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+        }
 
         try {
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));

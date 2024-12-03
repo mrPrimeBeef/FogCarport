@@ -66,4 +66,12 @@ public class DetailOrderAccountDto {
 //    public String getStatus() {
 //        return status;
 //    }
+
+    public int getCarportLengthCm() {
+        return carportLengthCm;
+    }
+
+    public int getCarportWidthCm() {
+        return carportWidthCm;
+    }
 }

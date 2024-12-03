@@ -41,41 +41,6 @@ public class OrderMapper {
         return OverviewOrderAccountDtos;
     }
 
-
-    public static ArrayList<DetailOrderAccountDto> getDetailOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
-        ArrayList<DetailOrderAccountDto> DetailOrderAccountDtos = new ArrayList<>();
-
-        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, sale_price, status FROM orderr JOIN account USING(account_id) ORDER BY status, date_placed";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int orderId = rs.getInt("orderr_id");
-                int accountId = rs.getInt("account_id");
-                String email = rs.getString("email");
-                String name = rs.getString("name");
-                String phone = rs.getString("phone");
-                int zip = rs.getInt("zip");
-                String city = rs.getString("city");
-                Date datePlaced = rs.getDate("date_placed");
-                Date datePaid = rs.getDate("date_paid");
-                Date dateCompleted = rs.getDate("date_completed");
-                double salesPrice = rs.getDouble("sale_price");
-                String status = rs.getString("status");
-                int carportLengthCm = rs.getInt("carport_length_cm");
-                int carportWidthCm = rs.getInt("carport_width_cm");
-                DetailOrderAccountDtos.add(new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, salesPrice, status, carportLengthCm, carportWidthCm));
-
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos", e.getMessage());
-        }
-        return DetailOrderAccountDtos;
-    }
-
-
     public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
@@ -104,4 +69,51 @@ public class OrderMapper {
         }
         return success;
     }
+
+
+    public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+
+        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, date_placed, date_paid, date_completed, sale_price, status, carport_length_cm, carport_width_cm FROM orderr JOIN account USING(account_id) WHERE orderr_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String email = rs.getString("email");
+                String name = rs.getString("name");
+                String phone = rs.getString("phone");
+                int zip = rs.getInt("zip_code");
+//                String city = rs.getString("city");
+                String city = "noname";
+                Date datePlaced = rs.getDate("date_placed");
+                Date datePaid = rs.getDate("date_paid");
+                Date dateCompleted = rs.getDate("date_completed");
+                double salesPrice = rs.getDouble("sale_price");
+                String status = rs.getString("status");
+                int carportLengthCm = rs.getInt("carport_length_cm");
+                int carportWidthCm = rs.getInt("carport_width_cm");
+                System.out.println("accountId: " + accountId);
+                System.out.println("email: " + email);
+                System.out.println("name: " + name);
+                System.out.println("phone: " + phone);
+                System.out.println("zip: " + zip);
+                System.out.println("datePlaced: " + datePlaced);
+                System.out.println("dateCompleted: " + dateCompleted);
+                System.out.println("salesPrice: " + salesPrice);
+
+                System.out.println("carportLengthCm: " + carportLengthCm);
+                System.out.println("carportWidthCm: " + carportWidthCm);
+//                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, salesPrice, status, carportLengthCm, carportWidthCm);
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl til sælger", "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId, e.getMessage());
+        }
+        return null;
+    }
+
 }
