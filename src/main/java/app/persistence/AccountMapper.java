@@ -110,15 +110,16 @@ public class AccountMapper {
 
     public static int getActiveOrderrIdFromAccountId(int accountId, ConnectionPool connectionPool) throws AccountException {
         int activeOrderrId = 0;
-        String sql = "SELECT orderr.orderr_id FROM account JOIN orderr using(account_id) WHERE account_id = ? AND Status = 'Færdig'";
+        String sql = "SELECT orderr.orderr_id FROM account JOIN orderr using(account_id) WHERE account_id = ?";
 
         try(Connection connection = connectionPool.getConnection();
         PreparedStatement ps = connection.prepareStatement(sql)){
 
             ps.setInt(1, accountId);
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
-                activeOrderrId = rs.getInt("order_id");
+                activeOrderrId = rs.getInt("orderr_id");
             }
         } catch (SQLException e){
 
