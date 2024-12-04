@@ -36,7 +36,7 @@ public class CarportSvg {
             System.out.println("itemType: " + itemType);
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, z, length, width, "stroke:black;fill: red");
+                svg.addRectangle(x, z, length, width, "stroke:black;fill: white");
             } else {
                 svg.addRectangle(x, z, length, width, "stroke:black;fill: white");
             }
@@ -90,15 +90,22 @@ public class CarportSvg {
             System.out.println("itemType: " + itemType);
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
+                svg.addRectangle(x, y, length, height, "stroke:black;fill: none");
             } else {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
             }
         }
 
 
-        System.out.println(carport.getFixatingStrapListXY().get(0).get(0));
+        double Ax1 = carport.getFixatingStrapListXY().get(0).get(0);
+        double Ay1 = carport.getFixatingStrapListXY().get(0).get(1);
+        double Ax2 = carport.getFixatingStrapListXY().get(0).get(2);
+        double Ay2 = carport.getFixatingStrapListXY().get(0).get(3);
 
+        double Bx1 = carport.getFixatingStrapListXY().get(1).get(0);
+        double By1 = carport.getFixatingStrapListXY().get(1).get(1);
+        double Bx2 = carport.getFixatingStrapListXY().get(1).get(2);
+        double By2 = carport.getFixatingStrapListXY().get(1).get(3);
 
 //        // Hardcoded Spær og deres dimensions
 //        for (int x = 0; x < carportLengthCm; x += 55) {
