@@ -42,20 +42,17 @@ public class CarportSvg {
             }
         }
 
-//        // DRAW DIMENSIONS FOR COLUMNS
-//        List<Double> columnX = new ArrayList<Double>();
-//        for (PlacedMaterial placedMaterial : placedMaterials) {
-//            String itemType = placedMaterial.getMaterial().getItemType();
-//
-//            if (itemType.equalsIgnoreCase("stolpe")) {
-//                columnX.add(placedMaterial.getX());
-//            }
-//        }
-//        Collections.sort(columnX);
-//        svg.addDimension(0, carportHeightCm, columnX.get(0), carportHeightCm, OffsetDirection.DOWN);
-//        svg.addDimension(columnX.get(0), carportHeightCm, columnX.get(1), carportHeightCm, OffsetDirection.DOWN);
+        // DRAW DIMENSIONS FOR COLUMNS
+        List<Double> columnX = new ArrayList<Double>();
+        for (PlacedMaterial placedMaterial : placedMaterials) {
+            String itemType = placedMaterial.getMaterial().getItemType();
 
-        svg.addDimension(120, carportHeightCm, 600, carportHeightCm, OffsetDirection.DOWN);
+            if (itemType.equalsIgnoreCase("stolpe")) {
+                columnX.add(placedMaterial.getX());
+            }
+        }
+        System.out.println(columnX);
+
 
         return svg.close();
 
@@ -73,7 +70,6 @@ public class CarportSvg {
 
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
-        svg.addDimension(0, 100, 0, carportWidthCm - 100, OffsetDirection.LEFT, 40, "*");
 
 
         System.out.println("--- SVG topView placedMaterials ---");
@@ -96,16 +92,32 @@ public class CarportSvg {
             }
         }
 
+        List<Double> pillarY = new ArrayList<Double>();
+        double pillarDim = 0;
+        for (PlacedMaterial placedMaterial : placedMaterials) {
 
-        double Ax1 = carport.getFixatingStrapListXY().get(0).get(0);
-        double Ay1 = carport.getFixatingStrapListXY().get(0).get(1);
-        double Ax2 = carport.getFixatingStrapListXY().get(0).get(2);
-        double Ay2 = carport.getFixatingStrapListXY().get(0).get(3);
+            String itemType = placedMaterial.getMaterial().getItemType();
+            if (itemType.equalsIgnoreCase("stolpe")) {
+                pillarY.add(placedMaterial.getY());
+                pillarDim = placedMaterial.getMaterial().getHeightCm();
+            }
+        }
+        System.out.println(pillarY);
+        double min = Collections.min(pillarY);
+        double max = Collections.max(pillarY) + pillarDim;
+        System.out.println(min + " " + max);
+        svg.addDimension(0, min, 0, max, OffsetDirection.LEFT, 40, "*");
 
-        double Bx1 = carport.getFixatingStrapListXY().get(1).get(0);
-        double By1 = carport.getFixatingStrapListXY().get(1).get(1);
-        double Bx2 = carport.getFixatingStrapListXY().get(1).get(2);
-        double By2 = carport.getFixatingStrapListXY().get(1).get(3);
+        double strap1X1 = carport.getFixatingStrapListXY().get(0).get(0);
+        double strap1Y1 = carport.getFixatingStrapListXY().get(0).get(1);
+        double strap1X2 = carport.getFixatingStrapListXY().get(0).get(2);
+        double strap1Y2 = carport.getFixatingStrapListXY().get(0).get(3);
+        double strap2X1 = carport.getFixatingStrapListXY().get(1).get(0);
+        double strap2Y1 = carport.getFixatingStrapListXY().get(1).get(1);
+        double strap2X2 = carport.getFixatingStrapListXY().get(1).get(2);
+        double strap2Y2 = carport.getFixatingStrapListXY().get(1).get(3);
+        svg.addLine(strap1X1, strap1Y1, strap1X2, strap1Y2, "stroke:black; stroke-dasharray: 5 5");
+        svg.addLine(strap2X1, strap2Y1, strap2X2, strap2Y2, "stroke:black; stroke-dasharray: 5 5");
 
 //        // Hardcoded Spær og deres dimensions
 //        for (int x = 0; x < carportLengthCm; x += 55) {
@@ -119,12 +131,8 @@ public class CarportSvg {
 //
 //        // Hardcoded Stolper
 //        svg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:2px; stroke:black; fill: none");
-//
-//        // Hardcoded hulbånd
-//        svg.addLine(120, 35, 745, 565, "stroke:black; stroke-dasharray: 5 5");
 
         return svg.close();
     }
-
 
 }
