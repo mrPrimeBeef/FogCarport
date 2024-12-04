@@ -71,46 +71,49 @@ public class OrderController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-    static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("activeAccount");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
-            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
-            ctx.render("error.html");
-            return;
-        }
-
-        try {
-            ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
-            ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
-            ctx.render("saelgeralleordrer.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", e.getMessage());
-            ctx.render("error.html");
-        }
     }
 
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
-        int accountId;
-        boolean allreadyUser = false;
-        ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
+        static void salesrepShowAllOrdersPage (Context ctx, ConnectionPool connectionPool){
+            Account activeAccount = ctx.sessionAttribute("activeAccount");
+            if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
-        for (String mail : emails) {
-            if (mail.equals(email)) {
-                allreadyUser = true;
+                ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+                ctx.render("error.html");
+                return;
+            }
+
+            try {
+                ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
+                ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
+                ctx.render("saelgeralleordrer.html");
+            } catch (DatabaseException e) {
+                ctx.attribute("errorMessage", e.getMessage());
+                ctx.render("error.html");
             }
         }
 
-        if (!allreadyUser) {
-            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
-        }
-        return AccountMapper.getAccountIdFromEmail(email, connectionPool);
-    }
+        private static int createOrGetAccountId (String email, String name, String address,int zip, String
+        phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
+            int accountId;
+            boolean allreadyUser = false;
+            ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
-    private static void showThankYouPage(String name, String email, Context ctx) {
-        ctx.attribute("navn", name);
-        ctx.attribute("email", email);
-        ctx.render("tak.html");
-    }
+            for (String mail : emails) {
+                if (mail.equals(email)) {
+                    allreadyUser = true;
+                }
+            }
+
+            if (!allreadyUser) {
+                return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            }
+            return AccountMapper.getAccountIdFromEmail(email, connectionPool);
+        }
+
+        private static void showThankYouPage (String name, String email, Context ctx){
+            ctx.attribute("navn", name);
+            ctx.attribute("email", email);
+            ctx.render("tak.html");
+        }
+
 }
