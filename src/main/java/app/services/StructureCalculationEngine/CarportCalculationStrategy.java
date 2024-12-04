@@ -1,6 +1,7 @@
 package app.services.StructureCalculationEngine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
     int defaultOverhangX = 100;
     int maxPillarDistanceX = 600 - 2 * defaultOverhangX;
     // int getMaxPillarDistanceY = 560 - 2 * defaultOverhangY;
+    int rafterDistance = 50;
 
     ConnectionPool pool;
 
@@ -58,7 +60,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             getRoofScrewsAndCalculate(carport);
 
             //***** Hulbånd *****
-            getFixingStrapAndCalculate(carport);
+            getFixatingStrapAndCalculate(carport);
 
         } catch (DatabaseException e) {
             e.printStackTrace();
@@ -159,7 +161,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     private int calculateRafters(Carport carport, Material rafterMaterial){
 
-        int amountOfRaftersX = carport.getLength() / 50;
+        int amountOfRaftersX = carport.getLength() / rafterDistance;
         int totalAmount = 0;
         float totalRafterWidth = amountOfRaftersX * rafterMaterial.getWidthCm();
         float spacing = (carport.getLength() - totalRafterWidth) / (amountOfRaftersX - 1);
@@ -334,27 +336,44 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         calculatePartsList(carport, roofScrew, quantity);
     }
 
-    private void getFixingStrapAndCalculate(Carport carport) throws DatabaseException {
+    private void getFixatingStrapAndCalculate(Carport carport) throws DatabaseException {
 
-        ItemSearchBuilder builderFixingStrap = new ItemSearchBuilder();
-        Map<String, Object> filtersFixingStrap = builderFixingStrap
+        ItemSearchBuilder builderFixatingStrap = new ItemSearchBuilder();
+        Map<String, Object> filtersFixatingStrap = builderFixatingStrap
                 .setName("Hulbånd")
                 .build();
-        Material fixingStrap = ItemMapper.searchSingleItem(filtersFixingStrap, pool);
+        Material fixatingStrap = ItemMapper.searchSingleItem(filtersFixatingStrap, pool);
 
-        calculateFixingStrap(carport, fixingStrap);
+        calculateFixatingStrap(carport, fixatingStrap);
     }
 
-    private void calculateFixingStrap(Carport carport, Material fixingStrap) {
+    private void calculateFixatingStrap(Carport carport, Material fixatingStrap) {
 
-        double fixingStrapsLength = Math.sqrt(Math.pow(carport.getLength(), 2) + Math.pow(carport.getWidth(), 2)) * 2;
-        int quantity = (int) (Math.ceil(fixingStrapsLength / 100) * 0.1);
+        List<Float> fixatingStrapOneCoordinates = Arrays.asList(
+                (float)rafterDistance,
+                (float)defaultOverhangY,
+                (float)carport.getLength() - rafterDistance,
+                (float)carport.getWidth() - defaultOverhangY
+        );
 
-        calculatePartsList(carport, fixingStrap, quantity);
+        List<Float> fixatingStrapTwoCoordinates = Arrays.asList(
+                (float)rafterDistance,
+                (float)carport.getWidth() - defaultOverhangY,
+                (float)carport.getLength() - rafterDistance,
+                (float)defaultOverhangY
+        );
+
+        carport.addFixatingStrapListXY(fixatingStrapOneCoordinates);
+        carport.addFixatingStrapListXY(fixatingStrapTwoCoordinates);
+
+        double fixatingStrapsLength = Math.sqrt(Math.pow(carport.getLength(), 2) + Math.pow(carport.getWidth(), 2)) * 2;
+        int quantity = (int) (Math.ceil(fixatingStrapsLength / 100) * 0.1);
+
+        calculatePartsList(carport, fixatingStrap, quantity);
     }
 
-    private void calculatePartsList(Structure structure, Material material, int quantity) {
-        structure.addToPartsList(material, quantity);
+    private void calculatePartsList(Carport carport, Material material, int quantity) {
+        carport.addToPartsList(material, quantity);
     }
 
     private void rotateAroundX(Material material){

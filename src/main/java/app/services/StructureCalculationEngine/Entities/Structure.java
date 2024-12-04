@@ -12,6 +12,7 @@ public abstract class Structure {
     private CalculationStrategy strategy;
     List<PlacedMaterial> placedMaterials;
     private Map<Material, Integer> partsList;
+    private List<List<Float>> fixatingStrapListXY = new ArrayList<>();
 
     public abstract int getWidth();
     public abstract int getLength();
@@ -48,5 +49,13 @@ public abstract class Structure {
 
     public Map<Material, Integer> getPartsList() {
         return partsList;
+    }
+
+    public void addFixatingStrapListXY(List<Float> oneStrap){
+        fixatingStrapListXY.add(oneStrap);
+    }
+
+    public List<List<Float>> getFixatingStrapListXY(){
+        return fixatingStrapListXY;
     }
 }
