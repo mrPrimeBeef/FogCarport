@@ -18,6 +18,8 @@ public class OrderController {
     // TODO: Fix the exception handling
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
+        // TODO: Rember to put guard conditin
+
         int carportLengthCm = 752;
         int carportWidthCm = 600;
         int carportHeightCm = 210;
