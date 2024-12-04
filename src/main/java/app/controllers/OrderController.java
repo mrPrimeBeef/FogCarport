@@ -102,6 +102,8 @@ public class OrderController {
     // TODO: Fix the exception handling
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
+        // TODO: Tilføj guard condition her
+
         int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {
@@ -136,6 +138,8 @@ public class OrderController {
 
     private static void postMarginPercentage(Context ctx, ConnectionPool connectionPool) {
 
+        // TODO: Tilføj guard condition her
+
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         Double marginPercentage = Double.parseDouble(ctx.formParam("daekningsgrad"));
 
@@ -150,6 +154,9 @@ public class OrderController {
 
 
     private static void salesrepPostCalculation(Context ctx, ConnectionPool connectionPool) {
+
+        // TODO: Tilføj guard condition her
+
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
