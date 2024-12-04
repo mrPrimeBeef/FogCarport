@@ -29,6 +29,10 @@ public class Material {
         this.packageType = packageType;
         this.costPrice = costPrice;
 
+        this.drawnLengthCm = this.lengthCm;
+        this.drawnWidthCm = this.widthCm;
+        this.drawnHeightCm = this.heightCm;
+
         this.materialType = convertToMaterialType(strMaterialType);
     }
 

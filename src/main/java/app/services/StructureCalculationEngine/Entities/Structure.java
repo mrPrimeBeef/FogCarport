@@ -3,13 +3,16 @@ package app.services.StructureCalculationEngine.Entities;
 import app.services.StructureCalculationEngine.CalculationStrategy;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Structure {
     private CalculationStrategy strategy;
+    List<PlacedMaterial> placedMaterials;
     private Map<Material, Integer> partsList;
+    private List<List<Float>> fixatingStrapListXY = new ArrayList<>();
 
     public abstract int getWidth();
     public abstract int getLength();
@@ -17,6 +20,7 @@ public abstract class Structure {
 
     public Structure(CalculationStrategy strategy) {
         this.strategy = strategy;
+        this.placedMaterials = new ArrayList<>();
         this.partsList = new HashMap<>();
     }
 
@@ -45,5 +49,13 @@ public abstract class Structure {
 
     public Map<Material, Integer> getPartsList() {
         return partsList;
+    }
+
+    public void addFixatingStrapListXY(List<Float> oneStrap){
+        fixatingStrapListXY.add(oneStrap);
+    }
+
+    public List<List<Float>> getFixatingStrapListXY(){
+        return fixatingStrapListXY;
     }
 }
