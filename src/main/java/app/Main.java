@@ -4,10 +4,10 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
 import app.controllers.AccountController;
-import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
-import app.controllers.AccountController;
+import app.config.ThymeleafConfig;
 import app.persistence.ConnectionPool;
+import app.exceptions.LoggerConfig;
 
 public class Main {
     private static final String USER = "postgres";
@@ -17,6 +17,7 @@ public class Main {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     public static void main(String[] args) {
+        LoggerConfig.setup();
         // Initializing Javalin and Jetty webserver
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("/public");
