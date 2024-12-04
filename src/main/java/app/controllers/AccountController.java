@@ -7,7 +7,7 @@ import app.entities.Order;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
-import app.persistence.OrderlineMapper;
+import app.persistence.OrderlineMapper1;
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.svgEngine.CarportSvg;
 import io.javalin.Javalin;
@@ -110,14 +110,14 @@ public class AccountController {
                 int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
 
                 carport.getPlacedMaterials();
-                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId, connectionPool);
-                OrderlineMapper.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
+                OrderlineMapper1.deleteOrderlinesFromOrderId(orderrId, connectionPool);
+                OrderlineMapper1.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
 
                 Order orders = OrderMapper.showCustomerOrder(orderrId, connectionPool);
                 ctx.attribute("showOrder", orders);
 
 
-                ArrayList<Orderline> orderlines = OrderlineMapper.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+                ArrayList<Orderline> orderlines = OrderlineMapper1.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
 
 
