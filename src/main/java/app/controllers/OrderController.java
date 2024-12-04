@@ -1,10 +1,7 @@
 package app.controllers;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import app.services.StructureCalculationEngine.Entities.Carport;
-import app.services.svgEngine.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -53,24 +50,6 @@ public class OrderController {
     }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-
-        int carportLengthCm = 752;
-        int carportWidthCm = 600;
-        int carportHeightCm = 210;
-
-        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-        System.out.println(carport.getLength());
-        System.out.println(carport.getWidth());
-        System.out.println(carport.getHeight());
-
-        try {
-            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
