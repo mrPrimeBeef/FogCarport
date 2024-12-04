@@ -106,10 +106,6 @@ public class OrderController {
 
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
-        System.out.println(carport.getLength());
-        System.out.println(carport.getWidth());
-        System.out.println(carport.getHeight());
-
         try {
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));

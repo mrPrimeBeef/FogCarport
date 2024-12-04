@@ -23,11 +23,10 @@ public class CarportSvg {
         svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
         svg.addLine(0, carportHeightCm, carportLengthCm, carportHeightCm, "stroke:black");
 
-        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
         List<Double> dimPointsX = new ArrayList<Double>();
+        dimPointsX.add(0.0);
 
-        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
-        for (PlacedMaterial placedMaterial : placedMaterials) {
+        for (PlacedMaterial placedMaterial : carport.getPlacedMaterials()) {
             double x = placedMaterial.getX();
             double y = placedMaterial.getY();
             double z = placedMaterial.getZ();
@@ -40,12 +39,9 @@ public class CarportSvg {
             if (itemType.equalsIgnoreCase("stolpe") && y > carportWidthCm / 2) {
                 dimPointsX.add(x + xSize / 2);
             }
-
         }
 
-        dimPointsX.add(0.0);
         dimPointsX.add((double) carportLengthCm);
-        Collections.sort(dimPointsX);
         for (int i = 0; i < dimPointsX.size() - 1; i++) {
             svg.addDimension(dimPointsX.get(i), carportHeightCm, dimPointsX.get(i + 1), carportHeightCm, OffsetDirection.DOWN);
         }
@@ -66,11 +62,11 @@ public class CarportSvg {
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
 
-        // DRAWING REAL CARPORT FROM CALCULATION ENGINE
+        List<Double> pillarEdgesY = new ArrayList<Double>();
+        double pillarYSize = 0;
         List<Double> rafterCentersX = new ArrayList<Double>();
 
-        List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
-        for (PlacedMaterial placedMaterial : placedMaterials) {
+        for (PlacedMaterial placedMaterial : carport.getPlacedMaterials()) {
             double x = placedMaterial.getX();
             double y = placedMaterial.getY();
             double xSize = placedMaterial.getMaterial().getLengthCm();
@@ -79,42 +75,25 @@ public class CarportSvg {
 
             if (itemType.equalsIgnoreCase("stolpe")) {
                 svg.addRectangle(x, y, xSize, ySize, "stroke-width:2px; stroke:black; fill: none");
-            } else {
-                svg.addRectangle(x, y, xSize, ySize, "stroke:black; fill: white");
+                pillarEdgesY.add(y);
+                pillarYSize = ySize;
+                continue;
             }
+
+            svg.addRectangle(x, y, xSize, ySize, "stroke:black; fill: white");
 
             if (itemType.equalsIgnoreCase("lægte")) {
                 rafterCentersX.add(x + xSize / 2);
             }
         }
 
+        double pillarEdgeY1 = Collections.min(pillarEdgesY);
+        double pillarEdgeY2 = Collections.max(pillarEdgesY) + pillarYSize;
+        svg.addDimension(0, pillarEdgeY1, 0, pillarEdgeY2, OffsetDirection.LEFT, 40, "*");
+
         for (int i = 0; i < rafterCentersX.size() - 1; i++) {
             svg.addDimension(rafterCentersX.get(i), 0, rafterCentersX.get(i + 1), 0, OffsetDirection.UP);
         }
-
-//        List<Double> pillarY = new ArrayList<Double>();
-//
-//        double pillarDim = 0;
-//        for (PlacedMaterial placedMaterial : placedMaterials) {
-//
-//            String itemType = placedMaterial.getMaterial().getItemType();
-//            if (itemType.equalsIgnoreCase("stolpe")) {
-//                pillarY.add(placedMaterial.getY());
-//                pillarDim = placedMaterial.getMaterial().getHeightCm();
-//            }
-//
-//            if (itemType.equalsIgnoreCase("lægte")) {
-//                rafterCentersX.add(placedMaterial.getX() + 0.5 * placedMaterial.getMaterial().getLengthCm());
-//            }
-//        }
-
-
-//        double min = Collections.min(pillarY);
-//        double max = Collections.max(pillarY) + pillarDim;
-//        System.out.println(min + " " + max);
-//        svg.addDimension(0, min, 0, max, OffsetDirection.LEFT, 40, "*");
-
-
 
         double strap1X1 = carport.getFixatingStrapListXY().get(0).get(0);
         double strap1Y1 = carport.getFixatingStrapListXY().get(0).get(1);
