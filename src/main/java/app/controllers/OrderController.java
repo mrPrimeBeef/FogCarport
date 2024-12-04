@@ -97,4 +97,30 @@ public class OrderController {
         ctx.attribute("email", email);
         ctx.render("tak.html");
     }
+
+    // TODO: Fix the exception handling
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
+
+        int carportLengthCm = 752;
+        int carportWidthCm = 600;
+        int carportHeightCm = 210;
+
+        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
+        System.out.println(carport.getLength());
+        System.out.println(carport.getWidth());
+        System.out.println(carport.getHeight());
+
+        try {
+            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        ctx.render("saelgerordre.html");
+    }
+
+
 }
