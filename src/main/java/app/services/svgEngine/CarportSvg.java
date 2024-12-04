@@ -16,8 +16,7 @@ public class CarportSvg {
         int carportHeightCm = carport.getHeight();
 
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
-        svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: lightgreen");
-        svg.addRectangle(0, 0, carportLengthCm, carportHeightCm, "fill: white");
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: white");
 
         svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
         svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
@@ -43,15 +42,15 @@ public class CarportSvg {
         }
 
         // DRAW DIMENSIONS FOR COLUMNS
-        List<Double> columnX = new ArrayList<Double>();
+        List<Double> pillarX = new ArrayList<Double>();
         for (PlacedMaterial placedMaterial : placedMaterials) {
             String itemType = placedMaterial.getMaterial().getItemType();
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                columnX.add(placedMaterial.getX());
+                pillarX.add(placedMaterial.getX());
             }
         }
-        System.out.println(columnX);
+        System.out.println(pillarX);
 
 
         return svg.close();
@@ -65,8 +64,7 @@ public class CarportSvg {
         int carportWidthCm = carport.getWidth();
 
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
-        svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: lightgreen");
-        svg.addRectangle(0, 0, carportLengthCm, carportWidthCm, "fill: white");
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: white");
 
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
@@ -86,13 +84,14 @@ public class CarportSvg {
             System.out.println("itemType: " + itemType);
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: none");
+                svg.addRectangle(x, y, length, height, "stroke-width:2px; stroke:black; fill: none");
             } else {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
+                svg.addRectangle(x, y, length, height, "stroke:black; fill: white");
             }
         }
 
         List<Double> pillarY = new ArrayList<Double>();
+        List<Double> raftersX = new ArrayList<Double>();
         double pillarDim = 0;
         for (PlacedMaterial placedMaterial : placedMaterials) {
 
@@ -101,12 +100,23 @@ public class CarportSvg {
                 pillarY.add(placedMaterial.getY());
                 pillarDim = placedMaterial.getMaterial().getHeightCm();
             }
+
+            if (itemType.equalsIgnoreCase("lægte")) {
+                raftersX.add(placedMaterial.getX() + 0.5 * placedMaterial.getMaterial().getLengthCm());
+            }
         }
-        System.out.println(pillarY);
+
+
         double min = Collections.min(pillarY);
         double max = Collections.max(pillarY) + pillarDim;
         System.out.println(min + " " + max);
         svg.addDimension(0, min, 0, max, OffsetDirection.LEFT, 40, "*");
+
+        System.out.println("rafterX: " + raftersX);
+        for (int i = 0; i < raftersX.size() - 1; i++) {
+            svg.addDimension(raftersX.get(i), 0, raftersX.get(i + 1), 0, OffsetDirection.UP);
+
+        }
 
         double strap1X1 = carport.getFixatingStrapListXY().get(0).get(0);
         double strap1Y1 = carport.getFixatingStrapListXY().get(0).get(1);
@@ -118,19 +128,6 @@ public class CarportSvg {
         double strap2Y2 = carport.getFixatingStrapListXY().get(1).get(3);
         svg.addLine(strap1X1, strap1Y1, strap1X2, strap1Y2, "stroke:black; stroke-dasharray: 5 5");
         svg.addLine(strap2X1, strap2Y1, strap2X2, strap2Y2, "stroke:black; stroke-dasharray: 5 5");
-
-//        // Hardcoded Spær og deres dimensions
-//        for (int x = 0; x < carportLengthCm; x += 55) {
-//            svg.addRectangle(x, 0, 4.5, carportWidthCm, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//            svg.addDimension(x, 0, x + 55, 0, OffsetDirection.UP);
-//        }
-//
-//        // Hardcoded Remme
-//        svg.addRectangle(0, 35, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//        svg.addRectangle(0, 565, carportLengthCm, 4.5, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-//
-//        // Hardcoded Stolper
-//        svg.addRectangle(110, 35, 9.7, 9.7, "stroke-width:2px; stroke:black; fill: none");
 
         return svg.close();
     }
