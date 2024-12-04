@@ -54,7 +54,7 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("account", account);
             if (account.getRole().equals("salesrep")) {
-                salesrepShowAllCustomersPage(ctx, connectionPool);
+                OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
                 return;
             }
             if (account.getRole().equals("Kunde")) {
