@@ -17,7 +17,6 @@ import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 
 
-
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 
@@ -87,7 +86,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
@@ -114,8 +113,7 @@ public class OrderController {
         try {
             ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
             ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
