@@ -16,7 +16,7 @@ public class OrderlineMapper1 {
 
     public static ArrayList<Orderline> getMaterialListForCustomerOrSalesrep(int orderr_id, String role, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Orderline> orderlineList = new ArrayList<>();
-        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
+        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, orderr.paid FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -29,7 +29,8 @@ public class OrderlineMapper1 {
                 double costPrice = rs.getDouble("cost_price");
                 String name = rs.getString("name");
                 String description = rs.getString("description") != null ? rs.getString("description") : "";
-                if (role.equals("Kunde")) {
+                boolean paid = rs.getBoolean("paid");
+                if (role.equals("Kunde") && paid) {
                     orderlineList.add(new Orderline(name, description, quantity));
                 } else if (role.equals("salesrep")) {
                     orderlineList.add(new Orderline(name, quantity, costPrice));

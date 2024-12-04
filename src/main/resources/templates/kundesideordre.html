@@ -54,7 +54,7 @@
                 </tr>
                 <tbody class="table-group-divider">
                 <tr th:if="${showOrderlines == null}">
-                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                    <td colspan="6" class="text-center">Ingen stykliste fundet endnu</td>
                 </tr>
                 <tr th:each="orderline : ${showOrderlines}">
                     <td th:text="${orderline.name}"></td>
