@@ -34,12 +34,12 @@ public abstract class Structure {
 
     // Adds the parts, and quantity of parts of the Structure, to a Hashmap. If the material is already in the map, the
     // quantity is added with the already existing quantity.
-    public void addToPartsList(Material materialName, int quantity) {
-        if (partsList.containsKey(materialName)) {
-            int existingQuantity = partsList.get(materialName);
-            partsList.put(materialName, existingQuantity + quantity);
+    public void addToPartsList(Material material, int quantity) {
+        if (partsList.containsKey(material)) {
+            int existingQuantity = partsList.get(material);
+            partsList.put(material, existingQuantity + quantity);
         } else {
-            partsList.put(materialName, quantity);
+            partsList.put(material, quantity);
         }
     }
 
