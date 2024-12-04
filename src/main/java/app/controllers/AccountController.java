@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("activeAccount");
+        Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
