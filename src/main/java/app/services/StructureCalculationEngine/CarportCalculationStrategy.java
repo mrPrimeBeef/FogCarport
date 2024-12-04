@@ -1,5 +1,9 @@
 package app.services.StructureCalculationEngine;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.ItemMapper;
@@ -9,17 +13,15 @@ import app.services.StructureCalculationEngine.Entities.Material;
 import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
 import app.services.StructureCalculationEngine.Entities.Structure;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class CarportCalculationStrategy implements CalculationStrategy{
+
+    List<PlacedMaterial> placedMaterialList;
 
     //Every unit is in cm unless otherwise is specified
     int defaultOverhangY = 20;
     int defaultOverhangX = 100;
-    int maxPillarDistance = 310;
-    List<PlacedMaterial> placedMaterialList;
+    int maxPillarDistanceX = 600 - 2 * defaultOverhangX;
+    // int getMaxPillarDistanceY = 560 - 2 * defaultOverhangY;
 
     ConnectionPool pool;
 
@@ -30,59 +32,33 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
     @Override
     public List<PlacedMaterial> calculateStructure(Structure structure) {
+
         Carport carport = (Carport) structure;
 
         try {
             //***** Remme *****
-            ItemSearchBuilder builderBeam = new ItemSearchBuilder();
-            Map<String, Object> filtersBeam = builderBeam
-                    .setItemType("Spær")
-                    .setLengthCm(carport.getLength())
-                    .build();
-
-            Material beamMaterial = ItemMapper.searchSingleItem(filtersBeam, pool);
-            calculateBeams(carport, beamMaterial);
+            getBeamAndCalculate(carport);
 
             //***** Spær *****
-            ItemSearchBuilder builderRafter = new ItemSearchBuilder();
-            Map<String, Object> filtersRafter = builderRafter
-                    .setItemType("Lægte")
-                    .setLengthCm(carport.getWidth())
-                    .build();
-
-            Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
-            calculateRafters(carport, rafterMaterial);
+            getRafterAndCalculate(carport);
 
             //***** Stolper *****
-            ItemSearchBuilder builderPillar = new ItemSearchBuilder();
-            Map<String, Object> filtersPillar = builderPillar
-                    .setItemType("Stolpe")
-                    .setLengthCm(carport.getHeight()+90)
-                    .build();
+            getPillarsAndCalculate(carport);
 
-            Material pillarMaterial = ItemMapper.searchSingleItem(filtersPillar, pool);
-            calculatePillars(carport, pillarMaterial);
+            //***** Stern Brædder Ender *****
+            getFasciaEndsAndCalculate(carport);
 
-            //***** Stern Brædder *****
-            ItemSearchBuilder builderFasciaBoard = new ItemSearchBuilder();
-            Map<String, Object> filtersFasciaBoardSide = builderFasciaBoard
-                    .setItemType("Brædt")
-                    .setWidthMm(25)
-                    .setHeightMm(200)
-                    .setLengthCm(carport.getLength())
-                    .build();
+            //***** Stern Brædder Sider *****
+            getFasciaSidesAndCalculate(carport);
 
-            Material FasciaBoardSide = ItemMapper.searchSingleItem(filtersFasciaBoardSide, pool);
+            //***** Tagplader *****
+            getRoofPanelsAndCalculate(carport);
 
-            Map<String, Object> filterFasciaFrontBack = builderFasciaBoard
-                    .setItemType("Brædt")
-                    .setWidthMm(25)
-                    .setHeightMm(200)
-                    .setLengthCm(carport.getWidth())
-                    .build();
+            //***** Tag Skruer *****
+            getRoofScrewsAndCalculate(carport);
 
-            Material fasciaFrontBack = ItemMapper.searchSingleItem(filterFasciaFrontBack, pool);
-            calculateFasciaBoard(carport, fasciaFrontBack, FasciaBoardSide);
+            //***** Hulbånd *****
+            getFixingStrapAndCalculate(carport);
 
         } catch (DatabaseException e) {
             e.printStackTrace();
@@ -91,93 +67,100 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         return placedMaterialList;
     }
 
-    void calculatePillars(Carport carport, Material pillarMaterial) {
+    // Most calculations are broken in to parts: One part to get the required material, and another to place
+    // the material, and calculate the amount needed.
+    private void getPillarsAndCalculate(Carport carport) throws DatabaseException {
 
-        for(int i = 0; i < 4; i++){
-            Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
-            float materialWidth = clonedMaterial.getWidthCm();
-            clonedMaterial.setLengthCm(carport.getHeight());
+        ItemSearchBuilder builderPillar = new ItemSearchBuilder();
+        Map<String, Object> filtersPillar = builderPillar
+                .setItemType("Stolpe")
+                .setLengthCm(carport.getHeight()+90)
+                .build();
+        Material pillarMaterial = ItemMapper.searchSingleItem(filtersPillar, pool);
 
-            PlacedMaterial placedPillar = null;
-            if(i == 0){
-                placedPillar = new PlacedMaterial(clonedMaterial, defaultOverhangX - materialWidth/2, defaultOverhangY - materialWidth/2, 0);
-            }else if(i == 1){
-                placedPillar = new PlacedMaterial(clonedMaterial, carport.getLength() - defaultOverhangX - materialWidth/2, defaultOverhangY - materialWidth/2, 0);
-            }else if(i == 2){
-                placedPillar = new PlacedMaterial(clonedMaterial, defaultOverhangX - materialWidth/2, carport.getWidth() - defaultOverhangY - materialWidth/2, 0);
-            }else if(i == 3){
-                placedPillar = new PlacedMaterial(clonedMaterial, carport.getLength() - defaultOverhangX - materialWidth/2, carport.getWidth() - defaultOverhangY - materialWidth/2, 0);
-            }
-            // placedPillar = new PlacedMaterial(clonedMaterial, 0, 0, 100);
+        calculatePillars(carport, pillarMaterial);
+    }
 
-            rotateAroundY(clonedMaterial);
-            placedMaterialList.add(placedPillar);
-        }
+    private void calculatePillars(Carport carport, Material pillarMaterial) {
 
-
-        /*
-        int amountOfPillarsX = Math.max(2, (carport.getLength() - 2 * defaultOverhangX) / maxPillarDistance + 1);
-        int amountOfPillarsY = Math.max(2, (carport.getWidth() - 2 * defaultOverhangY) / maxPillarDistance + 1);
-
-        System.out.println("Amount of Pillars on X: " + amountOfPillarsX);
-        System.out.println("Amount of Pillars on Y: " + amountOfPillarsY);
+        int amountOfPillarsX = Math.max(2, (carport.getLength() + 2 * defaultOverhangX) / maxPillarDistanceX + 1);
+        int amountOfPillarsY = 2;
+        int totalAmount = 0;
+        //int amountOfPillarsY = Math.max(2, (carport.getWidth() - 2 * defaultOverhangY) / maxPillarDistance + 1);
 
         for (int i = 0; i < amountOfPillarsY; i++) {
             for (int j = 0; j < amountOfPillarsX; j++) {
-                float y = defaultOverhangX + j * (float) (carport.getLength() - 2 * defaultOverhangX) / (amountOfPillarsX - 1);
-                float x = defaultOverhangY + i * (float) (carport.getWidth() - 2 * defaultOverhangY) / (amountOfPillarsY - 1);
+                float x;
+                //if(carport.getLength() > 300) {
+                    x = defaultOverhangX + j * (float) (carport.getLength() - 2 * defaultOverhangX) / (amountOfPillarsX - 1);
+                //}
+                float y = defaultOverhangY + i * (float) (carport.getWidth() - 2 * defaultOverhangY) / (amountOfPillarsY - 1);
 
-                // Clones the material for each pillar
                 Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
-                System.out.println("Pillar x: " + x);
-                System.out.println("Pillar y: " + y);
-                PlacedMaterial placedPillar = new PlacedMaterial(clonedMaterial, x, y, 0);
+                float materialWidth = clonedMaterial.getWidthCm();
+                clonedMaterial.setLengthCm(carport.getHeight());
+                PlacedMaterial placedPillar = new PlacedMaterial(clonedMaterial, x - materialWidth / 2, y - materialWidth / 2, 0);
 
                 rotateAroundY(clonedMaterial);
                 placedMaterialList.add(placedPillar);
+
+                totalAmount++;
             }
         }
-        */
+        calculatePartsList(carport, pillarMaterial, totalAmount);
     }
 
+    private void getBeamAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderBeam = new ItemSearchBuilder();
+        Map<String, Object> filtersBeam = builderBeam
+                .setItemType("Spær")
+                .setLengthCm(carport.getLength())
+                .build();
+        Material beamMaterial = ItemMapper.searchSingleItem(filtersBeam, pool);
+
+        calculateBeams(carport, beamMaterial);
+    }
 
     private void calculateBeams(Carport carport, Material beamMaterial) {
+
+        PlacedMaterial placedBeam = new PlacedMaterial(beamMaterial, 0, 0, 0);
+        int totalAmount = 0;
 
         for(int i = 0; i < 2; i++){
             Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
             float materialWidth = clonedMaterial.getWidthCm();
             clonedMaterial.setLengthCm(carport.getLength());
 
-            PlacedMaterial placedPillar = null;
             if(i == 0){
-                placedPillar = new PlacedMaterial(clonedMaterial, 0, defaultOverhangY - materialWidth/2, 0);
+                placedBeam = new PlacedMaterial(clonedMaterial, 0, defaultOverhangY - materialWidth/2, 0);
             }else if(i == 1){
-                placedPillar = new PlacedMaterial(clonedMaterial, 0, carport.getWidth() - defaultOverhangY - materialWidth/2, 0);
+                placedBeam = new PlacedMaterial(clonedMaterial, 0, carport.getWidth() - defaultOverhangY - materialWidth/2, 0);
             }
             rotateAroundX(clonedMaterial);
-            placedMaterialList.add(placedPillar);
-        }
-
-        /*
-        int amountOfBeamsY = (carport.getLength() - 2 * defaultOverhangY) / maxPillarDistance % maxPillarDistance + 1;
-
-        System.out.println("Amount of Beams: " + amountOfBeamsY);
-
-        for (int j = 0; j < amountOfBeamsY; j++) {
-            float y = j * ((float) carport.getLength() / amountOfBeamsY - 2 * defaultOverhangY) - beamMaterial.getWidthCm()/2+defaultOverhangY;
-            Material clonedMaterial = beamMaterial.cloneMaterial(beamMaterial);
-            System.out.println("Beam y: " + y);
-            PlacedMaterial placedBeam = new PlacedMaterial(clonedMaterial, 0, y, carport.getHeight());
-
-            rotateAroundX(clonedMaterial);
             placedMaterialList.add(placedBeam);
+            totalAmount++;
         }
-        */
+        calculatePartsList(carport, beamMaterial, totalAmount);
     }
 
-    private void calculateRafters(Carport carport, Material rafterMaterial){
+    private void getRafterAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderRafter = new ItemSearchBuilder();
+        Map<String, Object> filtersRafter = builderRafter
+                .setItemType("Lægte")
+                .setLengthCm(carport.getWidth())
+                .build();
+        Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
+
+        int amount = calculateRafters(carport, rafterMaterial);
+        getRafterBracketsAndCalculate(carport, amount);
+    }
+
+    private int calculateRafters(Carport carport, Material rafterMaterial){
 
         int amountOfRaftersX = carport.getLength() / 50;
+        int totalAmount = 0;
         float totalRafterWidth = amountOfRaftersX * rafterMaterial.getWidthCm();
         float spacing = (carport.getLength() - totalRafterWidth) / (amountOfRaftersX - 1);
 
@@ -191,13 +174,56 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             rotateAroundZ(clonedMaterial);
             rotateAroundY(clonedMaterial);
             placedMaterialList.add(placedRafter);
+            totalAmount++;
         }
+        calculatePartsList(carport, rafterMaterial, totalAmount);
+        return totalAmount;
     }
 
-    private void calculateFasciaBoard(Carport carport, Material fasciaFrontBack, Material fasciaSide) {
+    private void getRafterBracketsAndCalculate(Carport carport, int amount) throws DatabaseException {
+
+        ItemSearchBuilder builderRightBrackets = new ItemSearchBuilder();
+        Map<String, Object> filtersRightBrackets = builderRightBrackets
+                .setName("Universal beslag")
+                .setDescription("190 mm højre")
+                .build();
+        Material rightBracketMaterial = ItemMapper.searchSingleItem(filtersRightBrackets, pool);
+
+        ItemSearchBuilder builderLeftBrackets = new ItemSearchBuilder();
+        Map<String, Object> filtersLeftBrackets = builderLeftBrackets
+                .setName("Universal beslag")
+                .setDescription("190 mm højre")
+                .build();
+        Material leftBracketMaterial = ItemMapper.searchSingleItem(filtersLeftBrackets, pool);
+
+        calculateRafterBrackets(carport, rightBracketMaterial, amount);
+        calculateRafterBrackets(carport, leftBracketMaterial, amount);
+    }
+
+    private void calculateRafterBrackets(Carport carport, Material rafterBracket, int amount){
+        calculatePartsList(carport, rafterBracket, amount);
+    }
+
+    private void getFasciaEndsAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderFasciaBoard = new ItemSearchBuilder();
+        Map<String, Object> filterFasciaFrontBack = builderFasciaBoard
+                .setItemType("Brædt")
+                .setWidthMm(25)
+                .setHeightMm(200)
+                .setLengthCm(carport.getWidth())
+                .build();
+
+        Material fasciaFrontBack = ItemMapper.searchSingleItem(filterFasciaFrontBack, pool);
+        calculateFasciaEnds(carport, fasciaFrontBack);
+    }
+
+    private void calculateFasciaEnds(Carport carport, Material fasciaEnds) {
+
+        int totalAmount = 0;
 
         for(int i = 0; i < 2; i++){
-            Material clonedMaterial = fasciaFrontBack.cloneMaterial(fasciaFrontBack);
+            Material clonedMaterial = fasciaEnds.cloneMaterial(fasciaEnds);
             clonedMaterial.setLengthCm(clonedMaterial.getLengthCm() * (carport.getWidth() / clonedMaterial.getLengthCm()));
             float materialWidth = clonedMaterial.getWidthCm();
 
@@ -207,10 +233,32 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             }else if(i == 1){
                 placedFasciaFrontBack = new PlacedMaterial(clonedMaterial, 0 - materialWidth, 0, 0);
             }
+
             rotateAroundX(clonedMaterial);
             rotateAroundZ(clonedMaterial);
             placedMaterialList.add(placedFasciaFrontBack);
+            totalAmount++;
         }
+        calculatePartsList(carport, fasciaEnds, totalAmount);
+    }
+
+    private void getFasciaSidesAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderFasciaBoard = new ItemSearchBuilder();
+        Map<String, Object> filtersFasciaBoardSide = builderFasciaBoard
+                .setItemType("Brædt")
+                .setWidthMm(25)
+                .setHeightMm(200)
+                .setLengthCm(carport.getLength())
+                .build();
+        Material FasciaBoardSide = ItemMapper.searchSingleItem(filtersFasciaBoardSide, pool);
+
+        calculateFasciaSides(carport, FasciaBoardSide);
+    }
+
+    private void calculateFasciaSides(Carport carport, Material fasciaSide){
+
+        int totalAmount = 0;
 
         for(int i = 0; i < 2; i++){
             Material clonedMaterial = fasciaSide.cloneMaterial(fasciaSide);
@@ -223,12 +271,93 @@ public class CarportCalculationStrategy implements CalculationStrategy{
             }else if(i == 1){
                 placedFasciaSide = new PlacedMaterial(clonedMaterial, 0, carport.getWidth(), 0);
             }
+
             rotateAroundX(clonedMaterial);
             placedMaterialList.add(placedFasciaSide);
+            totalAmount++;
+        }
+        calculatePartsList(carport, fasciaSide, totalAmount);
+    }
+
+    private void getRoofPanelsAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderRoofPanelsShort = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofPanelsShort = builderRoofPanelsShort
+                .setName("Plastmo Ecolite blåtonet")
+                .setItemType("Tagplade")
+                .setLengthCm(360)
+                .build();
+        Material roofPanelShort = ItemMapper.searchSingleItem(filtersRoofPanelsShort, pool);
+
+        ItemSearchBuilder builderRoofPanelsLong = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofPanelsLong = builderRoofPanelsLong
+                .setName("Plastmo Ecolite blåtonet")
+                .setItemType("Tagplade")
+                .setLengthCm(600)
+                .build();
+        Material roofPanelLong = ItemMapper.searchSingleItem(filtersRoofPanelsLong, pool);
+
+        calculateRoofPanels(carport, roofPanelShort, roofPanelLong);
+    }
+
+    void calculateRoofPanels(Carport carport, Material roofPanelShort, Material roofPanelLong){
+
+        if(carport.getLength() < 360){
+            calculatePartsList(carport, roofPanelShort, (int)Math.ceil((double) carport.getWidth() /100));
+
+        }else if(carport.getLength() < 600){
+            calculatePartsList(carport, roofPanelLong, (int)Math.ceil((double) carport.getWidth() /100));
+
+        }else{
+            calculatePartsList(carport, roofPanelShort, (int)Math.ceil((double) carport.getWidth() /100));
+            calculatePartsList(carport, roofPanelLong, (int)Math.ceil((double) carport.getWidth() /100));
         }
     }
 
-    void rotateAroundX(Material material){
+    private void getRoofScrewsAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderRoofScrew = new ItemSearchBuilder();
+        Map<String, Object> filtersRoofScrew = builderRoofScrew
+                .setName("Plastmo bundskruer")
+                .setItemType("Bundskrue")
+                .build();
+        Material roofScrew = ItemMapper.searchSingleItem(filtersRoofScrew, pool);
+
+        calculateRoofScrews(carport, roofScrew);
+    }
+
+    private void calculateRoofScrews(Carport carport, Material roofScrew){
+
+        // 12 skruer pr. kvadratmeter
+        int quantity = (int) Math.ceil(((double)(carport.getWidth()/100) * (double)(carport.getLength()/100)) * 12 / roofScrew.getPackageAmount());
+
+        calculatePartsList(carport, roofScrew, quantity);
+    }
+
+    private void getFixingStrapAndCalculate(Carport carport) throws DatabaseException {
+
+        ItemSearchBuilder builderFixingStrap = new ItemSearchBuilder();
+        Map<String, Object> filtersFixingStrap = builderFixingStrap
+                .setName("Hulbånd")
+                .build();
+        Material fixingStrap = ItemMapper.searchSingleItem(filtersFixingStrap, pool);
+
+        calculateFixingStrap(carport, fixingStrap);
+    }
+
+    private void calculateFixingStrap(Carport carport, Material fixingStrap) {
+
+        double fixingStrapsLength = Math.sqrt(Math.pow(carport.getLength(), 2) + Math.pow(carport.getWidth(), 2)) * 2;
+        int quantity = (int) (Math.ceil(fixingStrapsLength / 100) * 0.1);
+
+        calculatePartsList(carport, fixingStrap, quantity);
+    }
+
+    private void calculatePartsList(Structure structure, Material material, int quantity) {
+        structure.addToPartsList(material, quantity);
+    }
+
+    private void rotateAroundX(Material material){
 
         float height = material.getHeightCm();
         float width = material.getWidthCm();
@@ -237,7 +366,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         material.setWidthCm(height);
     }
 
-    void rotateAroundY(Material material){
+    private void rotateAroundY(Material material){
 
         float width = material.getWidthCm();
         float length = material.getLengthCm();
@@ -246,7 +375,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         material.setWidthCm(length);
     }
 
-    void rotateAroundZ(Material material){
+    private void rotateAroundZ(Material material){
 
         float height = material.getHeightCm();
         float length = material.getLengthCm();

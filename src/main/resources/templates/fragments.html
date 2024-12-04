@@ -23,9 +23,33 @@
                     <li class="nav-item">
                         <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Byg-selv carporte</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Dummy link3</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
-                    <a class="nav-link active" th:href="@{/login}" href="login.html">Fog konto</a>
+                    <a class="nav-link active"
+                       th:if="${session.account != null}"
+                       th:href="@{/kundeside}"
+                       th:text="${session.account.email}">
+                        Bruger Email
+                    </a>
+                    <a class="nav-link active btn-sm ms-2"
+                       th:if="${session.account != null}"
+                       th:href="@{/logout}">
+                        Log ud
+                    </a>
+                    <a class="nav-link active"
+                       th:unless="${session.account != null}"
+                       th:href="@{/login}">
+                        Fog konto
+                    </a>
                 </div>
             </div>
         </div>

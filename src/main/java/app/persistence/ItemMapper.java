@@ -19,7 +19,6 @@ public class ItemMapper {
         StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
         List<Object> parameters = new ArrayList<>();
 
-        // Add exact match filters dynamically
         filters.forEach((key, value) -> {
             if ("length_cm".equals(key) || "width_mm".equals(key) || "height_mm".equals(key)) {
                 sql.append(" AND ").append(key).append(" >= ?");
@@ -39,55 +38,15 @@ public class ItemMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return mapRowToMaterial(rs);
+            }else {
+                StringBuilder offendingFields = new StringBuilder();
+                filters.forEach((key, value) -> offendingFields.append(key).append("=").append(value).append(", "));
+
+                throw new DatabaseException("Databasefejl",  "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Databasefejl: ingen forbindelse",  "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
         }
-
-        return null;
-    }
-
-    // Dynamically searches for several items with the help of ItemSearchBuilder
-    public static List<Material> searchSeveralItems(ConnectionPool pool, Map<String, Object> filters) throws DatabaseException {
-
-        StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
-        List<Object> parameters = new ArrayList<>();
-
-        filters.forEach((key, value) -> {
-            sql.append(" AND ").append(key).append(" = ?");
-            parameters.add(value);
-        });
-
-        List<Material> materials = new ArrayList<>();
-        try (Connection connection = pool.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql.toString());
-            for (int i = 0; i < parameters.size(); i++) {
-                ps.setObject(i + 1, parameters.get(i));
-            }
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                materials.add(mapRowToMaterial(rs));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-        return materials;
-    }
-
-    public static Material getItemById(int id, ConnectionPool pool) throws DatabaseException {
-
-        String sql = "SELECT item_id FROM item WHERE id = ?";
-        try (Connection connection = pool.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapRowToMaterial(rs);
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-        return null;
     }
 
     // Convert a result from DB to an instance of a material, and return it.
