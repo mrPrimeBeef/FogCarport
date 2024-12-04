@@ -12,7 +12,7 @@ public class LoggerConfig {
             fileHandler.setFormatter(new SimpleFormatter());
 
 
-            Logger rootLogger = Logger.getLogger("");
+            Logger rootLogger = Logger.getLogger("Logger");
             rootLogger.addHandler(fileHandler);
 
             // Valgfrit: Indstil root loggerens niveau til at logge alt
