@@ -28,17 +28,17 @@ public class CarportSvg {
         List<PlacedMaterial> placedMaterials = carport.getPlacedMaterials();
         for (PlacedMaterial placedMaterial : placedMaterials) {
             double x = placedMaterial.getX();
-            double y = placedMaterial.getZ();
+            double z = placedMaterial.getZ();
             float length = placedMaterial.getMaterial().getLengthCm();
-            float height = placedMaterial.getMaterial().getWidthCm();
+            float width = placedMaterial.getMaterial().getWidthCm();
             String itemType = placedMaterial.getMaterial().getItemType();
 
             System.out.println("itemType: " + itemType);
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: red");
+                svg.addRectangle(x, z, length, width, "stroke:black;fill: red");
             } else {
-                svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
+                svg.addRectangle(x, z, length, width, "stroke:black;fill: white");
             }
         }
 
@@ -75,6 +75,7 @@ public class CarportSvg {
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
         svg.addDimension(0, 100, 0, carportWidthCm - 100, OffsetDirection.LEFT, 40, "*");
 
+
         System.out.println("--- SVG topView placedMaterials ---");
 
         // DRAWING REAL CARPORT FROM CALCULATION ENGINE
@@ -94,6 +95,9 @@ public class CarportSvg {
                 svg.addRectangle(x, y, length, height, "stroke:black;fill: white");
             }
         }
+
+
+        System.out.println(carport.getFixatingStrapListXY().get(0).get(0));
 
 
 //        // Hardcoded Spær og deres dimensions
