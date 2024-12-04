@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class OrderlineMapper {
 
-    public void addOrderlines(Map<Material, Integer> orderParts, int orderr_id, ConnectionPool connectionPool) throws DatabaseException {
+    public static void addOrderlines(Map<Material, Integer> orderParts, int orderr_id, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price)" + "VALUES(?, ?, ?, ?) ";
 
