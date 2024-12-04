@@ -3,14 +3,11 @@ h1 {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 3rem;
 }
-main{
+
+main {
     min-height: calc(100vh - 172px);
 }
 
-#carport-side-view {
-    max-width: 800px;
-}
-
-#carport-top-view {
+.carport-svg-view {
     max-width: 800px;
 }
