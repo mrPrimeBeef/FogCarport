@@ -95,16 +95,16 @@ public class CarportSvg {
             svg.addDimension(rafterCentersX.get(i), 0, rafterCentersX.get(i + 1), 0, OffsetDirection.UP);
         }
 
-        double strap1X1 = carport.getFixatingStrapListXY().get(0).get(0);
-        double strap1Y1 = carport.getFixatingStrapListXY().get(0).get(1);
-        double strap1X2 = carport.getFixatingStrapListXY().get(0).get(2);
-        double strap1Y2 = carport.getFixatingStrapListXY().get(0).get(3);
-        double strap2X1 = carport.getFixatingStrapListXY().get(1).get(0);
-        double strap2Y1 = carport.getFixatingStrapListXY().get(1).get(1);
-        double strap2X2 = carport.getFixatingStrapListXY().get(1).get(2);
-        double strap2Y2 = carport.getFixatingStrapListXY().get(1).get(3);
-        svg.addLine(strap1X1, strap1Y1, strap1X2, strap1Y2, "stroke:black; stroke-dasharray: 5 5");
-        svg.addLine(strap2X1, strap2Y1, strap2X2, strap2Y2, "stroke:black; stroke-dasharray: 5 5");
+        double strapAx1 = carport.getFixatingStrapListXY().get(0).get(0);
+        double strapAy1 = carport.getFixatingStrapListXY().get(0).get(1);
+        double strapAx2 = carport.getFixatingStrapListXY().get(0).get(2);
+        double strapAy2 = carport.getFixatingStrapListXY().get(0).get(3);
+        double strapBx1 = carport.getFixatingStrapListXY().get(1).get(0);
+        double strapBy1 = carport.getFixatingStrapListXY().get(1).get(1);
+        double strapBx2 = carport.getFixatingStrapListXY().get(1).get(2);
+        double strapBy2 = carport.getFixatingStrapListXY().get(1).get(3);
+        svg.addLine(strapAx1, strapAy1, strapAx2, strapAy2, "stroke:black; stroke-dasharray: 5 5");
+        svg.addLine(strapBx1, strapBy1, strapBx2, strapBy2, "stroke:black; stroke-dasharray: 5 5");
 
         return svg.close();
     }
