@@ -67,16 +67,18 @@
 
     <form method="post" action="daekningsgrad">
 
-        <table style="width: 40%">
+        <table style="width: 50%">
             <tr>
                 <th>Kostpris<br>DKK</th>
                 <th>Dækningsgrad<br>%</th>
+                <th>Dækningsbidrag<br>DKK</th>
                 <th>Salgspris<br>DKK</th>
                 <th>Salgspris inkl. moms<br>DKK</th>
             </tr>
             <tr>
                 <td th:text="${costPrice}"></td>
                 <td th:text="${detailOrderAccountDto.marginPercentage}"></td>
+                <td></td>
                 <td th:text="${salePrice}"></td>
                 <td th:text="${salePriceInclVAT}"></td>
             </tr>
