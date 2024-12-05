@@ -100,8 +100,8 @@ public class OrderController {
     // TODO: Fix the exception handling
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
-        int carportLengthCm = 780;
-        int carportWidthCm = 600;
+        int carportLengthCm = 779;
+        int carportWidthCm = 599;
         int carportHeightCm = 210;
 
         Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
