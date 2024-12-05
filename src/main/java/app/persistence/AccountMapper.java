@@ -2,6 +2,7 @@ package app.persistence;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import app.entities.Account;
 import app.exceptions.AccountException;
@@ -9,6 +10,7 @@ import app.exceptions.DatabaseException;
 import app.services.PasswordGenerator;
 
 public class AccountMapper {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
