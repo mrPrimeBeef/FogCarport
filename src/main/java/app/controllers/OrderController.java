@@ -1,5 +1,6 @@
 package app.controllers;
 
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.SQLException;
@@ -118,7 +119,7 @@ public class OrderController {
             int carportWidthCm = detailOrderAccountDto.getCarportWidthCm();
             int carportHeightCm = detailOrderAccountDto.getCarportHeightCm();
 
-            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+//            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
             double costPrice = 90;  // TODO: Skal beregnes ved at summere cost price fra orderlines
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
@@ -132,11 +133,13 @@ public class OrderController {
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
-            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+//            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+//            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+            ctx.attribute("carportSvgSideView", detailOrderAccountDto.getSvgSideView());
+            ctx.attribute("carportSvgTopView", detailOrderAccountDto.getSvgTopView());
             ctx.render("saelgerordre.html");
 
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException e) {
             e.printStackTrace();
         }
 
@@ -165,16 +168,27 @@ public class OrderController {
         // TODO: Tilføj guard condition her
 
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
-        int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
-        int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        int carportHeight = Integer.parseInt(ctx.formParam("carport-hoejde"));
+        int carportWidthCm = Integer.parseInt(ctx.formParam("carport-bredde"));
+        int carportLengthCm = Integer.parseInt(ctx.formParam("carport-laengde"));
+        int carportHeightCm = Integer.parseInt(ctx.formParam("carport-hoejde"));
 
-        System.out.println(orderId);
-        System.out.println(carportWidth);
-        System.out.println(carportLength);
-        System.out.println(carportHeight);
+//        System.out.println(orderId);
+//        System.out.println(carportWidth);
+//        System.out.println(carportLength);
+//        System.out.println(carportHeight);
 
-        ctx.redirect("saelgerordre?ordrenr=" + orderId);
+        try {
+            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+            String svgSideView = CarportSvg.sideView(carport);
+            String svgTopView = CarportSvg.topView(carport);
+
+            OrderMapper.updateCarport(orderId, carportWidthCm, carportLengthCm, carportHeightCm, svgSideView, svgTopView, connectionPool);
+
+            ctx.redirect("saelgerordre?ordrenr=" + orderId);
+
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 

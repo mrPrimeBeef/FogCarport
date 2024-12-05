@@ -18,8 +18,10 @@ public class DetailOrderAccountDto {
     private int carportLengthCm;
     private int carportWidthCm;
     private int carportHeightCm;
+    private String svgSideView;
+    private String svgTopView;
 
-    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm) {
+    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm, String svgSideView, String svgTopView) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
@@ -35,6 +37,8 @@ public class DetailOrderAccountDto {
         this.carportLengthCm = carportLengthCm;
         this.carportWidthCm = carportWidthCm;
         this.carportHeightCm = carportHeightCm;
+        this.svgSideView = svgSideView;
+        this.svgTopView = svgTopView;
     }
 
     public int getOrderId() {
@@ -95,5 +99,13 @@ public class DetailOrderAccountDto {
 
     public int getCarportHeightCm() {
         return carportHeightCm;
+    }
+
+    public String getSvgSideView() {
+        return svgSideView;
+    }
+
+    public String getSvgTopView() {
+        return svgTopView;
     }
 }
