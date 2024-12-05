@@ -1,8 +1,5 @@
 package app.persistence;
 
-import app.services.StructureCalculationEngine.Entities.Material;
-import app.exceptions.DatabaseException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,15 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import app.services.StructureCalculationEngine.Entities.Material;
+import app.exceptions.DatabaseException;
+
 public class ItemMapper {
 
     // Dynamically searches for an item with the help of ItemSearchBuilder
-    public static Material searchSingleItem(Map<String, Object> filters, ConnectionPool pool) throws DatabaseException {
+    public static Material searchSingleItem(Map<String, Object> filters, ConnectionPool connectionPool) throws DatabaseException {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
         List<Object> parameters = new ArrayList<>();
 
-        // Add exact match filters dynamically
         filters.forEach((key, value) -> {
             if ("length_cm".equals(key) || "width_mm".equals(key) || "height_mm".equals(key)) {
                 sql.append(" AND ").append(key).append(" >= ?");
@@ -31,7 +30,7 @@ public class ItemMapper {
 
         sql.append(" ORDER BY length_cm ASC, width_mm ASC, height_mm ASC LIMIT 1");
 
-        try (Connection connection = pool.getConnection()) {
+        try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql.toString());
             for (int i = 0; i < parameters.size(); i++) {
                 ps.setObject(i + 1, parameters.get(i));
@@ -39,55 +38,35 @@ public class ItemMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return mapRowToMaterial(rs);
+            } else {
+                StringBuilder offendingFields = new StringBuilder();
+                filters.forEach((key, value) -> offendingFields.append(key).append("=").append(value).append(", "));
+
+                throw new DatabaseException("Databasefejl", "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Databasefejl: ingen forbindelse", "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
         }
-
-        return null;
     }
 
-    // Dynamically searches for several items with the help of ItemSearchBuilder
-    public static List<Material> searchSeveralItems(ConnectionPool pool, Map<String, Object> filters) throws DatabaseException {
+    public static Material getItemById(int itemId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM item WHERE item_id = ?";
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
-        List<Object> parameters = new ArrayList<>();
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
-        filters.forEach((key, value) -> {
-            sql.append(" AND ").append(key).append(" = ?");
-            parameters.add(value);
-        });
+            ps.setInt(1, itemId);
 
-        List<Material> materials = new ArrayList<>();
-        try (Connection connection = pool.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql.toString());
-            for (int i = 0; i < parameters.size(); i++) {
-                ps.setObject(i + 1, parameters.get(i));
-            }
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                materials.add(mapRowToMaterial(rs));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToMaterial(rs);
+                } else {
+                    throw new DatabaseException("Database error", "Error in getItemById() in ItemMapper: No item found with item_id " + itemId);
+                }
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Database error", "Connection error in getItemById() in ItemMapper: " + itemId, e.getMessage());
         }
-        return materials;
-    }
-
-    public static Material getItemById(int id, ConnectionPool pool) throws DatabaseException {
-
-        String sql = "SELECT item_id FROM item WHERE id = ?";
-        try (Connection connection = pool.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapRowToMaterial(rs);
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-        return null;
     }
 
     // Convert a result from DB to an instance of a material, and return it.

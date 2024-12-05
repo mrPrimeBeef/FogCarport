@@ -13,13 +13,13 @@ public class AccountMapper {
     public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
 
-        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
+        String sql = "SELECT email, name, address, zip_code, city, phone, role FROM account JOIN zip_code USING(zip_code)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-          
+
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -27,36 +27,46 @@ public class AccountMapper {
                 int zipCode = rs.getInt("zip_code");
                 String phone = rs.getString("phone");
                 String city = rs.getString("city");
+                String role = rs.getString("role");
 
-                accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                if(!role.equals("salesrep")){
+                    accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                }
             }
             return accounts;
 
         } catch (SQLException e) {
-        throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+            throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
-  
-  public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
-    
-     try (Connection connection = connectionPool.getConnection();
+        String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
+
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-       
+
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-       
+
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
+                String name = rs.getString("name");
                 String role = rs.getString("role");
-                account = new Account(accountId, role);
-            } else {
-                throw new AccountException("Dette er ikke en valid bruger", "Error in login");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                String phone = rs.getString("phone");
+
+                if (role.equals("salesrep")) {
+                    account = new Account(accountId, role);
+                } else if (role.equals("Kunde")) {
+                    account = new Account(accountId, email, name, role, address, city, phone);
+                }
             }
-       
+
         } catch (SQLException e) {
             throw new AccountException("Fejl i login.", "Error in login.", e.getMessage());
         }
