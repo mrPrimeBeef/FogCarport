@@ -120,12 +120,14 @@ public class OrderController {
 
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
 
-            double costPrice = 17000;  // TODO: Skal beregnes ved at summere cost price fra orderlines
+            double costPrice = 90;  // TODO: Skal beregnes ved at summere cost price fra orderlines
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
+            double marginAmount = salePrice - costPrice;
             double salePriceInclVAT = 1.25 * salePrice;
 
             ctx.attribute("costPrice", costPrice);
+            ctx.attribute("marginAmount", marginAmount);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
 
