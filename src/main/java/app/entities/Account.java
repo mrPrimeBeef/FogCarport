@@ -36,6 +36,11 @@ public class Account {
         this.role = role;
     }
 
+    public Account(int accountId, String role) {
+        this.accountId = accountId;
+        this.role = role;
+    }
+
     public int getAccountId() {
         return accountId;
     }

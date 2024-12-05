@@ -37,14 +37,14 @@ public class AccountMapper {
         }
     }
 
-    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
+    public static Account login(String Email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, role FROM account WHERE email=? AND password=?";
+        String sql = "SELECT account_id, role, email FROM account WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, email);
+            ps.setString(1, Email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
@@ -52,7 +52,13 @@ public class AccountMapper {
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String role = rs.getString("role");
-                account = new Account(accountId, rs.getString("email"), role);
+                String email = rs.getString("email");
+
+                if (role.equals("salesrep")) {
+                    account = new Account(accountId, role);
+                } else if (role.equals("Kunde")) {
+                    account = new Account(accountId, email, role);
+                }
             } else {
                 throw new AccountException("Dette er ikke en valid bruger", "Error in login");
             }
@@ -62,6 +68,7 @@ public class AccountMapper {
         }
         return account;
     }
+
 
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();

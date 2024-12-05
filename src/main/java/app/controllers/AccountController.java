@@ -50,7 +50,7 @@ public class AccountController {
                 return;
             }
             //TODO skal henvise til en kunde index side i ctx.render.
-            if (account.getRole().equals("customer")) {
+            if (account.getRole().equals("Kunde")) {
                 ctx.render("/index");
                 return;
             }
@@ -74,7 +74,7 @@ public class AccountController {
 
             if (account == null) {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastet email.");
-                ctx.render("error.html");
+                ctx.render("glemtKode.html");
                 return;
             }
             String role = account.getRole();
@@ -85,15 +85,17 @@ public class AccountController {
                 return;
             }
 
-            if ("customer".equals(role)) {
+            if ("Kunde".equals(role)) {
                 String newPassword = PasswordGenerator.generatePassword();
 
                 System.out.println("Den indtastet email: " + email + "\n" + "Adgangskoden for den indtastet mail er: " + newPassword);
                 ctx.render("login.html");
                 return;
+
+            }else {
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastet email, prøv igen.");
+                ctx.render("glemtKode.html");
             }
-            ctx.attribute("errorMessage", "Ugyldig brugertype.");
-            ctx.render("error.html");
 
         } catch (AccountException e) {
             ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
