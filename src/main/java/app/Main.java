@@ -9,6 +9,8 @@ import app.config.ThymeleafConfig;
 import app.persistence.ConnectionPool;
 import app.exceptions.LoggerConfig;
 
+import java.util.logging.Logger;
+
 public class Main {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
@@ -17,7 +19,6 @@ public class Main {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     public static void main(String[] args) {
-        LoggerConfig.setup();
         // Initializing Javalin and Jetty webserver
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("/public");

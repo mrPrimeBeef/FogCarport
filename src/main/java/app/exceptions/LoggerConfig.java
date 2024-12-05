@@ -6,20 +6,26 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class LoggerConfig {
-    public static void setup() {
-        try {
-            FileHandler fileHandler = new FileHandler("errors.log", true); // true = append mode
-            fileHandler.setFormatter(new SimpleFormatter());
+    private static Logger LOGGER;
 
+    private LoggerConfig() {
+        // Privat constructor for at forhindre instansiering
+    }
 
-            Logger rootLogger = Logger.getLogger("Logger");
-            rootLogger.addHandler(fileHandler);
+    public static Logger getLOGGER() {
+        if (LOGGER == null) {
+            try {
+                LOGGER = Logger.getLogger("GlobalLogger");
 
-            // Valgfrit: Indstil root loggerens niveau til at logge alt
-            rootLogger.setLevel(java.util.logging.Level.ALL);
+                FileHandler fileHandler = new FileHandler("errors.log", true);
+                fileHandler.setFormatter(new SimpleFormatter());
+                LOGGER.addHandler(fileHandler);
 
-        } catch (IOException e) {
-            System.err.println("Kunne ikke konfigurere logger: " + e.getMessage());
+                LOGGER.setLevel(java.util.logging.Level.ALL);
+            } catch (IOException e) {
+                System.err.println("Kunne ikke konfigurere logger: " + e.getMessage());
+            }
         }
+        return LOGGER;
     }
 }

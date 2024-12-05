@@ -1,8 +1,10 @@
 package app.controllers;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import app.exceptions.AccountException;
+import app.exceptions.LoggerConfig;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -12,6 +14,8 @@ import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 
 public class AccountController {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
@@ -23,15 +27,23 @@ public class AccountController {
   public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
+            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
         }
         try {
+            LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
+
             ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
             ctx.attribute("accounts", accounts);
             ctx.render("saelgerallekunder.html");
         } catch (DatabaseException e) {
+            LOGGER.severe("Fejl ved hentning af kundeliste: " + e.getMessage());
+
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }

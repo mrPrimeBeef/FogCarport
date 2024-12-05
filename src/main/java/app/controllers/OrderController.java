@@ -1,7 +1,9 @@
 package app.controllers;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import app.exceptions.LoggerConfig;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -16,6 +18,7 @@ import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 
 public class OrderController {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/", ctx -> ctx.render("index"));
@@ -43,6 +46,9 @@ public class OrderController {
 
             new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
         } catch (AccountException | OrderException | DatabaseException e) {
+
+            LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
+
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
@@ -52,6 +58,9 @@ public class OrderController {
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
+            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
 
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
@@ -63,6 +72,8 @@ public class OrderController {
             ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
             ctx.render("saelgeralleordrer.html");
         } catch (DatabaseException e) {
+            LOGGER.severe("Fejl ved hentning af alle kunders ordre: " + e.getMessage());
+
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
