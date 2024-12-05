@@ -60,11 +60,11 @@ public class AccountMapper {
                     account = new Account(accountId, email, role);
                 }
             } else {
-                throw new AccountException("Dette er ikke en valid bruger", "Error in login");
+                throw new AccountException("Dette indtastet mail findes ikke i systemet", "Error in login");
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl i login.", "Error in login.", e.getMessage());
+            throw new AccountException("Der opstod en fejl ved login.", "Error in login.", e.getMessage());
         }
         return account;
     }
@@ -165,5 +165,25 @@ public class AccountMapper {
             throw new AccountException("Kunne ikke hente konto fra databasen: " + "Error in getAccountByEmail " + e.getMessage());
         }
         return account;
+    }
+
+    public static void updatePassword(String email, String newPassword, ConnectionPool connectionPool) throws AccountException {
+        String sql = "UPDATE account SET password = ? WHERE email = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new AccountException("Kunne ikke opdatere adgangskoden, da ingen konto blev fundet for den indtastet email.");
+            }
+
+        } catch (SQLException e) {
+            throw new AccountException("Fejl ved opdatering af adgangskoden: " + "Error in updatePassword " + e.getMessage());
+        }
     }
 }

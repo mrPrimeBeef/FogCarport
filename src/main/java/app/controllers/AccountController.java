@@ -20,8 +20,8 @@ public class AccountController {
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
-  
-  public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -46,7 +46,7 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("activeAccount", account);
             if (account.getRole().equals("salesrep")) {
-                salesrepShowAllCustomersPage(ctx,connectionPool);
+                salesrepShowAllCustomersPage(ctx, connectionPool);
                 return;
             }
             //TODO skal henvise til en kunde index side i ctx.render.
@@ -73,7 +73,7 @@ public class AccountController {
             Account account = AccountMapper.getAccountByEmail(email, connectionPool);
 
             if (account == null) {
-                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastet email.");
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
                 ctx.render("glemtKode.html");
                 return;
             }
@@ -87,16 +87,16 @@ public class AccountController {
 
             if ("Kunde".equals(role)) {
                 String newPassword = PasswordGenerator.generatePassword();
+                AccountMapper.updatePassword(email, newPassword, connectionPool);
 
-                System.out.println("Den indtastet email: " + email + "\n" + "Adgangskoden for den indtastet mail er: " + newPassword);
+                System.out.println("Den indtastede e-mail: " + email + "\n" + "Adgangskoden for den indtastede mail er: " + newPassword);
+
+                ctx.attribute("message", "Din adgangskode er blevet nulstillet. Log ind med den nye adgangskode.");
                 ctx.render("login.html");
-                return;
-
-            }else {
-                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastet email, prøv igen.");
+            } else {
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail. Prøv igen.");
                 ctx.render("glemtKode.html");
             }
-
         } catch (AccountException e) {
             ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
             ctx.render("error.html");
