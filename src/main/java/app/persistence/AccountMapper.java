@@ -13,7 +13,7 @@ public class AccountMapper {
     public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
 
-        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
+        String sql = "SELECT email, name, address, zip_code, city, phone, role FROM account JOIN zip_code USING(zip_code)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -27,8 +27,11 @@ public class AccountMapper {
                 int zipCode = rs.getInt("zip_code");
                 String phone = rs.getString("phone");
                 String city = rs.getString("city");
+                String role = rs.getString("role");
 
-                accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                if(!role.equals("salesrep")){
+                    accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                }
             }
             return accounts;
 
