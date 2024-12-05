@@ -88,6 +88,7 @@
                            id="daekningsgrad"
                            name="daekningsgrad"
                            min="0"
+                           max="99"
                            step="0.1"
                            required
                            placeholder="Dækningsgrad %"
@@ -156,11 +157,11 @@
     <br>
 
     <h3>Tegning fra siden</h3>
-    <div class="carport-svg-view" th:utext="${carportSvgSideView}"></div>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgSideView}"></div>
     <br>
 
     <h3>Tegning fra oven</h3>
-    <div class="carport-svg-view" th:utext="${carportSvgTopView}"></div>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgTopView}"></div>
 
     * Mål udvendigt på stolper<br>
     ** Afstand fra stern ved H=2,50m<br>

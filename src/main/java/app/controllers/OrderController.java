@@ -1,14 +1,12 @@
 package app.controllers;
 
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.SQLException;
 
-import app.dto.DetailOrderAccountDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
 import app.entities.Account;
@@ -18,13 +16,9 @@ import app.exceptions.OrderException;
 import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
-
-
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 
-import app.services.svgEngine.CarportSvg;
-import app.services.StructureCalculationEngine.Entities.Carport;
 
 public class OrderController {
 
@@ -34,8 +28,8 @@ public class OrderController {
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
-        app.post("daekningsgrad", ctx -> postMarginPercentage(ctx, connectionPool));
-        app.post("carportberegning", ctx -> salesrepPostCalculation(ctx, connectionPool));
+        app.post("daekningsgrad", ctx -> salesrepPostMarginPercentage(ctx, connectionPool));
+        app.post("carportberegning", ctx -> salesrepPostCarportCalculation(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -105,7 +99,7 @@ public class OrderController {
         ctx.render("tak.html");
     }
 
-    // TODO: Fix the exception handling
+    // TODO: Fix the exception handling to show error page
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
         // TODO: Tilføj guard condition her
@@ -115,28 +109,18 @@ public class OrderController {
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
-            int carportLengthCm = detailOrderAccountDto.getCarportLengthCm();
-            int carportWidthCm = detailOrderAccountDto.getCarportWidthCm();
-            int carportHeightCm = detailOrderAccountDto.getCarportHeightCm();
-
-//            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-            double costPrice = 90;  // TODO: Skal beregnes ved at summere cost price fra orderlines
+            // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
+            double costPrice = 10000;  // TODO: Skal beregnes ved at summere cost price fra orderlines, f.eks: OrderlineMapper.getSumCostPriceByOrderId(orderId, connectionPool)
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
             double marginAmount = salePrice - costPrice;
             double salePriceInclVAT = 1.25 * salePrice;
 
+            ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("costPrice", costPrice);
             ctx.attribute("marginAmount", marginAmount);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
-
-            ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
-//            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-//            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-            ctx.attribute("carportSvgSideView", detailOrderAccountDto.getSvgSideView());
-            ctx.attribute("carportSvgTopView", detailOrderAccountDto.getSvgTopView());
             ctx.render("saelgerordre.html");
 
         } catch (DatabaseException e) {
@@ -145,8 +129,8 @@ public class OrderController {
 
     }
 
-
-    private static void postMarginPercentage(Context ctx, ConnectionPool connectionPool) {
+    // TODO: Fix the exception handling to show error page
+    private static void salesrepPostMarginPercentage(Context ctx, ConnectionPool connectionPool) {
 
         // TODO: Tilføj guard condition her
 
@@ -162,8 +146,8 @@ public class OrderController {
 
     }
 
-
-    private static void salesrepPostCalculation(Context ctx, ConnectionPool connectionPool) {
+    // TODO: Fix the exception handling to show error page
+    private static void salesrepPostCarportCalculation(Context ctx, ConnectionPool connectionPool) {
 
         // TODO: Tilføj guard condition her
 
@@ -172,13 +156,12 @@ public class OrderController {
         int carportLengthCm = Integer.parseInt(ctx.formParam("carport-laengde"));
         int carportHeightCm = Integer.parseInt(ctx.formParam("carport-hoejde"));
 
-//        System.out.println(orderId);
-//        System.out.println(carportWidth);
-//        System.out.println(carportLength);
-//        System.out.println(carportHeight);
-
         try {
+
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+            carportWidthCm = carport.getWidth();
+            carportLengthCm = carport.getLength();
+            carportHeightCm = carport.getHeight();
             String svgSideView = CarportSvg.sideView(carport);
             String svgTopView = CarportSvg.topView(carport);
 
