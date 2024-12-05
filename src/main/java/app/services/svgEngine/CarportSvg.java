@@ -18,7 +18,7 @@ public class CarportSvg {
 
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportHeightCm + 100);
 
-        svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill: white");
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportHeightCm + 200, "fill:white");
         svg.addDimension(0, 0, 0, carportHeightCm, OffsetDirection.LEFT);
         svg.addDimension(carportLengthCm, 0, carportLengthCm, carportHeightCm, OffsetDirection.RIGHT);
         svg.addLine(0, carportHeightCm, carportLengthCm, carportHeightCm, "stroke:black");
@@ -34,7 +34,7 @@ public class CarportSvg {
             double zSize = placedMaterial.getMaterial().getWidthCm();
             String itemType = placedMaterial.getMaterial().getItemType();
 
-            svg.addRectangle(x, z, xSize, zSize, "stroke:black; fill: white");
+            svg.addRectangle(x, z, xSize, zSize, "stroke:black; fill:white");
 
             if (itemType.equalsIgnoreCase("stolpe") && y > carportWidthCm / 2) {
                 dimPointsX.add(x + xSize / 2);
@@ -58,7 +58,7 @@ public class CarportSvg {
 
         Svg svg = new Svg(-100, -100, carportLengthCm + 100, carportWidthCm + 100);
 
-        svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill: white");
+        svg.addRectangle(-100, -100, carportLengthCm + 200, carportWidthCm + 200, "fill:white");
         svg.addDimension(0, carportWidthCm, carportLengthCm, carportWidthCm, OffsetDirection.DOWN);
         svg.addDimension(0, 0, 0, carportWidthCm, OffsetDirection.LEFT, 70);
 
@@ -74,13 +74,13 @@ public class CarportSvg {
             String itemType = placedMaterial.getMaterial().getItemType();
 
             if (itemType.equalsIgnoreCase("stolpe")) {
-                svg.addRectangle(x, y, xSize, ySize, "stroke-width:2px; stroke:black; fill: none");
+                svg.addRectangle(x, y, xSize, ySize, "stroke-width:2px; stroke:black; fill:none");
                 pillarEdgesY.add(y);
                 pillarYSize = ySize;
                 continue;
             }
 
-            svg.addRectangle(x, y, xSize, ySize, "stroke:black; fill: white");
+            svg.addRectangle(x, y, xSize, ySize, "stroke:black; fill:white");
 
             if (itemType.equalsIgnoreCase("lægte")) {
                 rafterCentersX.add(x + xSize / 2);
