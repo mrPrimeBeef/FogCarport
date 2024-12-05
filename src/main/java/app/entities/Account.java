@@ -9,6 +9,7 @@ public class Account {
     private String phone;
     private String email;
     private String role;
+    private String password;
 
 
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
@@ -72,6 +73,8 @@ public class Account {
     public String getRole() {
         return role;
     }
+
+    public String getPassword(){return password;}
 
 
     @Override
