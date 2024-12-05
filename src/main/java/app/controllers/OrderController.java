@@ -1,5 +1,6 @@
 package app.controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import io.javalin.Javalin;
@@ -15,6 +16,10 @@ import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 
+
+import app.services.svgEngine.CarportSvg;
+import app.services.StructureCalculationEngine.Entities.Carport;
+
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -22,6 +27,7 @@ public class OrderController {
         app.get("fladttag", ctx -> ctx.render("fladttag"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
+        app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -80,7 +86,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            return  accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
@@ -90,4 +96,25 @@ public class OrderController {
         ctx.attribute("email", email);
         ctx.render("tak.html");
     }
+
+    // TODO: Fix the exception handling
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
+
+        int carportLengthCm = 779;
+        int carportWidthCm = 599;
+        int carportHeightCm = 210;
+
+        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
+        try {
+            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ctx.render("saelgerordre.html");
+    }
+
+
 }
