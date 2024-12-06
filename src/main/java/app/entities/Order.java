@@ -3,7 +3,7 @@ package app.entities;
 import java.util.Date;
 
 public class Order {
-    int orderr_id;
+    int orderId;
     Date datePlaced;
     Date datePaid;
     Date dateCompleted;
@@ -11,7 +11,7 @@ public class Order {
     String status;
 
     public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, double saleprice, String status) {
-    this.orderr_id = orderrId;
+    this.orderId = orderrId;
     this.datePlaced = datePlaced;
     this.datePaid = datePaid;
     this.dateCompleted = dateCompleted;
@@ -19,8 +19,8 @@ public class Order {
     this.status = status;
     }
 
-    public int getOrderr_id() {
-        return orderr_id;
+    public int getOrderId() {
+        return orderId;
     }
 
     public Date getDatePlaced() {
@@ -46,7 +46,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "orderr_id=" + orderr_id +
+                "orderr_id=" + orderId +
                 ", datePlaced=" + datePlaced +
                 ", datePaid=" + datePaid +
                 ", dateCompleted=" + dateCompleted +

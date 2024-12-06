@@ -3,18 +3,18 @@ package app.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import app.entities.Order;
-import app.entities.Orderline;
-import app.exceptions.DatabaseException;
-import app.exceptions.OrderException;
-import app.persistence.OrderlineMapper1;
-import app.services.StructureCalculationEngine.Entities.Carport;
-import app.services.svgEngine.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.entities.Order;
+import app.entities.Orderline;
+import app.services.StructureCalculationEngine.Entities.Carport;
+import app.services.svgEngine.CarportSvg;
 import app.entities.Account;
 import app.exceptions.AccountException;
+import app.exceptions.DatabaseException;
+import app.exceptions.OrderException;
+import app.persistence.OrderlineMapper1;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
@@ -31,6 +31,7 @@ public class AccountController {
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
+
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
@@ -40,6 +41,7 @@ public class AccountController {
             ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
             ctx.attribute("accounts", accounts);
             ctx.render("saelgerallekunder.html");
+
         } catch (AccountException e) {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
@@ -70,14 +72,13 @@ public class AccountController {
     public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
 
-        if (activeAccount == null) {
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
-        }
-        if (activeAccount.getRole().equals("Kunde")) {
+        } else{
             try {
-                ArrayList<Order> orders = OrderMapper.showCustomerOrders(activeAccount.getAccountId(), connectionPool);
+                ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
 
             } catch (OrderException e) {
@@ -91,13 +92,11 @@ public class AccountController {
     public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
 
-        if (activeAccount == null) {
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
-        }
-
-        if (activeAccount.getRole().equals("Kunde")) {
+        } else {
             // TODO fix med rigtig måde at vise?
             int carportLengthCm = 752;
             int carportWidthCm = 600;
@@ -113,13 +112,12 @@ public class AccountController {
                 OrderlineMapper1.deleteOrderlinesFromOrderId(orderrId, connectionPool);
                 OrderlineMapper1.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
 
-                Order orders = OrderMapper.showCustomerOrder(orderrId, connectionPool);
+                Order orders = OrderMapper.getCustomerOrder(orderrId, connectionPool);
                 ctx.attribute("showOrder", orders);
 
 
                 ArrayList<Orderline> orderlines = OrderlineMapper1.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
-
 
                 ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
                 ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));

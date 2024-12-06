@@ -70,7 +70,7 @@ public class OrderMapper {
         return success;
     }
 
-    public static ArrayList<Order> showCustomerOrders(int account_id, ConnectionPool connectionPool) throws OrderException {
+    public static ArrayList<Order> getOrdersFromAccountId(int account_id, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Order> orders = new ArrayList<>();
         String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE account_id = ?";
 
@@ -97,7 +97,7 @@ public class OrderMapper {
             throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
         }
     }
-    public static Order showCustomerOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
+    public static Order getCustomerOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
         String sql = "SELECT date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE orderr_id = ?";
 
