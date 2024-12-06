@@ -13,10 +13,10 @@ import app.services.PasswordGenerator;
 public class AccountMapper {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
-    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws AccountException {
+    public static ArrayList<Account> getAllCustomerAccounts(ConnectionPool connectionPool) throws AccountException {
         ArrayList<Account> accounts = new ArrayList<>();
 
-        String sql = "SELECT email, name, address, zip_code, city, phone, role FROM account JOIN zip_code USING(zip_code)";
+        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code) WHERE role = 'Kunde'";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -30,11 +30,8 @@ public class AccountMapper {
                 int zipCode = rs.getInt("zip_code");
                 String phone = rs.getString("phone");
                 String city = rs.getString("city");
-                String role = rs.getString("role");
 
-                if(!role.equals("salesrep")){
-                    accounts.add(new Account(name, address, zipCode, phone, mail, city));
-                }
+                accounts.add(new Account(name, address, zipCode, phone, mail, city));
             }
             return accounts;
 
@@ -112,8 +109,8 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            LOGGER.severe("Error in getIdFromAccountEmail() connection. E message: " + e.getMessage());
-            throw new AccountException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail(): " + email, e.getMessage());
+            LOGGER.severe("Error in getAccountIdFromEmail() connection. E message: " + e.getMessage());
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email, e.getMessage());
         }
         return accountId;
     }

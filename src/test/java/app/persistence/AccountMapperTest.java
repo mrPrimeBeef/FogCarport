@@ -34,8 +34,8 @@ class AccountMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    void getAllAccounts() throws AccountException {
-        ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
+    void getAllCustomerAccounts() throws AccountException {
+        ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
         String actual = accounts.get(2).getName();
 
         assertEquals("Test Testersen", actual);

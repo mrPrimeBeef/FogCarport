@@ -17,7 +17,7 @@ import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
-import app.persistence.OrderlineMapper1;
+import app.persistence.OrderlineMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
@@ -51,7 +51,7 @@ public class AccountController {
         try {
             LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
 
-            ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
+            ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
             ctx.attribute("accounts", accounts);
             ctx.render("saelgerallekunder.html");
         } catch (AccountException e) {
@@ -66,13 +66,13 @@ public class AccountController {
         String password = ctx.formParam("password");
 
         try {
-            Account account = AccountMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("account", account);
-            if (account.getRole().equals("salesrep")) {
+            Account activeAccount = AccountMapper.login(email, password, connectionPool);
+            ctx.sessionAttribute("account", activeAccount);
+            if (activeAccount.getRole().equals("salesrep")) {
                 OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
                 return;
             }
-            if (account.getRole().equals("Kunde")) {
+            if (activeAccount.getRole().equals("Kunde")) {
                 showCustomerOverview(ctx, connectionPool);
             }
 
@@ -122,14 +122,14 @@ public class AccountController {
                 int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
 
                 carport.getPlacedMaterials();
-                OrderlineMapper1.deleteOrderlinesFromOrderId(orderrId, connectionPool);
-                OrderlineMapper1.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
+                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId, connectionPool);
+                OrderlineMapper.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
 
-                Order orders = OrderMapper.getCustomerOrder(orderrId, connectionPool);
+                Order orders = OrderMapper.getOrder(orderrId, connectionPool);
                 ctx.attribute("showOrder", orders);
 
 
-                ArrayList<Orderline> orderlines = OrderlineMapper1.getMaterialListForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+                ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
 
                 ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
@@ -153,16 +153,10 @@ public class AccountController {
 
         try {
             Account account = AccountMapper.getAccountByEmail(email, connectionPool);
-
-            if (account == null) {
-                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
-                ctx.render("glemtKode.html");
-                return;
-            }
             String role = account.getRole();
 
-            if ("salesrep".equals(role)) {
-                ctx.attribute("message", "Sælgere kan ikke få adgang til deres adgangskode. Kontakt admin for at ændre adgangskoden.");
+            if (account == null || "salesrep".equals(role)) {
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
                 ctx.render("glemtKode.html");
                 return;
             }

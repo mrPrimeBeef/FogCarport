@@ -12,16 +12,16 @@ import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.services.StructureCalculationEngine.Entities.Material;
 
-public class OrderlineMapper1 {
+public class OrderlineMapper {
 
-    public static ArrayList<Orderline> getMaterialListForCustomerOrSalesrep(int orderr_id, String role, ConnectionPool connectionPool) throws OrderException {
+    public static ArrayList<Orderline> getOrderlinesForCustomerOrSalesrep(int orderId, String role, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Orderline> orderlineList = new ArrayList<>();
         String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, orderr.paid FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setInt(1, orderr_id);
+            ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -37,12 +37,12 @@ public class OrderlineMapper1 {
                 }
             }
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din stykliste", "Error in getMaterialListForCustomerOrSalesrep()", e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din stykliste", "Error in getOrderlinesForCustomerOrSalesrep()", e.getMessage());
         }
         return orderlineList;
     }
 
-    public static void addOrderlines(Map<Material, Integer> orderParts, int orderr_id, ConnectionPool connectionPool) throws DatabaseException {
+    public static void addOrderlines(Map<Material, Integer> orderParts, int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price)" + "VALUES(?, ?, ?, ?) ";
 
@@ -57,13 +57,11 @@ public class OrderlineMapper1 {
 
                 ps.setInt(1, material.getMaterialId());
                 ps.setInt(2, quantity);
-                ps.setInt(3, orderr_id);
+                ps.setInt(3, orderId);
                 ps.setFloat(4, material.getCostPrice() * quantity);
-
                 // adds every query to a batch of queries
                 ps.addBatch();
             }
-
             // Executes all queries at once
             ps.executeBatch();
             connection.commit();

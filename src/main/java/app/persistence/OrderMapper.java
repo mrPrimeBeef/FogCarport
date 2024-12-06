@@ -54,10 +54,10 @@ public class OrderMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, accountId);
-            ps.setString(2, "In progress");
+            ps.setString(2, "Henvendelse");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 210 cm
+            ps.setInt(5, 210); // carport height 210 cm //TODO opdater faldttag.html
             ps.setInt(6, shedWidth);
             ps.setInt(7, shedLength);
 
@@ -89,21 +89,21 @@ public class OrderMapper {
 
 
             while (rs.next()) {
-                int orderr_id = rs.getInt("orderr_id");
+                int orderId = rs.getInt("orderr_id");
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double saleprice = rs.getDouble("sale_price");
+                double salePrice = rs.getDouble("sale_price");
                 String status = rs.getString("status");
 
-                orders.add(new Order(orderr_id, datePlaced, datePaid, dateCompleted, saleprice, status)) ;
+                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status)) ;
             }
             return orders;
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in showCustomerOrder()", e.getMessage());
         }
     }
-    public static Order getCustomerOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
+    public static Order getOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
         String sql = "SELECT date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE orderr_id = ?";
 
@@ -118,9 +118,9 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double saleprice = rs.getDouble("sale_price");
+                double salePrice = rs.getDouble("sale_price");
                 String status = rs.getString("status");
-                order = new Order(orderId, datePlaced, datePaid, dateCompleted, saleprice, status);
+                order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status);
             }
             return order;
 
