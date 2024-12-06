@@ -61,12 +61,14 @@ CREATE TABLE IF NOT EXISTS public.orderr
     status character varying NOT NULL,
     paid boolean DEFAULT false,
     date_paid date,
-    sale_price numeric,
+    margin_percentage numeric,
     carport_length_cm integer NOT NULL,
     carport_width_cm integer NOT NULL,
     carport_height_cm integer,
     shed_length_cm integer,
     shed_width_cm integer,
+    svg_side_view character varying,
+    svg_top_view character varying,
     CONSTRAINT orders_pkey PRIMARY KEY (orderr_id)
     );
 
@@ -1541,19 +1543,21 @@ CREATE TABLE IF NOT EXISTS test.account
 CREATE TABLE IF NOT EXISTS test.orderr
 (
     orderr_id serial NOT NULL,
-    date_placed date,
+    date_placed date DEFAULT CURRENT_DATE,
     date_completed date,
     account_id integer NOT NULL,
     status character varying NOT NULL,
     paid boolean DEFAULT false,
     date_paid date,
-    sale_price numeric,
+    margin_percentage numeric,
     carport_length_cm integer NOT NULL,
     carport_width_cm integer NOT NULL,
     carport_height_cm integer,
     shed_length_cm integer,
     shed_width_cm integer,
-    CONSTRAINT orders_pkey_test PRIMARY KEY (orderr_id)
+    svg_side_view character varying,
+    svg_top_view character varying,
+    CONSTRAINT orders_pkey PRIMARY KEY (orderr_id)
     );
 
 CREATE TABLE IF NOT EXISTS test.item
