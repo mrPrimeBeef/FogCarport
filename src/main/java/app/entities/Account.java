@@ -4,12 +4,11 @@ public class Account {
     private int accountId;
     private String name;
     private String address;
-    private int zip;
     private String city;
+    private int zip;
     private String phone;
     private String email;
     private String role;
-
 
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
@@ -21,7 +20,17 @@ public class Account {
         this.role = role;
     }
 
-    public Account(String name, String address, int zip, String phone, String email, String city) {
+    public Account(int accountId, String email, String name, String role, String address, String city, String phone) {
+        this.accountId = accountId;
+        this.email = email;
+        this.name = name;
+        this.role = role;
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+    }
+  
+    public  Account(String name, String address, int zip, String phone, String email, String city) {
         this.name = name;
         this.address = address;
         this.zip = zip;
@@ -29,13 +38,11 @@ public class Account {
         this.email = email;
         this.city = city;
     }
-
     public Account(int accountId, String email, String role) {
         this.accountId = accountId;
         this.email = email;
         this.role = role;
     }
-
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
@@ -53,6 +60,10 @@ public class Account {
         return address;
     }
 
+    public String getCity() {
+        return city;
+    }
+
     public int getZip() {
         return zip;
     }
@@ -65,15 +76,9 @@ public class Account {
         return email;
     }
 
-    public String getCity() {
-        return city;
-    }
-
     public String getRole() {
         return role;
     }
-
-
     @Override
     public String toString() {
         return "Member{" +

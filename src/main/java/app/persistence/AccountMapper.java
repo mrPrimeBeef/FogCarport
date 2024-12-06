@@ -2,18 +2,21 @@ package app.persistence;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
+import app.config.LoggerConfig;
 import app.services.PasswordGenerator;
 
 public class AccountMapper {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Account> accounts = new ArrayList<>();
 
-        String sql = "SELECT email, name, address, zip_code, city, phone FROM account JOIN zip_code USING(zip_code)";
+        String sql = "SELECT email, name, address, zip_code, city, phone, role FROM account JOIN zip_code USING(zip_code)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -27,44 +30,49 @@ public class AccountMapper {
                 int zipCode = rs.getInt("zip_code");
                 String phone = rs.getString("phone");
                 String city = rs.getString("city");
+                String role = rs.getString("role");
 
-                accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                if(!role.equals("salesrep")){
+                    accounts.add(new Account(name, address, zipCode, phone, mail, city));
+                }
             }
             return accounts;
 
         } catch (SQLException e) {
+            LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
             throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
-
-    public static Account login(String Email, String password, ConnectionPool connectionPool) throws AccountException {
+    public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
-        String sql = "SELECT account_id, role, email FROM account WHERE email=? AND password=?";
+        String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, Email);
+            ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
+                String name = rs.getString("name");
                 String role = rs.getString("role");
-                String email = rs.getString("email");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                String phone = rs.getString("phone");
 
                 if (role.equals("salesrep")) {
                     account = new Account(accountId, role);
                 } else if (role.equals("Kunde")) {
-                    account = new Account(accountId, email, role);
+                    account = new Account(accountId, email, name, role, address, city, phone);
                 }
-            } else {
-                throw new AccountException("Dette indtastet mail findes ikke i systemet", "Error in login");
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Der opstod en fejl ved login.", "Error in login.", e.getMessage());
+            LOGGER.severe("Error in login() connection. E message: " + e.getMessage());
+            throw new AccountException("Fejl i login.", "Error in login()", e.getMessage());
         }
         return account;
     }
@@ -85,7 +93,8 @@ public class AccountMapper {
             return emails;
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at hente emails", "Error in getAllEmailsFromAccount", e.getMessage());
+            LOGGER.severe("Error in getAllAccountEmails() connection. E message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at hente emails", "Error in getAllEmailsFromAccount()", e.getMessage());
         }
     }
 
@@ -104,7 +113,8 @@ public class AccountMapper {
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail: " + email, e.getMessage());
+            LOGGER.severe("Error in getIdFromAccountEmail() connection. E message: " + e.getMessage());
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getIdFromAccountEmail(): " + email, e.getMessage());
         }
         return accountId;
     }
@@ -129,18 +139,21 @@ public class AccountMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
+                LOGGER.info("Fejl ved oprettelse af ny bruger.");
                 throw new AccountException("Fejl ved oprettelse af ny bruger.");
             } else {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     accountId = rs.getInt(1);
                 } else {
+                    LOGGER.severe("Error in createAccount()");
                     throw new AccountException("Kunne ikke hente det genererede account ID.");
                 }
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl i at oprette en konto", "Error in createAccount", e.getMessage());
+            LOGGER.severe("Error in createAccount() connection. E message: " + e.getMessage());
+            throw new AccountException("Fejl i at oprette en konto", "Error in createAccount()", e.getMessage());
         }
         return accountId;
     }

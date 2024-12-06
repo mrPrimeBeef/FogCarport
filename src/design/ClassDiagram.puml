@@ -54,6 +54,10 @@ package app {
     + static boolean updateOrderStatus(String status, Context ctx, ConnectionPool connectionPool)
     + static List<Order> getAllOrdersByAccountId(int accountId, Context ctx, ConnectionPool connectionPool)
     }
+    class OrderlineMapper{
+
+    }
+
     class ItemMapper{
 
     }
@@ -61,11 +65,55 @@ package app {
 
   package Services{
   package svgEngine {
-  class SVG{
-  }
+    class Svg{
+    - static final String SVG_OPEN_TAG_TEMPLATE
+    - static final String SVG_RECTANGLE_TEMPLATE
+    - static final String SVG_TEXT_TEMPLATE
+    - static final String SVG_LINE_TEMPLATE
+    - static final String SVG_DIM_LINE_TEMPLATE
+    - static final String SVG_ARROW_DEFS
+    - static final double ARROW_HALF_WIDTH
+    - static final double DIM_LINE_OFFSET_ORIGIN
+    - static final double EXT_LINE_OFFSET_ORIGIN
+    - static final double TEXT_OFFSET_DIM_LINE
+    - static final Locale LOCALE_US
+    - static final Locale LOCALE_DK
+    - final StringBuilder svg
+    + Svg(int xMin, int yMin, int xMax, int yMax)
+    + String close()
+    + void addRectangle(double x, double y, double width, double height, String style)
+    + void addLine(double x1, double y1, double x2, double y2, String style)
+    + void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars)
+    + void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance)
+    + void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection)
+    - void addText(String text, double x, double y, double rotation)
+    - void addDimLine(double x1, double y1, double x2, double y2)
+    }
+    class CarportSvg{
+    + static String sideView(Carport carport)
+    + static String topView(Carport carport)
+    }
+    class Line{
+    - double x1
+    - double y1
+    - double x2
+    - double y2
+    + Line()
+    + Line(double x1, double y1, double x2, double y2)
+    + double getX1()
+    + double getY1()
+    + double getX2()
+    + double getY2()
+    }
+    enum OffsetDirection {
+      UP
+      DOWN
+      LEFT
+      RIGHT
+    }
   }
   package Calculator{
-  class calculaterEngien{
+  class calculatorEngine{
   }
   }
   class PasswordGenerator{
@@ -183,11 +231,11 @@ package app {
 
     persistence -->  exceptions : uses
 
-    Calculator --> svgEngine : carport object
+    Calculator <--> OrderController : carport info in, carport object out
 
-    svgEngine --> OrderController : svg String
+    svgEngine <--> OrderController : carport object in, svg String out
 
-    Calculator <--> ItemMapper
+    Calculator <-- ItemMapper
 
-    OrderController --> Services : carport info
+    OrderController --> OrderlineMapper : uses
 @enduml
