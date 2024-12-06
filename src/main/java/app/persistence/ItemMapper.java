@@ -1,8 +1,5 @@
 package app.persistence;
 
-import app.services.StructureCalculationEngine.Entities.Material;
-import app.exceptions.DatabaseException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import app.services.StructureCalculationEngine.Entities.Material;
+import app.exceptions.DatabaseException;
+
 public class ItemMapper {
 
     // Dynamically searches for an item with the help of ItemSearchBuilder
-    public static Material searchSingleItem(Map<String, Object> filters, ConnectionPool pool) throws DatabaseException {
+    public static Material searchSingleItem(Map<String, Object> filters, ConnectionPool connectionPool) throws DatabaseException {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE 1=1");
         List<Object> parameters = new ArrayList<>();
@@ -30,7 +30,7 @@ public class ItemMapper {
 
         sql.append(" ORDER BY length_cm ASC, width_mm ASC, height_mm ASC LIMIT 1");
 
-        try (Connection connection = pool.getConnection()) {
+        try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql.toString());
             for (int i = 0; i < parameters.size(); i++) {
                 ps.setObject(i + 1, parameters.get(i));
@@ -38,14 +38,34 @@ public class ItemMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return mapRowToMaterial(rs);
-            }else {
+            } else {
                 StringBuilder offendingFields = new StringBuilder();
                 filters.forEach((key, value) -> offendingFields.append(key).append("=").append(value).append(", "));
 
-                throw new DatabaseException("Databasefejl",  "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
+                throw new DatabaseException("Databasefejl", "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl: ingen forbindelse",  "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
+            throw new DatabaseException("Databasefejl: ingen forbindelse", "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
+        }
+    }
+
+    public static Material getItemById(int itemId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM item WHERE item_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, itemId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToMaterial(rs);
+                } else {
+                    throw new DatabaseException("Database error", "Error in getItemById() in ItemMapper: No item found with item_id " + itemId);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Database error", "Connection error in getItemById() in ItemMapper: " + itemId, e.getMessage());
         }
     }
 

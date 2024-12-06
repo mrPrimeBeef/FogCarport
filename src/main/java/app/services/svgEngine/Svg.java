@@ -11,16 +11,16 @@ public class Svg {
     private static final String SVG_DIM_LINE_TEMPLATE = "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" marker-start=\"url(#beginArrow)\" marker-end=\"url(#endArrow)\"/>";
     private static final String SVG_ARROW_DEFS = "<defs>\n" +
             "        <marker id=\"beginArrow\" markerWidth=\"12\" markerHeight=\"12\" refX=\"0\" refY=\"6\" orient=\"auto\">\n" +
-            "            <path d=\"M0,6 L12,0 L12,12 L0,6\" style=\"fill: #000000;\" />\n" +
+            "            <path d=\"M0,6 L12,0 L12,12 L0,6\" style=\"fill:black;\" />\n" +
             "        </marker>\n" +
             "        <marker id=\"endArrow\" markerWidth=\"12\" markerHeight=\"12\" refX=\"12\" refY=\"6\" orient=\"auto\">\n" +
-            "            <path d=\"M0,0 L12,6 L0,12 L0,0 \" style=\"fill: #000000;\" />\n" +
+            "            <path d=\"M0,0 L12,6 L0,12 L0,0 \" style=\"fill:black;\" />\n" +
             "        </marker>\n" +
             "    </defs>";
 
     private static final double ARROW_HALF_WIDTH = 6;
     private static final double DIM_LINE_OFFSET_ORIGIN = 50;
-    private static final double EXT_LINE_OFFSET_ORIGIN = 15;
+    private static final double EXT_LINE_OFFSET_ORIGIN = 20;
     private static final double TEXT_OFFSET_DIM_LINE = 10;
 
     private static final Locale LOCALE_US = new Locale("us", "US");
@@ -47,11 +47,10 @@ public class Svg {
     }
 
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
-
-        // TODO: Is this a smart way to instanticate these variables?
-        Line dimLine = null;
-        Line extLine1 = null;
-        Line extLine2 = null;
+        Line dimLine = new Line();
+        Line extLine1 = new Line();
+        Line extLine2 = new Line();
+      
         double textX = Double.NaN;
         double textY = Double.NaN;
         double textRotation = Double.NaN;
@@ -95,8 +94,8 @@ public class Svg {
         }
 
         addDimLine(dimLine.getX1(), dimLine.getY1(), dimLine.getX2(), dimLine.getY2());
-        addLine(extLine1.getX1(), extLine1.getY1(), extLine1.getX2(), extLine1.getY2(), "stroke: black");
-        addLine(extLine2.getX1(), extLine2.getY1(), extLine2.getX2(), extLine2.getY2(), "stroke: black");
+        addLine(extLine1.getX1(), extLine1.getY1(), extLine1.getX2(), extLine1.getY2(), "stroke:black");
+        addLine(extLine2.getX1(), extLine2.getY1(), extLine2.getX2(), extLine2.getY2(), "stroke:black");
 
         double deltaX = x2 - x1;
         double deltaY = y2 - y1;
