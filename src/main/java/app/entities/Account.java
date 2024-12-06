@@ -81,8 +81,8 @@ public class Account {
     }
     @Override
     public String toString() {
-        return "Member{" +
-                "memberId=" + accountId +
+        return "Account{" +
+                "Account Id=" + accountId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", zip='" + zip + '\'' +

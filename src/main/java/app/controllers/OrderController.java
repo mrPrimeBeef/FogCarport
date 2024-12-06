@@ -8,15 +8,17 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.config.LoggerConfig;
-import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
-import app.persistence.OrderMapper;
 import app.persistence.AccountMapper;
+import app.persistence.OrderMapper;
 import app.persistence.ConnectionPool;
+import app.dto.OverviewOrderAccountDto;
+import app.services.svgEngine.CarportSvg;
+import app.services.StructureCalculationEngine.Entities.Carport;
 
 
 import app.services.svgEngine.CarportSvg;
@@ -61,8 +63,25 @@ public class OrderController {
         showThankYouPage(name, email, ctx);
     }
 
+
+    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
+
+        int carportLengthCm = 752;
+        int carportWidthCm = 600;
+        int carportHeightCm = 210;
+
+        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+
+        try {
+            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("activeAccount");
+        Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
@@ -85,7 +104,8 @@ public class OrderController {
         }
     }
 
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
+    private static int createOrGetAccountId(String email, String name, String address, int zip, String
+            phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
         int accountId;
         boolean allreadyUser = false;
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
@@ -107,7 +127,6 @@ public class OrderController {
         ctx.attribute("email", email);
         ctx.render("tak.html");
     }
-
     // TODO: Fix the exception handling
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 

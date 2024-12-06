@@ -26,6 +26,7 @@ public class CarportSvg {
         List<Double> dimPointsX = new ArrayList<Double>();
         dimPointsX.add(0.0);
 
+
         for (PlacedMaterial placedMaterial : carport.getPlacedMaterials()) {
             double x = placedMaterial.getX();
             double y = placedMaterial.getY();
@@ -40,16 +41,13 @@ public class CarportSvg {
                 dimPointsX.add(x + xSize / 2);
             }
         }
-
+        svg.addDimension(120, carportHeightCm, 600, carportHeightCm, OffsetDirection.DOWN);
         dimPointsX.add((double) carportLengthCm);
         for (int i = 0; i < dimPointsX.size() - 1; i++) {
             svg.addDimension(dimPointsX.get(i), carportHeightCm, dimPointsX.get(i + 1), carportHeightCm, OffsetDirection.DOWN);
         }
-
         return svg.close();
-
     }
-
 
     public static String topView(Carport carport) throws SQLException {
 
@@ -108,5 +106,4 @@ public class CarportSvg {
 
         return svg.close();
     }
-
 }

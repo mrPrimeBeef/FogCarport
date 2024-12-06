@@ -4,10 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import app.entities.Order;
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.config.LoggerConfig;
@@ -73,5 +74,58 @@ public class OrderMapper {
             throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()", e.getMessage());
         }
         return success;
+    }
+
+    public static ArrayList<Order> getOrdersFromAccountId(int account_id, ConnectionPool connectionPool) throws OrderException {
+        ArrayList<Order> orders = new ArrayList<>();
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE account_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, account_id);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                int orderr_id = rs.getInt("orderr_id");
+                Date datePlaced = rs.getDate("date_placed");
+                Date datePaid = rs.getDate("date_paid");
+                Date dateCompleted = rs.getDate("date_completed");
+                double saleprice = rs.getDouble("sale_price");
+                String status = rs.getString("status");
+
+                orders.add(new Order(orderr_id, datePlaced, datePaid, dateCompleted, saleprice, status)) ;
+            }
+            return orders;
+        } catch (SQLException e) {
+            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
+        }
+    }
+    public static Order getCustomerOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
+        Order order = null;
+        String sql = "SELECT date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE orderr_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Date datePlaced = rs.getDate("date_placed");
+                Date datePaid = rs.getDate("date_paid");
+                Date dateCompleted = rs.getDate("date_completed");
+                double saleprice = rs.getDouble("sale_price");
+                String status = rs.getString("status");
+                order = new Order(orderId, datePlaced, datePaid, dateCompleted, saleprice, status);
+            }
+            return order;
+
+        } catch (SQLException e) {
+            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
+        }
     }
 }

@@ -15,7 +15,7 @@
 <header th:fragment="headerCustomer">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand">
+            <a class="navbar-brand" th:href="@{/}" href="index.html">
                 <img class="logo" src="../public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
             </a>
             <div class="collapse navbar-collapse">
@@ -60,7 +60,7 @@
 <header th:fragment="headerAdmin">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand">
+            <a class="navbar-brand" href="saelgeralleordrer.html" th:href="@{/saelgeralleordrer}">
                 <img class="logo" src="../public/images/fog-logo.png" width="60" height="60" th:src="@{/images/fog-logo.png}"/>
             </a>
             <div class="collapse navbar-collapse">
