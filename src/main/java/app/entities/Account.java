@@ -29,6 +29,7 @@ public class Account {
         this.city = city;
         this.phone = phone;
     }
+  
     public  Account(String name, String address, int zip, String phone, String email, String city) {
         this.name = name;
         this.address = address;
@@ -37,8 +38,11 @@ public class Account {
         this.email = email;
         this.city = city;
     }
-
-
+    public Account(int accountId, String email, String role) {
+        this.accountId = accountId;
+        this.email = email;
+        this.role = role;
+    }
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
@@ -75,7 +79,6 @@ public class Account {
     public String getRole() {
         return role;
     }
-
     @Override
     public String toString() {
         return "Member{" +

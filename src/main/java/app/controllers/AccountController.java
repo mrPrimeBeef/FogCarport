@@ -3,13 +3,14 @@ package app.controllers;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.config.LoggerConfig;
 import app.entities.Account;
+import app.services.PasswordGenerator;
 import app.exceptions.DatabaseException;
+import app.exceptions.AccountException;
 import app.exceptions.AccountException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
@@ -20,12 +21,14 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.get("glemtKode", ctx -> ctx.render("glemtKode"));
+        app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("kundeside", ctx -> showKundeside(ctx));
         app.get("logout",ctx->logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
-  
-  public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("activeAccount");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
@@ -58,10 +61,10 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("activeAccount", account);
             if (account.getRole().equals("salesrep")) {
-                salesrepShowAllCustomersPage(ctx,connectionPool);
+                salesrepShowAllCustomersPage(ctx, connectionPool);
                 return;
             }
-            if (account.getRole().equals("Kunde")) {
+           if (account.getRole().equals("Kunde")) {
                 ctx.sessionAttribute("account", account);
                 ctx.render("/kundeside");
             }
@@ -87,5 +90,42 @@ public class AccountController {
     private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
+    }
+
+    public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
+        String email = ctx.formParam("email");
+
+        try {
+            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
+
+            if (account == null) {
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
+                ctx.render("glemtKode.html");
+                return;
+            }
+            String role = account.getRole();
+
+            if ("salesrep".equals(role)) {
+                ctx.attribute("message", "Sælgere kan ikke få adgang til deres adgangskode. Kontakt admin for at ændre adgangskoden.");
+                ctx.render("glemtKode.html");
+                return;
+            }
+
+            if ("Kunde".equals(role)) {
+                String newPassword = PasswordGenerator.generatePassword();
+                AccountMapper.updatePassword(email, newPassword, connectionPool);
+
+                System.out.println("Den indtastede e-mail: " + email + "\n" + "Adgangskoden for den indtastede mail er: " + newPassword);
+
+                ctx.attribute("message", "Din adgangskode er blevet nulstillet. Log ind med den nye adgangskode.");
+                ctx.render("login.html");
+            } else {
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail. Prøv igen.");
+                ctx.render("glemtKode.html");
+            }
+        } catch (AccountException e) {
+            ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
+            ctx.render("error.html");
+        }
     }
 }
