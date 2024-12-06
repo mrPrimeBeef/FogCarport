@@ -6,13 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
+import app.config.LoggerConfig;
 import app.exceptions.OrderException;
 
 public class OrderMapper {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static ArrayList<OverviewOrderAccountDto> getOverviewOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = new ArrayList<>();
@@ -36,7 +39,8 @@ public class OrderMapper {
                 OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salesPrice, status));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos", e.getMessage());
+            LOGGER.severe("Error in getOverviewOrderAccountDtos() connection. E message: " + e.getMessage());
+            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos()", e.getMessage());
         }
         return OverviewOrderAccountDtos;
     }
@@ -53,7 +57,7 @@ public class OrderMapper {
             ps.setString(2, "In progress");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 200 cm
+            ps.setInt(5, 210); // carport height 210 cm
             ps.setInt(6, shedWidth);
             ps.setInt(7, shedLength);
 
@@ -62,10 +66,12 @@ public class OrderMapper {
             if (rowsAffected == 1) {
                 success = true;
             } else {
-                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method");
+                LOGGER.severe("Error in createOrder() SQL query was not a sucessful execution");
+                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder method", e.getMessage());
+            LOGGER.severe("Error in createOrder() connection. E message: " + e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()", e.getMessage());
         }
         return success;
     }

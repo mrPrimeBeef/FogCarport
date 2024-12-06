@@ -63,4 +63,17 @@ class AccountMapperTest extends AbstractMapperTest {
         assertNotEquals(2, account.getAccountId());
         assertNotEquals("admin", account.getRole());
     }
+
+    @Test
+    void getAccountByEmail() throws AccountException{
+        Account account = AccountMapper.getAccountByEmail("test@test.dk",connectionPool);
+
+        assertEquals(1,account.getAccountId());
+        assertEquals("test@test.dk",account.getEmail());
+        assertEquals("customer",account.getRole());
+
+        assertNotEquals(2,account.getAccountId());
+        assertNotEquals("test@testtest.dk",account.getEmail());
+        assertNotEquals("salesrep",account.getRole());
+    }
 }
