@@ -1,8 +1,0 @@
-Dec 05, 2024 9:39:35 AM app.exceptions.LoggerConfigTest testLogFileCreation
-INFO: test1
-Dec 05, 2024 9:39:35 AM app.exceptions.LoggerConfigTest testLogFileCreation
-SEVERE: Test logging-besked
-Dec 05, 2024 9:40:18 AM app.controllers.AccountController salesrepShowAllCustomersPage
-INFO: Sælger henter kundeliste. sælger: 2
-Dec 05, 2024 9:40:22 AM app.controllers.AccountController salesrepShowAllCustomersPage
-INFO: Sælger henter kundeliste. sælger: 2

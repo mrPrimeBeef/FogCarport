@@ -11,7 +11,6 @@ import app.entities.Account;
 import app.services.PasswordGenerator;
 import app.exceptions.DatabaseException;
 import app.exceptions.AccountException;
-import app.exceptions.AccountException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 
