@@ -56,7 +56,7 @@ public class OrderMapper {
             ps.setString(2, "In progress");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 200 cm
+            ps.setInt(5, 210); // carport height 210 cm
             ps.setInt(6, shedWidth);
             ps.setInt(7, shedLength);
 
