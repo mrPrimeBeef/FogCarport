@@ -1,9 +1,6 @@
 package app.exceptions;
 
-import java.util.logging.Logger;
-
 public class AccountException extends Exception {
-    private static final Logger LOGGER = Logger.getLogger("Logger");
     public AccountException(String userMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);

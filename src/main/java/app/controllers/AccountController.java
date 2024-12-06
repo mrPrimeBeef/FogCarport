@@ -3,13 +3,14 @@ package app.controllers;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import app.exceptions.AccountException;
-import app.exceptions.LoggerConfig;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.config.LoggerConfig;
 import app.entities.Account;
 import app.exceptions.DatabaseException;
+import app.exceptions.AccountException;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 

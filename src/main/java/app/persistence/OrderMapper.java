@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
-import app.exceptions.LoggerConfig;
+import app.config.LoggerConfig;
 import app.exceptions.OrderException;
 
 public class OrderMapper {

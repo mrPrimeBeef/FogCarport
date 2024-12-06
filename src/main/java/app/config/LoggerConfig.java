@@ -1,4 +1,4 @@
-package app.exceptions;
+package app.config;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -17,7 +17,7 @@ public class LoggerConfig {
             try {
                 LOGGER = Logger.getLogger("GlobalLogger");
 
-                FileHandler fileHandler = new FileHandler("errors.log", true);
+                FileHandler fileHandler = new FileHandler("loggingfile.log", true);
                 fileHandler.setFormatter(new SimpleFormatter());
                 LOGGER.addHandler(fileHandler);
 

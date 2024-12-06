@@ -3,10 +3,10 @@ package app.controllers;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import app.exceptions.LoggerConfig;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.config.LoggerConfig;
 import app.dto.OverviewOrderAccountDto;
 import app.entities.EmailReceipt;
 import app.entities.Account;

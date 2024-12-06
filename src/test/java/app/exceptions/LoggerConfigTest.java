@@ -1,5 +1,6 @@
 package app.exceptions;
 
+import app.config.LoggerConfig;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;

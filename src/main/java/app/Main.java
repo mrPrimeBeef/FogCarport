@@ -7,9 +7,6 @@ import app.controllers.AccountController;
 import app.controllers.OrderController;
 import app.config.ThymeleafConfig;
 import app.persistence.ConnectionPool;
-import app.exceptions.LoggerConfig;
-
-import java.util.logging.Logger;
 
 public class Main {
     private static final String USER = "postgres";

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
-import app.exceptions.LoggerConfig;
+import app.config.LoggerConfig;
 import app.services.PasswordGenerator;
 
 public class AccountMapper {

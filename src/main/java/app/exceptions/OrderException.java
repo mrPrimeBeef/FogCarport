@@ -1,10 +1,6 @@
 package app.exceptions;
 
-import java.util.logging.Logger;
-
 public class OrderException extends Exception {
-    private static final Logger LOGGER = Logger.getLogger("Logger");
-
     public OrderException(String userMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
