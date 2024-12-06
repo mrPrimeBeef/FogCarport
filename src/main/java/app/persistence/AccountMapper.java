@@ -13,7 +13,7 @@ import app.services.PasswordGenerator;
 public class AccountMapper {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
-    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<Account> getAllAccounts(ConnectionPool connectionPool) throws AccountException {
         ArrayList<Account> accounts = new ArrayList<>();
 
         String sql = "SELECT email, name, address, zip_code, city, phone, role FROM account JOIN zip_code USING(zip_code)";
@@ -22,7 +22,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-
+          
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -39,8 +39,8 @@ public class AccountMapper {
             return accounts;
 
         } catch (SQLException e) {
-            LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
-            throw new DatabaseException("fejl", "Error in getAllAccounts", e.getMessage());
+        LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
+        throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
     public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
@@ -69,7 +69,6 @@ public class AccountMapper {
                     account = new Account(accountId, email, name, role, address, city, phone);
                 }
             }
-
         } catch (SQLException e) {
             LOGGER.severe("Error in login() connection. E message: " + e.getMessage());
             throw new AccountException("Fejl i login.", "Error in login()", e.getMessage());
