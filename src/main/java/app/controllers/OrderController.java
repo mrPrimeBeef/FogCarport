@@ -63,7 +63,6 @@ public class OrderController {
         showThankYouPage(name, email, ctx);
     }
 
-
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
         int carportLengthCm = 752;
@@ -121,30 +120,9 @@ public class OrderController {
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
-
     private static void showThankYouPage(String name, String email, Context ctx) {
         ctx.attribute("navn", name);
         ctx.attribute("email", email);
         ctx.render("tak.html");
     }
-    // TODO: Fix the exception handling
-    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
-
-        int carportLengthCm = 779;
-        int carportWidthCm = 599;
-        int carportHeightCm = 210;
-
-        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-        try {
-            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        ctx.render("saelgerordre.html");
-    }
-
-
 }

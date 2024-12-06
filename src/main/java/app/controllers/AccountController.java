@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import app.config.LoggerConfig;
+import app.services.PasswordGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -30,7 +32,6 @@ public class AccountController {
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("glemtKode", ctx -> ctx.render("glemtKode"));
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
-        app.get("kundeside", ctx -> showKundeside(ctx));
         app.get("logout",ctx->logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
