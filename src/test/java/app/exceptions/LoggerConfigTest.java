@@ -20,7 +20,7 @@ class LoggerConfigTest {
         LOGGER.severe("Test logging-besked");
 
         // Verificer at log-filen er oprettet og indeholder beskeden
-        try (BufferedReader reader = new BufferedReader(new FileReader("errors.log"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("loggingfile.log"))) {
             String lastLine = "";
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
