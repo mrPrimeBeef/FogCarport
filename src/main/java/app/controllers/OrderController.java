@@ -68,21 +68,21 @@ public class OrderController {
         showThankYouPage(name, email, ctx);
     }
 
-    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
-
-        int carportLengthCm = 752;
-        int carportWidthCm = 600;
-        int carportHeightCm = 210;
-
-        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-        try {
-            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
+//
+//        int carportLengthCm = 752;
+//        int carportWidthCm = 600;
+//        int carportHeightCm = 210;
+//
+//        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+//
+//        try {
+//            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
+//            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
