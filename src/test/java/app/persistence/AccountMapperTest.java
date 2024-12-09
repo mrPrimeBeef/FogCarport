@@ -34,8 +34,8 @@ class AccountMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    void getAllAccounts() throws DatabaseException {
-        ArrayList<Account> accounts = AccountMapper.getAllAccounts(connectionPool);
+    void getAllCustomerAccounts() throws AccountException {
+        ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
         String actual = accounts.get(2).getName();
 
         assertEquals("Test Testersen", actual);
@@ -69,8 +69,8 @@ class AccountMapperTest extends AbstractMapperTest {
         Account account = AccountMapper.getAccountByEmail("test@test.dk",connectionPool);
 
         assertEquals(1,account.getAccountId());
-        assertEquals("test@test.dk",account.getEmail());
-        assertEquals("customer",account.getRole());
+        assertEquals("test@test.dk", account.getEmail());
+        assertEquals("Kunde",account.getRole());
 
         assertNotEquals(2,account.getAccountId());
         assertNotEquals("test@testtest.dk",account.getEmail());

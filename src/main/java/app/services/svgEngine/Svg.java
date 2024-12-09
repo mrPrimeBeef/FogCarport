@@ -47,10 +47,10 @@ public class Svg {
     }
 
     public void addDimension(double x1, double y1, double x2, double y2, OffsetDirection offsetDirection, double offsetDistance, String stars) {
-
         Line dimLine = new Line();
         Line extLine1 = new Line();
         Line extLine2 = new Line();
+      
         double textX = Double.NaN;
         double textY = Double.NaN;
         double textRotation = Double.NaN;

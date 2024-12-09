@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SvgTest {
-
     private Svg svg;
 
     @BeforeEach
@@ -46,5 +45,4 @@ public class SvgTest {
         String expectedDimensionText = "<text x=\"50.500000\" y=\"21.000000\" text-anchor=\"middle\" alignment-baseline=\"middle\" transform=\"rotate(0.000000 50.500000 21.000000)\">2,42</text>";
         assertTrue(actualSvg.contains(expectedDimensionText));
     }
-
 }

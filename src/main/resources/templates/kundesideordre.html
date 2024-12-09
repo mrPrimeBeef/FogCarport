@@ -13,27 +13,7 @@
 <header th:replace="fragments :: headerCustomer"></header>
 <main class="text-center mt-5 mb-5 min-vh-100">
     <div class="mt-5 py-5">
-
-        <h2>Dine oplysninger</h2>
-        <div class="d-flex flex-column justify-content-around p-0 m-5">
-            <table class="table table-striped table-bordered">
-                <tr class="justify-content-around">
-                    <th>Email</th>
-                    <th>Navn</th>
-                    <th>Mobil</th>
-                    <th>Adresse</th>
-                    <th>By</th>
-                </tr>
-                <tbody>
-                <td th:text="${session.account.email}"></td>
-                <td th:text="${session.account.name}"></td>
-                <td th:text="${session.account.phone}"></td>
-                <td th:text="${session.account.address}"></td>
-                <td th:text="${session.account.city}"></td>
-                </tbody>
-            </table>
-        </div>
-        <h2 class="mt-5">Dine ordrer</h2>
+        <h2 class="mt-5">Dine ordre</h2>
         <div class="d-flex flex-column justify-content-around p-0 m-5">
             <table class="table table-striped table-bordered">
                 <tr class="justify-content-around">
@@ -45,10 +25,10 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${showOrders == null}">
+                <tr th:if="${showOrder == null}">
                     <td colspan="6" class="text-center">Ingen ordrer fundet</td>
                 </tr>
-                <tr th:each="order : ${showOrders}">
+                <tr th:each="order : ${showOrder}">
                     <td>
                         <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
                     </td>
@@ -57,6 +37,29 @@
                     <td th:text="${order.datePaid}"></td>
                     <td th:text="${order.salePrice}"></td>
                     <td th:text="${order.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="container-fluid">
+                <h2>Side View</h2>
+                <div class="mx-auto" id="carport-side-view" th:utext="${carportSvgSideView}"></div>
+                <h2>Top View</h2>
+                <div class="mx-auto" id="carport-top-view" th:utext="${carportSvgTopView}"></div>
+            </div>
+            <table class="table table-striped table-bordered mt-5">
+                <tr class="justify-content-around">
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Mængde</th>
+                </tr>
+                <tbody class="table-group-divider">
+                <tr th:if="${showOrderlines == null}">
+                    <td colspan="6" class="text-center">Ingen stykliste fundet endnu</td>
+                </tr>
+                <tr th:each="orderline : ${showOrderlines}">
+                    <td th:text="${orderline.name}"></td>
+                    <td th:text="${orderline.description}"></td>
+                    <td th:text="${orderline.quantity}"></td>
                 </tr>
                 </tbody>
             </table>

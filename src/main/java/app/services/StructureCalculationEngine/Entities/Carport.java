@@ -96,5 +96,4 @@ public class Carport extends Structure{
     public int getHeight() {
         return this.height;
     }
-
 }
