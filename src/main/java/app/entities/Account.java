@@ -44,6 +44,12 @@ public class Account {
         this.email = email;
         this.role = role;
     }
+    public Account(int accountId, String email, String password, String role) {
+        this.accountId = accountId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
