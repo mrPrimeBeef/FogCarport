@@ -95,15 +95,14 @@ public class OrderlineMapper {
 
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
-                return rs.getDouble(1);
-            } else {
-                return 0;
+                double totalCostPrice = rs.getDouble("sum");
+                return totalCostPrice;
             }
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId, "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId);
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl", "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId, e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId, "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId, e.getMessage());
         }
     }
 

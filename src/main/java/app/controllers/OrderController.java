@@ -133,7 +133,7 @@ public class OrderController {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
             // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
-            double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);  // TODO: Skal beregnes ved at summere cost price fra orderlines, f.eks: OrderlineMapper.getSumCostPriceByOrderId(orderId, connectionPool)
+            double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
             double marginAmount = salePrice - costPrice;
