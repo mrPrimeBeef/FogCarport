@@ -21,7 +21,7 @@ public class OrderMapper {
     public static ArrayList<OverviewOrderAccountDto> getOverviewOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = new ArrayList<>();
 
-        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, sale_price, status FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
+        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -35,9 +35,9 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salesPrice = rs.getDouble("sale_price");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salesPrice, status));
+                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, marginPercentage, status));
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in getOverviewOrderAccountDtos() connection. E message: " + e.getMessage());
@@ -88,7 +88,6 @@ public class OrderMapper {
 
             ResultSet rs = ps.executeQuery();
 
-
             while (rs.next()) {
                 int orderId = rs.getInt("orderr_id");
                 Date datePlaced = rs.getDate("date_placed");
@@ -134,7 +133,7 @@ public class OrderMapper {
     // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, sale_price, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -152,7 +151,7 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double marginPercentage = rs.getDouble("sale_price");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
                 int carportLengthCm = rs.getInt("carport_length_cm");
                 int carportWidthCm = rs.getInt("carport_width_cm");
@@ -172,7 +171,7 @@ public class OrderMapper {
     // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static void updateMarginPercentage(int orderId, double marginPercentage, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "UPDATE orderr SET sale_price = ? WHERE orderr_id = ?";
+        String sql = "UPDATE orderr SET margin_percentage = ? WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

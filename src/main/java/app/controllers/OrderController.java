@@ -38,6 +38,7 @@ public class OrderController {
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
         app.post("daekningsgrad", ctx -> salesrepPostMarginPercentage(ctx, connectionPool));
         app.post("carportberegning", ctx -> salesrepPostCarportCalculation(ctx, connectionPool));
+        app.post("sendbrugerinfo", ctx -> sendCustomerInfo(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -154,12 +155,9 @@ public class OrderController {
             ctx.attribute("marginAmount", marginAmount);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
-            ctx.render("saelgerordre.html");
-
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-
         ctx.render("saelgerordre.html");
     }
 
@@ -206,7 +204,32 @@ public class OrderController {
         } catch (DatabaseException | SQLException e) {
             e.printStackTrace();
         }
-
     }
+    public static void sendCustomerInfo(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
 
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at sende brugerinfo. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+        try{
+            int accountId = Integer.parseInt(ctx.formParam("accountId"));
+            Account account = AccountMapper.getPasswordAndEmail(accountId,connectionPool);
+
+            System.out.println("Her er din fog konto:");
+            System.out.println("Dit brugernavn: " + account.getEmail());
+            System.out.println("Dit kodeord: " + account.getPassword());
+
+            int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+            ctx.redirect("saelgerordre?ordrenr=" + orderId);
+
+        } catch (AccountException e) {
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("message", "Error in sendCustomerInfo " + e.getMessage());
+            ctx.render("error.html");
+        }
+    }
 }

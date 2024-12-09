@@ -195,4 +195,26 @@ public class AccountMapper {
             throw new AccountException("Fejl ved opdatering af adgangskoden: " + "Error in updatePassword " + e.getMessage());
         }
     }
+    public static Account getPasswordAndEmail(int accountId, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT email, password FROM account WHERE account_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, accountId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                account = new Account(email, password);
+            }
+        } catch (SQLException e){
+            LOGGER.severe("Error in getPasswordAndEmail() connection. E message: " + e.getMessage());
+            throw new AccountException("Fejl i at hente brugeren fra databasen");
+        }
+        return account;
+    }
 }
