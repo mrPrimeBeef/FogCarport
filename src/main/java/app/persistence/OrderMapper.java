@@ -79,7 +79,7 @@ public class OrderMapper {
 
     public static ArrayList<Order> getOrdersFromAccountId(int account_id, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Order> orders = new ArrayList<>();
-        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE account_id = ?";
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE account_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -93,10 +93,10 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("sale_price");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
 
-                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status)) ;
+                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, marginPercentage, status)) ;
             }
             return orders;
         } catch (SQLException e) {
@@ -105,7 +105,7 @@ public class OrderMapper {
     }
     public static Order getOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
-        String sql = "SELECT date_placed, date_paid, date_completed, sale_price, status FROM orderr WHERE orderr_id = ?";
+        String sql = "SELECT date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -118,9 +118,9 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("sale_price");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status);
+                order = new Order(orderId, datePlaced, datePaid, dateCompleted, marginPercentage, status);
             }
             return order;
 
@@ -129,8 +129,6 @@ public class OrderMapper {
         }
     }
 
-
-    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
@@ -168,7 +166,6 @@ public class OrderMapper {
         return null;
     }
 
-    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static void updateMarginPercentage(int orderId, double marginPercentage, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "UPDATE orderr SET margin_percentage = ? WHERE orderr_id = ?";
