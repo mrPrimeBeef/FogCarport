@@ -24,23 +24,25 @@
                     <img class="card-img-center mb-5" src="public/images/fog-logo.png" width="60" height="60"
                          th:src="@{/images/fog-logo.png}" />
                 </div>
-                <h2 id="log-text">Opdater adgangskode</h2><br>
+                <h2 id="log-text mb-1">Opdater adgangskode</h2>
                 <p class="mt-1 mb-3 text-success" th:if="${successMessage != null}" th:text="${successMessage}"></p>
                 <p class="mt-1 mb-3 text-danger" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
 
                 <p>Indtast din nuværende adgangskode og skriv derefter din nye adgangskode <br> og gentag den nye adgangskode</p>
-                <form method="post" th:action="@{/update-password}">
+                <form method="post">
                     <input type="hidden" name="email" th:value="${email}" />
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="currentPassword" class="form-label"></label>
                         <input type="password" id="currentPassword" name="currentPassword" class="form-control" placeholder="Nuværende adgangskode" required>
                     </div>
-                    <div class="mt-2 mb-4">
+                    <div class="mt-2 mb-3">
                         <label for="newPassword1" class="form-label"></label>
                         <input type="password" id="newPassword1" name="newPassword" class="form-control" placeholder="Ny adgangskode" required>
                         <label for="newPassword2" class="form-label"></label>
                         <input type="password" id="newPassword2" name="newPassword" class="form-control" placeholder="Gentag ny adgangskode" required>
                     </div>
+                    <p class="m-4"><a href="kundeside.html" th:href="@{/kundeside}">Tilbage til kunde siden </a>
+                    </p>
                     <button type="submit" class="btn btn-dark-blue text-light">Opdater adgangskode</button>
                 </form>
             </div>
