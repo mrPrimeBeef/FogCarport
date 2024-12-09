@@ -4,5 +4,5 @@ h1 {
     font-size: 3rem;
 }
 main{
-    min-height: calc(100vh - 172px);
+    min-height: calc(100vh - 124px);
 }
