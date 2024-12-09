@@ -32,13 +32,15 @@ public class AccountController {
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("glemtKode", ctx -> ctx.render("glemtKode"));
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
-        app.get("logout",ctx->logout(ctx));
+        app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
+        app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo"));
+        app.post("opdaterKundeInfo" , ctx -> setNewPassword(ctx, connectionPool));
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-      
+
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
@@ -89,7 +91,7 @@ public class AccountController {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
-        } else{
+        } else {
             try {
                 ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
@@ -176,6 +178,42 @@ public class AccountController {
         } catch (AccountException e) {
             ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
             ctx.render("error.html");
+        }
+    }
+
+    public static void setNewPassword(Context ctx, ConnectionPool connectionPool) {
+        String currentPassword = ctx.formParam("currentPassword");
+        String newPassword1 = ctx.formParam("newPassword");
+        String newPassword2 = ctx.formParam("newPassword");
+
+        String email = ctx.sessionAttribute("email");
+
+        if (email == null) {
+            ctx.attribute("errorMessage", "Du skal være logget ind for at ændre din adgangskode.");
+            ctx.render("opdaterKundeInfo.html");
+            return;
+        }
+        try {
+            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
+
+            if (!account.getPassword().equals(currentPassword)) {
+                ctx.attribute("errorMessage", "Den nuværende adgangskode er forkert.");
+                ctx.render("opdaterKundeInfo.html");
+                return;
+            }
+            if (!newPassword1.equals(newPassword2)) {
+                ctx.attribute("errorMessage", "De nye adgangskoder matcher ikke.");
+                ctx.render("opdaterKundeInfo.html");
+                return;
+            }
+            AccountMapper.updatePassword(email, newPassword1, connectionPool);
+
+            ctx.attribute("successMessage", "Adgangskoden blev opdateret.");
+            ctx.render("opdaterKundeInfo.html");
+
+        } catch (AccountException e) {
+            ctx.attribute("errorMessage", "Fejl ved opdateringen af adgangskoden: " + "Error in setNewPassword" + e.getMessage());
+            ctx.render("opdaterKundeInfo.html");
         }
     }
 }

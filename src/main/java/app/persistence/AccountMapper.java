@@ -22,7 +22,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-          
+
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -36,10 +36,11 @@ public class AccountMapper {
             return accounts;
 
         } catch (SQLException e) {
-        LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
-        throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
+            LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
+            throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
+
     public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
         String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
