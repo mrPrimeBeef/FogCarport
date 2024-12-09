@@ -9,6 +9,7 @@ public class Account {
     private String phone;
     private String email;
     private String role;
+    private String password;
 
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
@@ -46,6 +47,14 @@ public class Account {
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
+    }
+    public Account(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public int getAccountId() {

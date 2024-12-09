@@ -25,7 +25,7 @@
             </tr>
             <tbody class="table-group-divider">
             <tr th:each="account: ${accounts}">
-                <td><a href="saelgerordre.html" th:text="${account.email}" th:href="@{/saelgerkunde(email=${account.email})}"></a></td>
+                <td th:text="${account.email}"></td>
                 <td th:text="${account.name}"></td>
                 <td th:text="${account.phone}"></td>
                 <td th:text="${account.city}"></td>
