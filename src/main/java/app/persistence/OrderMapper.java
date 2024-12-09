@@ -97,13 +97,14 @@ public class OrderMapper {
                 double salePrice = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
 
-                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status)) ;
+                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status));
             }
             return orders;
         } catch (SQLException e) {
             throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in showCustomerOrder()", e.getMessage());
         }
     }
+
     public static Order getOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
         String sql = "SELECT date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE orderr_id = ?";
@@ -130,8 +131,6 @@ public class OrderMapper {
         }
     }
 
-
-    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
@@ -142,7 +141,7 @@ public class OrderMapper {
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String email = rs.getString("email");
                 String name = rs.getString("name");
@@ -159,17 +158,14 @@ public class OrderMapper {
                 int carportHeightCm = rs.getInt("carport_height_cm");
                 String svgSideView = rs.getString("svg_side_view");
                 String svgTopView = rs.getString("svg_top_view");
-
                 return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
-
             }
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId);
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl til sælger", "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId, e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId, e.getMessage());
         }
-        return null;
     }
 
-    // TODO: Husk at bede om at "sale_price" bliver lavet om til "margin_percentage" i databasen
     public static void updateMarginPercentage(int orderId, double marginPercentage, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "UPDATE orderr SET margin_percentage = ? WHERE orderr_id = ?";

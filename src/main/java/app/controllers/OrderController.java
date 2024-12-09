@@ -117,15 +117,13 @@ public class OrderController {
         ctx.render("tak.html");
     }
 
-    // TODO: Fix the exception handling to show error page
+
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
         Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
             LOGGER.warning("Uautoriseret adgangsforsøg til ordresiden for sælgere. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
-
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
@@ -151,10 +149,12 @@ public class OrderController {
             ctx.render("saelgerordre.html");
 
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            // TODO: Skriv en ordenlig logging besked
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
 
-        ctx.render("saelgerordre.html");
     }
 
     // TODO: Fix the exception handling to show error page
