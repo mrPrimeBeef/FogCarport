@@ -185,7 +185,6 @@ public class OrderController {
 
         // TODO: Tilføj guard condition her
 
-
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         int carportWidthCm = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLengthCm = Integer.parseInt(ctx.formParam("carport-laengde"));
