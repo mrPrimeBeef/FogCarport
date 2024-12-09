@@ -182,35 +182,28 @@ public class AccountController {
     }
 
     public static void setNewPassword(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        String email = activeAccount.getEmail();
         String currentPassword = ctx.formParam("currentPassword");
         String newPassword1 = ctx.formParam("newPassword");
         String newPassword2 = ctx.formParam("newPassword");
 
-        String email = ctx.sessionAttribute("email");
-
-        if (email == null) {
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+            String role = activeAccount != null ? activeAccount.getRole() : null;
             ctx.attribute("message", "Du skal være logget ind for at ændre din adgangskode.");
             ctx.render("login.html");
             return;
         }
 
         try {
-            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
-
-            if (account == null) {
-                ctx.attribute("message", "Kunne ikke finde din konto.");
-                ctx.render("login.html");
-                return;
-            }
-
-            if (!account.getPassword().equals(currentPassword)) {
-                ctx.attribute("message", "Den nuværende adgangskode er forkert.");
+            if (!activeAccount.getPassword().equals(currentPassword)) {
+                ctx.attribute("errorMessage", "Den nuværende adgangskode er forkert.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
             }
 
             if (!newPassword1.equals(newPassword2)) {
-                ctx.attribute("message", "De nye adgangskoder matcher ikke.");
+                ctx.attribute("errorMessage", "De nye adgangskoder matcher ikke.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
             }
