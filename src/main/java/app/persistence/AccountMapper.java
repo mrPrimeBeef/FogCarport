@@ -177,6 +177,29 @@ public class AccountMapper {
         return account;
     }
 
+    public static Account getPasswordByEmail(String email, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, password, email, role FROM account WHERE email = ?";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    account = new Account(
+                            rs.getInt("account_id"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("role")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new AccountException("Kunne ikke hente adgangskoden fra databasen: " + "Error in getPasswordByEmail " + e.getMessage());
+        }
+        return account;
+    }
+
     public static void updatePassword(String email, String newPassword, ConnectionPool connectionPool) throws AccountException {
         String sql = "UPDATE account SET password = ? WHERE email = ?";
 
