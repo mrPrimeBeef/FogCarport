@@ -76,11 +76,11 @@
                 <th>Salgspris inkl. moms<br>DKK</th>
             </tr>
             <tr>
-                <td th:text="${costPrice}"></td>
-                <td th:text="${detailOrderAccountDto.marginPercentage}"></td>
-                <td th:text="${marginAmount}"></td>
-                <td th:text="${salePrice}"></td>
-                <td th:text="${salePriceInclVAT}"></td>
+                <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginPercentage, 1, 1, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
             </tr>
             <tr>
                 <td></td>
