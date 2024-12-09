@@ -141,9 +141,9 @@ public abstract class AbstractMapperTest {
 
             stmt.execute("""
                         INSERT INTO account (email, password, name, role, address, zip_code, phone) VALUES
-                            ('test@test.dk', '1234', 'Test Testersen', 'customer', 'Testvej 1', 2100, '12345678'),
-                            ('admin@admin.dk', 'admin', 'Admin Admin', 'admin', 'Adminvej 1', 2200, '87654321'),
-                            ('kunde@kunde.dk', 'kunde', 'Kurt Kunde', 'customer', 'Kundevej 123', 2300, '11223344')
+                            ('test@test.dk', '1234', 'Test Testersen', 'Kunde', 'Testvej 1', 2100, '12345678'),
+                            ('admin@admin.dk', 'admin', 'Admin Admin', '´salesrep', 'Adminvej 1', 2200, '87654321'),
+                            ('kunde@kunde.dk', 'kunde', 'Kurt Kunde', 'Kunde', 'Kundevej 123', 2300, '11223344')
                     """);
 
             stmt.execute("""

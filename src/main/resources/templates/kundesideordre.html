@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Min side</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
+</head>
+<body class="bg-light">
+<header th:replace="fragments :: headerCustomer"></header>
+<main class="text-center mt-5 mb-5 min-vh-100">
+    <div class="mt-5 py-5">
+        <h2 class="mt-5">Dine ordre</h2>
+        <div class="d-flex flex-column justify-content-around p-0 m-5">
+            <table class="table table-striped table-bordered">
+                <tr class="justify-content-around">
+                    <th>Ordrenr.</th>
+                    <th>Henvendelse</th>
+                    <th>Dato betalt</th>
+                    <th>Dato færdig</th>
+                    <th>Pris</th>
+                    <th>Status</th>
+                </tr>
+                <tbody class="table-group-divider">
+                <tr th:if="${showOrder == null}">
+                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                </tr>
+                <tr th:each="order : ${showOrder}">
+                    <td>
+                        <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
+                    </td>
+                    <td th:text="${order.datePlaced}"></td>
+                    <td th:text="${order.dateCompleted}"></td>
+                    <td th:text="${order.datePaid}"></td>
+                    <td th:text="${order.salePrice}"></td>
+                    <td th:text="${order.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="container-fluid">
+                <h2>Side View</h2>
+                <div class="mx-auto" id="carport-side-view" th:utext="${carportSvgSideView}"></div>
+                <h2>Top View</h2>
+                <div class="mx-auto" id="carport-top-view" th:utext="${carportSvgTopView}"></div>
+            </div>
+            <table class="table table-striped table-bordered mt-5">
+                <tr class="justify-content-around">
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Mængde</th>
+                </tr>
+                <tbody class="table-group-divider">
+                <tr th:if="${showOrderlines == null}">
+                    <td colspan="6" class="text-center">Ingen stykliste fundet endnu</td>
+                </tr>
+                <tr th:each="orderline : ${showOrderlines}">
+                    <td th:text="${orderline.name}"></td>
+                    <td th:text="${orderline.description}"></td>
+                    <td th:text="${orderline.quantity}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>
