@@ -35,7 +35,7 @@ public class AccountController {
         app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
         app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo"));
-        app.post("opdaterKundeInfo" , ctx -> setNewPassword(ctx, connectionPool));
+        app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
@@ -189,30 +189,39 @@ public class AccountController {
         String email = ctx.sessionAttribute("email");
 
         if (email == null) {
-            ctx.attribute("errorMessage", "Du skal være logget ind for at ændre din adgangskode.");
-            ctx.render("opdaterKundeInfo.html");
+            ctx.attribute("message", "Du skal være logget ind for at ændre din adgangskode.");
+            ctx.render("login.html");
             return;
         }
+
         try {
             Account account = AccountMapper.getAccountByEmail(email, connectionPool);
 
+            if (account == null) {
+                ctx.attribute("message", "Kunne ikke finde din konto.");
+                ctx.render("login.html");
+                return;
+            }
+
             if (!account.getPassword().equals(currentPassword)) {
-                ctx.attribute("errorMessage", "Den nuværende adgangskode er forkert.");
+                ctx.attribute("message", "Den nuværende adgangskode er forkert.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
             }
+
             if (!newPassword1.equals(newPassword2)) {
-                ctx.attribute("errorMessage", "De nye adgangskoder matcher ikke.");
+                ctx.attribute("message", "De nye adgangskoder matcher ikke.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
             }
+
             AccountMapper.updatePassword(email, newPassword1, connectionPool);
 
             ctx.attribute("successMessage", "Adgangskoden blev opdateret.");
             ctx.render("opdaterKundeInfo.html");
 
         } catch (AccountException e) {
-            ctx.attribute("errorMessage", "Fejl ved opdateringen af adgangskoden: " + "Error in setNewPassword" + e.getMessage());
+            ctx.attribute("message", "Fejl ved opdateringen af adgangskoden: " + e.getMessage());
             ctx.render("opdaterKundeInfo.html");
         }
     }
