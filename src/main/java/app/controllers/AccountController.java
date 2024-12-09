@@ -176,27 +176,41 @@ public class AccountController {
                 ctx.render("glemtKode.html");
             }
         } catch (AccountException e) {
-            ctx.attribute("message", "Error in forgotPassword " + e.getMessage());
+            ctx.attribute("message", "Error in forgotPassword() " + e.getMessage());
             ctx.render("error.html");
         }
     }
 
     public static void setNewPassword(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+            ctx.attribute("errorMessage", "Du skal være logget ind for at ændre din adgangskode.");
+            ctx.render("login.html");
+            return;
+        }
+
         String email = activeAccount.getEmail();
         String currentPassword = ctx.formParam("currentPassword");
         String newPassword1 = ctx.formParam("newPassword");
         String newPassword2 = ctx.formParam("newPassword");
 
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
-            String role = activeAccount != null ? activeAccount.getRole() : null;
-            ctx.attribute("message", "Du skal være logget ind for at ændre din adgangskode.");
-            ctx.render("login.html");
-            return;
-        }
-
         try {
-            if (!activeAccount.getPassword().equals(currentPassword)) {
+            Account account = AccountMapper.getPasswordByEmail(email, connectionPool);
+
+            if (account == null) {
+                ctx.attribute("errorMessage", "Kunne ikke finde din konto. Prøv igen.");
+                ctx.render("opdaterKundeInfo.html");
+                return;
+            }
+
+            if (account.getPassword() == null) {
+                ctx.attribute("errorMessage", "Ingen adgangskode fundet under denne kontoen. Kontakt support.");
+                ctx.render("opdaterKundeInfo.html");
+                return;
+            }
+
+            if (!account.getPassword().equals(currentPassword)) {
                 ctx.attribute("errorMessage", "Den nuværende adgangskode er forkert.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
@@ -210,11 +224,11 @@ public class AccountController {
 
             AccountMapper.updatePassword(email, newPassword1, connectionPool);
 
-            ctx.attribute("successMessage", "Adgangskoden blev opdateret.");
+            ctx.attribute("successMessage", "Din adgangskode er blevet opdateret.");
             ctx.render("opdaterKundeInfo.html");
 
         } catch (AccountException e) {
-            ctx.attribute("message", "Fejl ved opdateringen af adgangskoden: " + e.getMessage());
+            ctx.attribute("errorMessage", "Error in setNewPassword() " + e.getMessage());
             ctx.render("opdaterKundeInfo.html");
         }
     }
