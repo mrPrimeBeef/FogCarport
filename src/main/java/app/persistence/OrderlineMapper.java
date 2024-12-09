@@ -85,4 +85,26 @@ public class OrderlineMapper {
             throw new DatabaseException("Fejl", "Error in deleteOrderlinesFromOrderId()", e.getMessage());
         }
     }
+
+
+    public static double getTotalCostPriceFromOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT SUM(cost_price) FROM orderline WHERE orderr_id=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl", "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId, e.getMessage());
+        }
+    }
+
 }

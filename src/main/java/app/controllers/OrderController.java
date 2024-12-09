@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -16,9 +17,6 @@ import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.persistence.AccountMapper;
-import app.persistence.OrderMapper;
-import app.persistence.AccountMapper;
-import app.persistence.ConnectionPool;
 import app.dto.OverviewOrderAccountDto;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
@@ -135,7 +133,7 @@ public class OrderController {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
             // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
-            double costPrice = 10000;  // TODO: Skal beregnes ved at summere cost price fra orderlines, f.eks: OrderlineMapper.getSumCostPriceByOrderId(orderId, connectionPool)
+            double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);  // TODO: Skal beregnes ved at summere cost price fra orderlines, f.eks: OrderlineMapper.getSumCostPriceByOrderId(orderId, connectionPool)
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
             double salePrice = 100 * costPrice / (100 - marginPercentage);
             double marginAmount = salePrice - costPrice;
