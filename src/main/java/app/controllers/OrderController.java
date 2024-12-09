@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import app.persistence.*;
+import app.services.SalePriceCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -135,9 +136,9 @@ public class OrderController {
             // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
             double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
-            double salePrice = 100 * costPrice / (100 - marginPercentage);
-            double marginAmount = salePrice - costPrice;
-            double salePriceInclVAT = 1.25 * salePrice;
+            double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);// - costPrice;
+            double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);// * costPrice / (100 - marginPercentage);
+            double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);// * salePrice;
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("costPrice", costPrice);
