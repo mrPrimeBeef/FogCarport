@@ -149,7 +149,6 @@ public class OrderController {
             ctx.render("saelgerordre.html");
 
         } catch (DatabaseException e) {
-            // TODO: Skriv en ordenlig logging besked
             LOGGER.severe(e.getMessage());
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
@@ -157,10 +156,16 @@ public class OrderController {
 
     }
 
-    // TODO: Fix the exception handling to show error page
     private static void salesrepPostMarginPercentage(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Tilføj guard condition her
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at ændre dækningsgrad. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         Double marginPercentage = Double.parseDouble(ctx.formParam("daekningsgrad"));
@@ -169,15 +174,24 @@ public class OrderController {
             OrderMapper.updateMarginPercentage(orderId, marginPercentage, connectionPool);
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
 
     }
 
-    // TODO: Fix the exception handling to show error page
+
     private static void salesrepPostCarportCalculation(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Tilføj guard condition her
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at køre carport beregning. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         int carportWidthCm = Integer.parseInt(ctx.formParam("carport-bredde"));
@@ -198,7 +212,9 @@ public class OrderController {
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
 
         } catch (DatabaseException | SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
 
     }

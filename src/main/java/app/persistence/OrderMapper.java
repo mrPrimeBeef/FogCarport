@@ -178,10 +178,10 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl til sælger", "Error updating margin percentage for orderId: " + orderId);
+                throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl til sælger", "Error updating margin percentage for orderId: " + orderId, e.getMessage());
+            throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId, e.getMessage());
         }
     }
 
@@ -202,10 +202,10 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl til sælger", "Error updating carport for orderId: " + orderId);
+                throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl til sælger", "Error updating carport for orderId: " + orderId, e.getMessage());
+            throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId, e.getMessage());
         }
 
     }
