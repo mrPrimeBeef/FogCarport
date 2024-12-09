@@ -167,12 +167,12 @@ public class AccountController {
                 String newPassword = PasswordGenerator.generatePassword();
                 AccountMapper.updatePassword(email, newPassword, connectionPool);
 
-                System.out.println("Den indtastede e-mail: " + email + "\n" + "Adgangskoden for den indtastede mail er: " + newPassword);
+                System.out.println("Den indtastede email: " + email + "\n" + "Adgangskoden for den indtastede mail er: " + newPassword);
 
                 ctx.attribute("message", "Din adgangskode er blevet nulstillet. Log ind med den nye adgangskode.");
                 ctx.render("login.html");
             } else {
-                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail. Prøv igen.");
+                ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede email. Prøv igen.");
                 ctx.render("glemtKode.html");
             }
         } catch (AccountException e) {
@@ -199,13 +199,13 @@ public class AccountController {
             Account account = AccountMapper.getPasswordByEmail(email, connectionPool);
 
             if (account == null) {
-                ctx.attribute("errorMessage", "Kunne ikke finde din konto. Prøv igen.");
-                ctx.render("opdaterKundeInfo.html");
+                ctx.attribute("errorMessage", "Ingen konto fundet. Prøv igen.");
+                ctx.render("login.html");
                 return;
             }
 
             if (account.getPassword() == null) {
-                ctx.attribute("errorMessage", "Ingen adgangskode fundet under denne kontoen. Kontakt support.");
+                ctx.attribute("errorMessage", "Ingen adgangskode fundet til denne konto.");
                 ctx.render("opdaterKundeInfo.html");
                 return;
             }
@@ -224,12 +224,14 @@ public class AccountController {
 
             AccountMapper.updatePassword(email, newPassword1, connectionPool);
 
+            System.out.println("Den indtastede email: " + email + "\n" + "Din nye adgangskode er: " + newPassword1);
+
             ctx.attribute("successMessage", "Din adgangskode er blevet opdateret.");
             ctx.render("opdaterKundeInfo.html");
 
         } catch (AccountException e) {
             ctx.attribute("errorMessage", "Error in setNewPassword() " + e.getMessage());
-            ctx.render("opdaterKundeInfo.html");
+            ctx.render("error.html");
         }
     }
 }
