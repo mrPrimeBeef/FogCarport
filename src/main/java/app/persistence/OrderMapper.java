@@ -258,7 +258,7 @@ public class OrderMapper {
     }
 
     public static void updateIsPaid(int orderId, ConnectionPool connectionPool) throws OrderException {
-        String sql = "UPDATE orderr SET paid = true WHERE orderid = ?";
+        String sql = "UPDATE orderr SET paid = true, status = 'Afsluttet' WHERE orderr_id = ?";
 
         try(Connection connection = connectionPool.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)) {

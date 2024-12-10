@@ -239,7 +239,7 @@ public class AccountController {
             return;
         }
         try {
-            int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
+            int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             OrderMapper.updateIsPaid(orderId, connectionPool);
 
             ctx.redirect("kundesideordre?ordrenr=" + orderId);
