@@ -18,6 +18,14 @@ public class Order {
         this.saleprice = saleprice;
         this.status = status;
     }
+    public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
+        this.orderId = orderrId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.saleprice = saleprice;
+        this.status = status;
+    }
 
     public int getOrderId() {
         return orderId;
