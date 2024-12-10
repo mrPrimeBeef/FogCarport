@@ -18,24 +18,209 @@
 <header th:replace="fragments :: headerCustomer"></header>
 
 <main>
+
     <br>
     <br>
     <br>
     <br>
     <h1>salesrepShowOrderPage</h1>
+    <br>
 
-    <h2>Side View</h2>
-    <div class="carport-svg-view" th:utext="${carportSvgSideView}"></div>
-    <h2>Top View</h2>
-    <div class="carport-svg-view" th:utext="${carportSvgTopView}"></div>
+    <table style="width: 40%">
+        <tr>
+            <th>Email</th>
+            <th>Navn</th>
+            <th>Telefon</th>
+            <th>Postnummer</th>
+            <th>By</th>
+        </tr>
+        <tr>
+            <td th:text="${detailOrderAccountDto.email}"></td>
+            <td th:text="${detailOrderAccountDto.name}">X</td>
+            <td th:text="${detailOrderAccountDto.phone}">X</td>
+            <td th:text="${detailOrderAccountDto.zip}">X</td>
+            <td th:text="${detailOrderAccountDto.city}">X</td>
+        </tr>
+    </table>
+    <br>
+
+    <table style="width: 50%">
+        <tr>
+            <th>Ordrenr.</th>
+            <th>Dato henvendelse</th>
+            <th>Dato betalt</th>
+            <th>Dato afsluttet</th>
+            <th>Status</th>
+        </tr>
+        <form method="post" action="opdaterstatus">
+            <tr>
+                <td th:text="${detailOrderAccountDto.orderId}">X</td>
+                <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
+                <td th:text="${detailOrderAccountDto.datePaid}">X</td>
+                <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
+                <td th:text="${detailOrderAccountDto.status}">X</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <select name="status" id="status">
+                        <option th:if="${detailOrderAccountDto.status != 'Igangværende'
+                                    and detailOrderAccountDto.status != 'Leveret'
+                                    and detailOrderAccountDto.status != 'Annulleret'
+                                    and detailOrderAccountDto.status != 'Afsluttet'}"
+                                value="Henvendelse"
+                                th:selected="${detailOrderAccountDto.status == 'Henvendelse'}">
+                            Henvendelse
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'
+                                    and detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Igangværende"
+                                th:selected="${detailOrderAccountDto.status == 'Igangværende'}">
+                            Igangværende
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'
+                                    and detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Leveret"
+                                th:selected="${detailOrderAccountDto.status == 'Leveret'}">
+                            Leveret
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Afsluttet"
+                                th:selected="${detailOrderAccountDto.status == 'Afsluttet'}">
+                            Afsluttet
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'}"
+                                value="Annulleret"
+                                th:selected="${detailOrderAccountDto.status == 'Annulleret'}">
+                            Annulleret
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+                    <button type="submit">Opdater Status</button></td>
+            </tr>
+        </form>
+    </table>
+
+    <br>
+    <br>
+    <h2>Dækningsgrad og salgspris</h2>
+
+    <form method="post" action="daekningsgrad">
+
+        <table style="width: 50%">
+            <tr>
+                <th>Kostpris<br>DKK</th>
+                <th>Dækningsgrad<br>%</th>
+                <th>Dækningsbidrag<br>DKK</th>
+                <th>Salgspris<br>DKK</th>
+                <th>Salgspris inkl. moms<br>DKK</th>
+            </tr>
+            <tr>
+                <td th:text="${costPrice}"></td>
+                <td th:text="${detailOrderAccountDto.marginPercentage}"></td>
+                <td th:text="${marginAmount}"></td>
+                <td th:text="${salePrice}"></td>
+                <td th:text="${salePriceInclVAT}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="number"
+                           id="daekningsgrad"
+                           name="daekningsgrad"
+                           min="0"
+                           max="99"
+                           step="0.1"
+                           required
+                           placeholder="Dækningsgrad %"
+                           th:value="${detailOrderAccountDto.marginPercentage}"></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+
+        <button type="submit">Ændre dækningsgrad</button>
+    </form>
+
+
+    <br>
+    <br>
+
+    <h2>Carport beregning</h2>
+
+    <form method="post" action="carportberegning">
+        <table style="width: 30%">
+            <tr>
+                <th>Bredde<br>cm</th>
+                <th>Længde<br>cm</th>
+                <th>Højde<br>cm</th>
+            </tr>
+            <tr>
+                <td th:text="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportLengthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+            <tr>
+                <td><input type="number"
+                           id="carport-bredde"
+                           name="carport-bredde"
+                           min="240"
+                           max="600"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 600 i cm"
+                           th:value="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td><input type="number"
+                           id="carport-laengde"
+                           name="carport-laengde"
+                           min="240"
+                           max="780"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 780 i cm"
+                           th:value="${detailOrderAccountDto.carportLengthCm}"></td>
+                <!-- TODO: Set min og max for højden -->
+                <td><input type="number"
+                           id="carport-hoejde"
+                           name="carport-hoejde"
+                           min="210"
+                           max="500"
+                           required
+                           placeholder="Angiv et tal mellem 210 og 500 i cm"
+                           th:value="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+
+        <button type="submit">Kør beregning</button>
+    </form>
+    <br>
+
+    <h3>Tegning fra siden</h3>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgSideView}"></div>
+    <br>
+
+    <h3>Tegning fra oven</h3>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgTopView}"></div>
 
     * Mål udvendigt på stolper<br>
     ** Afstand fra stern ved H=2,50m<br>
     *** Mål overkant rem<br>
     <br>
-    <br>
-    <br>
-    <br>
+
+
+    <h3>Stykliste</h3>
+
 </main>
 <!-- footer fragment -->
 <footer th:replace="fragments :: footer"></footer>

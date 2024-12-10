@@ -27,7 +27,7 @@
             </tr>
             <tbody class="table-group-divider">
             <tr th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
-                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(order_id=${OverviewOrderAccountDto.orderId})}"
+                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}"
                        th:text="${OverviewOrderAccountDto.orderId}"></a></td>
                 <td><a href="saelgerkunde.html" th:href="@{/saelgerkunde(account_id=${OverviewOrderAccountDto.accountId})}"
                        th:text="${OverviewOrderAccountDto.email}"></a></td>
