@@ -93,9 +93,11 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         for (int i = 0; i < amountOfPillarsY; i++) {
             for (int j = 0; j < amountOfPillarsX; j++) {
                 float x;
-                //if(carport.getLength() > 300) {
+                if(carport.getLength() > 400) {
                     x = defaultOverhangX + j * (float) (carport.getLength() - 2 * defaultOverhangX) / (amountOfPillarsX - 1);
-                //}
+                } else {
+                    x = 40 + j * (float) (carport.getLength() - 2 * 40) / (amountOfPillarsX - 1);
+                }
                 float y = defaultOverhangY + i * (float) (carport.getWidth() - 2 * defaultOverhangY) / (amountOfPillarsY - 1);
 
                 Material clonedMaterial = pillarMaterial.cloneMaterial(pillarMaterial);
