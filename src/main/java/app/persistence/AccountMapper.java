@@ -67,13 +67,12 @@ public class AccountMapper {
                     account = new Account(accountId, email, name, role, address, city, phone);
                 }
             }
+            return account;
         } catch (SQLException e) {
             LOGGER.severe("Error in login() connection. E message: " + e.getMessage());
             throw new AccountException("Fejl i login.", "Error in login()", e.getMessage());
         }
-        return account;
     }
-
 
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
