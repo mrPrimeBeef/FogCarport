@@ -103,7 +103,6 @@ public class AccountController {
 
     public static void setNewPassword(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("errorMessage", "Du skal være logget ind for at ændre din adgangskode.");
             ctx.render("login.html");
@@ -157,63 +156,59 @@ public class AccountController {
 
     public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("error.html");
             return;
-        } else {
-            try {
-                ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
-                ctx.attribute("showOrders", orders);
+        }
 
-            } catch (OrderException e) {
-                ctx.attribute(e.getMessage());
-                ctx.render("error.html");
-            }
+        try {
+            ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
+            ctx.attribute("showOrders", orders);
             ctx.render("kundeside.html");
+        } catch (OrderException e) {
+            ctx.attribute(e.getMessage());
+            ctx.render("error.html");
         }
     }
 
     public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("error.html");
             return;
-        } else {
-
-            try {
-                int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
-                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
-
-                Order order = OrderMapper.getOrder(orderId, connectionPool);
-                ctx.attribute("showOrder", order);
-
-                ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
-                ctx.attribute("showOrderlines", orderlines);
-
-                ctx.attribute("carportSvgSideView", dto.getSvgSideView());
-                ctx.attribute("carportSvgTopView", dto.getSvgTopView());
-
-            } catch (OrderException | DatabaseException e) {
-                ctx.attribute(e.getMessage());
-                ctx.render("error.html");
-            }
-            ctx.render("kundesideordre.html");
         }
-    }
 
+        try {
+            int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
+            DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
+
+            Order order = OrderMapper.getOrder(orderId, connectionPool);
+            ctx.attribute("showOrder", order);
+
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+            ctx.attribute("showOrderlines", orderlines);
+
+            ctx.attribute("carportSvgSideView", dto.getSvgSideView());
+            ctx.attribute("carportSvgTopView", dto.getSvgTopView());
+            ctx.render("kundesideordre.html");
+
+        } catch (OrderException | DatabaseException e) {
+            ctx.attribute(e.getMessage());
+            ctx.render("error.html");
+        }
+
+    }
 
     private static void buyOrder(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("errorMessage", "Kun adgang for kunder");
             ctx.render("error.html");
             return;
         }
+
         try {
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             OrderMapper.updateIsPaid(orderId, connectionPool);
@@ -226,16 +221,14 @@ public class AccountController {
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
-
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
         }
+
         try {
             LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
 
