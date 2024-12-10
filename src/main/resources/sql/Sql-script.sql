@@ -117,6 +117,9 @@ ALTER TABLE IF EXISTS public.orderr
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
 
+ALTER TABLE public.orderr
+    ALTER COLUMN margin_percentage SET DEFAULT 30;
+
 ALTER TABLE IF EXISTS public.orderline
     ADD CONSTRAINT fk_orderr_id FOREIGN KEY (orderr_id)
     REFERENCES public.orderr (orderr_id) MATCH SIMPLE
@@ -1611,6 +1614,9 @@ ALTER TABLE IF EXISTS test.orderline
     REFERENCES test.orderr (orderr_id) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
+
+ALTER TABLE IF EXISTS test.orderr
+ALTER COLUMN margin_percentage SET DEFAULT 30;
 
 ALTER TABLE IF EXISTS test.orderline
     ADD CONSTRAINT fk_item_id_test FOREIGN KEY (item_id)
