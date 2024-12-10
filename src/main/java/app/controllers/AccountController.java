@@ -46,19 +46,20 @@ public class AccountController {
 
         try {
             Account activeAccount = AccountMapper.login(email, password, connectionPool);
-            if (activeAccount != null) {
-                ctx.sessionAttribute("account", activeAccount);
-                if (activeAccount.getRole().equals("salesrep")) {
-                    OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
-                    return;
-                }
-                if (activeAccount.getRole().equals("Kunde")) {
-                    showCustomerOverview(ctx, connectionPool);
-                }
-            } else {
-                ctx.attribute("message", "forkert email eller password");
+            if (activeAccount == null) {
+                ctx.attribute("message", "Forkert email eller adgangskode");
                 ctx.render("login.html");
+                return;
             }
+            ctx.sessionAttribute("account", activeAccount);
+
+            if (activeAccount.getRole().equals("salesrep")) {
+                OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
+            }
+            if (activeAccount.getRole().equals("Kunde")) {
+                showCustomerOverview(ctx, connectionPool);
+            }
+
         } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
