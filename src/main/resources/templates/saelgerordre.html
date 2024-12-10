@@ -18,24 +18,159 @@
 <header th:replace="fragments :: headerCustomer"></header>
 
 <main>
+
     <br>
     <br>
     <br>
     <br>
     <h1>salesrepShowOrderPage</h1>
+    <br>
 
-    <h2>Side View</h2>
-    <div class="carport-svg-view" th:utext="${carportSvgSideView}"></div>
-    <h2>Top View</h2>
-    <div class="carport-svg-view" th:utext="${carportSvgTopView}"></div>
+    <table style="width: 40%">
+        <tr>
+            <th>Email</th>
+            <th>Navn</th>
+            <th>Telefon</th>
+            <th>Postnummer</th>
+            <th>By</th>
+        </tr>
+        <tr>
+            <td th:text="${detailOrderAccountDto.email}"></td>
+            <td th:text="${detailOrderAccountDto.name}">X</td>
+            <td th:text="${detailOrderAccountDto.phone}">X</td>
+            <td th:text="${detailOrderAccountDto.zip}">X</td>
+            <td th:text="${detailOrderAccountDto.city}">X</td>
+        </tr>
+    </table>
+    <br>
+
+    <table style="width: 50%">
+        <tr>
+            <th>Ordrenr.</th>
+            <th>Dato henvendelse</th>
+            <th>Dato betalt</th>
+            <th>Dato færdig</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td th:text="${detailOrderAccountDto.orderId}">X</td>
+            <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
+            <td th:text="${detailOrderAccountDto.datePaid}">X</td>
+            <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
+            <td th:text="${detailOrderAccountDto.status}">X</td>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+    <h2>Dækningsgrad og salgspris</h2>
+
+    <form method="post" action="daekningsgrad">
+
+        <table style="width: 50%">
+            <tr>
+                <th>Kostpris<br>DKK</th>
+                <th>Dækningsgrad<br>%</th>
+                <th>Dækningsbidrag<br>DKK</th>
+                <th>Salgspris<br>DKK</th>
+                <th>Salgspris inkl. moms<br>DKK</th>
+            </tr>
+            <tr>
+                <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginPercentage, 1, 1, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="number"
+                           id="daekningsgrad"
+                           name="daekningsgrad"
+                           min="0"
+                           max="99"
+                           step="0.1"
+                           required
+                           placeholder="Dækningsgrad %"
+                           th:value="${detailOrderAccountDto.marginPercentage}"></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+
+        <button type="submit">Ændre dækningsgrad</button>
+    </form>
+
+
+    <br>
+    <br>
+
+    <h2>Carport beregning</h2>
+
+    <form method="post" action="carportberegning">
+        <table style="width: 30%">
+            <tr>
+                <th>Bredde<br>cm</th>
+                <th>Længde<br>cm</th>
+                <th>Højde<br>cm</th>
+            </tr>
+            <tr>
+                <td th:text="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportLengthCm}"></td>
+                <td th:text="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+            <tr>
+                <td><input type="number"
+                           id="carport-bredde"
+                           name="carport-bredde"
+                           min="240"
+                           max="600"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 600 i cm"
+                           th:value="${detailOrderAccountDto.carportWidthCm}"></td>
+                <td><input type="number"
+                           id="carport-laengde"
+                           name="carport-laengde"
+                           min="240"
+                           max="780"
+                           required
+                           placeholder="Angiv et tal mellem 240 og 780 i cm"
+                           th:value="${detailOrderAccountDto.carportLengthCm}"></td>
+                <!-- TODO: Set min og max for højden -->
+                <td><input type="number"
+                           id="carport-hoejde"
+                           name="carport-hoejde"
+                           min="210"
+                           max="500"
+                           required
+                           placeholder="Angiv et tal mellem 210 og 500 i cm"
+                           th:value="${detailOrderAccountDto.carportHeightCm}"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+
+        <button type="submit">Kør beregning</button>
+    </form>
+    <br>
+
+    <h3>Tegning fra siden</h3>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgSideView}"></div>
+    <br>
+
+    <h3>Tegning fra oven</h3>
+    <div class="carport-svg-view" th:utext="${detailOrderAccountDto.svgTopView}"></div>
 
     * Mål udvendigt på stolper<br>
     ** Afstand fra stern ved H=2,50m<br>
     *** Mål overkant rem<br>
     <br>
-    <br>
-    <br>
-    <br>
+
+
+    <h3>Stykliste</h3>
+
 </main>
 <!-- footer fragment -->
 <footer th:replace="fragments :: footer"></footer>

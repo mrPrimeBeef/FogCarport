@@ -11,12 +11,12 @@ public class Order {
     String status;
 
     public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, double saleprice, String status) {
-    this.orderId = orderrId;
-    this.datePlaced = datePlaced;
-    this.datePaid = datePaid;
-    this.dateCompleted = dateCompleted;
-    this.saleprice = saleprice;
-    this.status = status;
+        this.orderId = orderrId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.saleprice = saleprice;
+        this.status = status;
     }
 
     public int getOrderId() {
