@@ -49,16 +49,66 @@
             <th>Ordrenr.</th>
             <th>Dato henvendelse</th>
             <th>Dato betalt</th>
-            <th>Dato færdig</th>
+            <th>Dato afsluttet</th>
             <th>Status</th>
         </tr>
-        <tr>
-            <td th:text="${detailOrderAccountDto.orderId}">X</td>
-            <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
-            <td th:text="${detailOrderAccountDto.datePaid}">X</td>
-            <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
-            <td th:text="${detailOrderAccountDto.status}">X</td>
-        </tr>
+        <form method="post" action="opdaterstatus">
+            <tr>
+                <td th:text="${detailOrderAccountDto.orderId}">X</td>
+                <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
+                <td th:text="${detailOrderAccountDto.datePaid}">X</td>
+                <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
+                <td th:text="${detailOrderAccountDto.status}">X</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <select name="status" id="status">
+                        <option th:if="${detailOrderAccountDto.status != 'Igangværende'
+                                    and detailOrderAccountDto.status != 'Leveret'
+                                    and detailOrderAccountDto.status != 'Annulleret'
+                                    and detailOrderAccountDto.status != 'Afsluttet'}"
+                                value="Henvendelse"
+                                th:selected="${detailOrderAccountDto.status == 'Henvendelse'}">
+                            Henvendelse
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'
+                                    and detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Igangværende"
+                                th:selected="${detailOrderAccountDto.status == 'Igangværende'}">
+                            Igangværende
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'
+                                    and detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Leveret"
+                                th:selected="${detailOrderAccountDto.status == 'Leveret'}">
+                            Leveret
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Annulleret'}"
+                                value="Afsluttet"
+                                th:selected="${detailOrderAccountDto.status == 'Afsluttet'}">
+                            Afsluttet
+                        </option>
+                        <option th:if="${detailOrderAccountDto.status != 'Afsluttet'}"
+                                value="Annulleret"
+                                th:selected="${detailOrderAccountDto.status == 'Annulleret'}">
+                            Annulleret
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
+                    <button type="submit">Opdater Status</button></td>
+            </tr>
+        </form>
     </table>
 
     <br>
