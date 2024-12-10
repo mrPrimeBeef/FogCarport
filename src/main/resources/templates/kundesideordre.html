@@ -14,7 +14,7 @@
 <header th:replace="fragments :: headerCustomer"></header>
 <main class="text-center mt-5 mb-5">
     <div class="mt-5 py-5">
-        <h2 class="mt-5">Dine ordre</h2>
+        <h2 class="mt-5">Ordrenr. <span th:text="${showOrder.orderId}"></span></h2>
         <div class="d-flex flex-column justify-content-around p-0 m-5">
             <table class="table table-striped table-bordered">
                 <tr class="justify-content-around">
