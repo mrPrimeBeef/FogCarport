@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import app.entities.Orderline;
 import app.services.StructureCalculationEngine.Entities.Material;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -130,6 +131,9 @@ public class OrderController {
 
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
+            int accountId = detailOrderAccountDto.getAccountId();
+            String role = activeAccount.getRole();
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(accountId, role, connectionPool);
 
             double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
@@ -138,13 +142,14 @@ public class OrderController {
             double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
+            ctx.attribute("orderlines", orderlines);
             ctx.attribute("costPrice", costPrice);
             ctx.attribute("marginAmount", marginAmount);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
             ctx.render("saelgerordre.html");
 
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | OrderException e) {
             LOGGER.severe(e.getMessage());
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
