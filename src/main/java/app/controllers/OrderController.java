@@ -32,6 +32,7 @@ public class OrderController {
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
         app.post("daekningsgrad", ctx -> salesrepPostMarginPercentage(ctx, connectionPool));
         app.post("carportberegning", ctx -> salesrepPostCarportCalculation(ctx, connectionPool));
+        app.post("sendbrugerinfo", ctx -> sendCustomerInfo(ctx, connectionPool));
         app.post("opdaterstatus", ctx -> salesrepPostStatus(ctx, connectionPool));
     }
 
@@ -140,14 +141,12 @@ public class OrderController {
             ctx.attribute("marginAmount", marginAmount);
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
-            ctx.render("saelgerordre.html");
-
         } catch (DatabaseException e) {
             LOGGER.severe(e.getMessage());
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
-
+       ctx.render("saelgerordre.html");
     }
 
     private static void salesrepPostMarginPercentage(Context ctx, ConnectionPool connectionPool) {
@@ -174,7 +173,6 @@ public class OrderController {
         }
 
     }
-
 
     private static void salesrepPostCarportCalculation(Context ctx, ConnectionPool connectionPool) {
 
@@ -210,10 +208,9 @@ public class OrderController {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
-
     }
-
-    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
+  
+  private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
 
         Account activeAccount = ctx.sessionAttribute("account");
 
@@ -239,6 +236,35 @@ public class OrderController {
         } catch (DatabaseException e) {
             LOGGER.severe(e.getMessage());
             ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
+    }
+    
+  public static void sendCustomerInfo(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at sende brugerinfo. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+        try{
+            int accountId = Integer.parseInt(ctx.formParam("accountId"));
+            Account account = AccountMapper.getPasswordAndEmail(accountId,connectionPool);
+
+            // Sending mock email via System.out.println
+            System.out.println("Her er din fog konto:");
+            System.out.println("Dit brugernavn: " + account.getEmail());
+            System.out.println("Dit kodeord: " + account.getPassword());
+
+            int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+            ctx.redirect("saelgerordre?ordrenr=" + orderId);
+
+        } catch (AccountException e) {
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("message", "Error in sendCustomerInfo " + e.getMessage());
             ctx.render("error.html");
         }
     }

@@ -41,6 +41,7 @@ public class OrderMapper {
                 String status = rs.getString("status");
                 double marginPercentage = rs.getDouble("margin_percentage");
                 double costPrice = rs.getDouble("sum");
+              
                 double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
                 OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
             }
@@ -92,7 +93,6 @@ public class OrderMapper {
             ps.setInt(1, account_id);
 
             ResultSet rs = ps.executeQuery();
-
 
             while (rs.next()) {
                 int orderId = rs.getInt("orderr_id");
