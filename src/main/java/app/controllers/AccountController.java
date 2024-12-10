@@ -37,6 +37,7 @@ public class AccountController {
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
         app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo"));
         app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
+        app.post("koebordre", ctx -> buyOrder(ctx, connectionPool));
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
@@ -119,12 +120,11 @@ public class AccountController {
         } else {
 
             try {
-                int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
+                int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
+                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId,connectionPool);
 
-                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderrId,connectionPool);
-
-                Order orders = OrderMapper.getOrder(orderrId, connectionPool);
-                ctx.attribute("showOrder", orders);
+                Order order = OrderMapper.getOrder(orderId, connectionPool);
+                ctx.attribute("showOrder", order);
 
                 ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
@@ -227,6 +227,24 @@ public class AccountController {
         } catch (AccountException e) {
             ctx.attribute("errorMessage", "Error in setNewPassword() " + e.getMessage());
             ctx.render("error.html");
+        }
+    }
+
+    private static void buyOrder(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+            ctx.attribute("errorMessage", "Kun adgang for kunder");
+            ctx.render("error.html");
+            return;
+        }
+        try {
+            int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+            OrderMapper.updateIsPaid(orderId, connectionPool);
+
+            ctx.redirect("kundesideordre?ordrenr=" + orderId);
+        } catch (OrderException e) {
+            LOGGER.severe(e.getMessage());
         }
     }
 }
