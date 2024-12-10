@@ -51,15 +51,17 @@ public class AccountController {
                 ctx.render("login.html");
                 return;
             }
+
             ctx.sessionAttribute("account", activeAccount);
 
-            if (activeAccount.getRole().equals("salesrep")) {
-                OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
+            switch (activeAccount.getRole()) {
+                case "salesrep":
+                    OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
+                    break;
+                case "Kunde":
+                    showCustomerOverview(ctx, connectionPool);
+                    break;
             }
-            if (activeAccount.getRole().equals("Kunde")) {
-                showCustomerOverview(ctx, connectionPool);
-            }
-
         } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
