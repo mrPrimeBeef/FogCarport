@@ -53,4 +53,12 @@ class OrderMapperTest extends AbstractMapperTest {
         assertEquals("henvendelse",actual);
         assertNotEquals("In progress",dto.getStatus());
     }
+    @Test
+    void updateMarginPercentage() throws DatabaseException {
+        OrderMapper.updateMarginPercentage(2,35,connectionPool);
+    }
+    @Test
+    void updateCarport(){
+
+    }
 }
