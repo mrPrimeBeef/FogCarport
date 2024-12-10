@@ -5,7 +5,7 @@ public class Orderline {
     private String description;
     private int lengthCm;
     private int quantity;
-    private double price;
+    private double costPrice;
     private double salePriceInclVAT;
 
     public Orderline(String name, int lengthCm, String description, int quantity, double salePriceInclVAT) {
@@ -16,11 +16,11 @@ public class Orderline {
         this.salePriceInclVAT = salePriceInclVAT;
     }
 
-    public Orderline(String name, int lengthCm, int quantity, double price) {
+    public Orderline(String name, int lengthCm, int quantity, double costPrice) {
         this.name = name;
         this.lengthCm = lengthCm;
         this.quantity = quantity;
-        this.price = price;
+        this.costPrice = costPrice;
     }
 
     public String getDescription() {
@@ -35,8 +35,8 @@ public class Orderline {
         return quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getCostPrice() {
+        return costPrice;
     }
 
     public double getSalePriceInclVAT() {
@@ -53,7 +53,7 @@ public class Orderline {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", quantity=" + quantity +
-                ", price=" + price +
+                ", costPrice=" + costPrice +
                 '}';
     }
 }
