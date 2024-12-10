@@ -51,11 +51,6 @@ public class OverviewOrderAccountDto {
         return salePriceInclVAT;
     }
 
-    // TODO: Slet denne metode. Er her kun for at thymeleaf fungerer
-    public double getSalesPrice() {
-        return salePriceInclVAT;
-    }
-
     public String getStatus() {
         return status;
     }

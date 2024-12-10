@@ -32,13 +32,13 @@ public class AccountController {
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("glemtKode", ctx -> ctx.render("glemtKode"));
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
-        app.get("logout",ctx->logout(ctx));
+        app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-      
+
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
 
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
@@ -89,7 +89,7 @@ public class AccountController {
             ctx.attribute("Du er ikke logget ind");
             ctx.render("/error");
             return;
-        } else{
+        } else {
             try {
                 ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
                 ctx.attribute("showOrders", orders);
