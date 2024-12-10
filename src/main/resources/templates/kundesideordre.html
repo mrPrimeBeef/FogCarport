@@ -22,7 +22,7 @@
                     <th>Henvendelse</th>
                     <th>Dato betalt</th>
                     <th>Dato færdig</th>
-                    <th>Pris</th>
+                    <th>Pris inkl. moms</th>
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
@@ -53,6 +53,7 @@
                     <th>Længde i cm</th>
                     <th>Beskrivelse</th>
                     <th>Mængde</th>
+                    <th>Pris for mængde inkl. moms</th>
                 </tr>
                 <tbody class="table-group-divider">
                 <tr th:if="${showOrderlines == null}">
@@ -63,19 +64,20 @@
                     <td th:text="${orderline.lengthCm}"></td>
                     <td th:text="${orderline.description}"></td>
                     <td th:text="${orderline.quantity}"></td>
+                    <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
                 </tbody>
             </table>
             <div th:if="${showOrder.status != 'Afsluttet'
                           and showOrder.status != 'Annulleret'
                           and showOrder.status != 'Leveret'}">
-            <form action ="koebordre" method="post">
-            <input type="hidden" name="ordrenr" th:value="${showOrder.orderId}">
-            <button class="btn btn-primary" type="submit">Køb</button>
-            </form>
-        </div>
+                <form action="koebordre" method="post">
+                    <input type="hidden" name="ordrenr" th:value="${showOrder.orderId}">
+                    <button class="btn btn-primary" type="submit">Køb</button>
+                </form>
+            </div>
 
-    </div>
+        </div>
     </div>
 </main>
 <footer th:replace="fragments :: footer"></footer>

@@ -31,8 +31,12 @@ public class OrderlineMapper {
                 int lengthCm = rs.getInt("length_cm");
                 String description = rs.getString("description") != null ? rs.getString("description") : "";
                 boolean paid = rs.getBoolean("paid");
+
+                // TODO: skal beregnes ordenligt
+                double salePriceInclVAT = 117;
+
                 if (role.equals("Kunde") && paid) {
-                    orderlineList.add(new Orderline(name, lengthCm, description, quantity));
+                    orderlineList.add(new Orderline(name, lengthCm, description, quantity, salePriceInclVAT));
                 } else if (role.equals("salesrep")) {
                     orderlineList.add(new Orderline(name, lengthCm, quantity, costPrice));
                 }

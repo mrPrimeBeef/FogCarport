@@ -6,12 +6,14 @@ public class Orderline {
     private int lengthCm;
     private int quantity;
     private double price;
+    private double salePriceInclVAT;
 
-    public Orderline(String name, int lengthCm, String description, int quantity) {
+    public Orderline(String name, int lengthCm, String description, int quantity, double salePriceInclVAT) {
         this.name = name;
         this.lengthCm = lengthCm;
         this.quantity = quantity;
         this.description = description;
+        this.salePriceInclVAT = salePriceInclVAT;
     }
 
     public Orderline(String name, int lengthCm, int quantity, double price) {
@@ -35,6 +37,10 @@ public class Orderline {
 
     public double getPrice() {
         return price;
+    }
+
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
     }
 
     public int getLengthCm() {

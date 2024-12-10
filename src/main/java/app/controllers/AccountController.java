@@ -127,6 +127,7 @@ public class AccountController {
                 ctx.attribute("showOrder", order);
 
                 ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+                System.out.println(orderlines.size());
                 ctx.attribute("showOrderlines", orderlines);
 
                 ctx.attribute("carportSvgSideView", dto.getSvgSideView());
