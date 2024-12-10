@@ -8,27 +8,25 @@ public class Orderline {
     private double costPrice;
     private double salePriceInclVAT;
 
-    public Orderline(String name, int lengthCm, String description, int quantity, double salePriceInclVAT) {
+    public Orderline(String name, String description, int lengthCm, int quantity, double costPrice, double salePriceInclVAT) {
         this.name = name;
-        this.lengthCm = lengthCm;
-        this.quantity = quantity;
         this.description = description;
-        this.salePriceInclVAT = salePriceInclVAT;
-    }
-
-    public Orderline(String name, int lengthCm, int quantity, double costPrice) {
-        this.name = name;
         this.lengthCm = lengthCm;
         this.quantity = quantity;
         this.costPrice = costPrice;
+        this.salePriceInclVAT = salePriceInclVAT;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getName() {
-        return name;
+    public int getLengthCm() {
+        return lengthCm;
     }
 
     public int getQuantity() {
@@ -43,10 +41,8 @@ public class Orderline {
         return salePriceInclVAT;
     }
 
-    public int getLengthCm() {
-        return lengthCm;
-    }
 
+    // TODO: Opdater denne toString metode
     @Override
     public String toString() {
         return "Orderline{" +

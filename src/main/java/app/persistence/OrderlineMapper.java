@@ -32,16 +32,14 @@ public class OrderlineMapper {
                 int lengthCm = rs.getInt("length_cm");
                 String description = rs.getString("description") != null ? rs.getString("description") : "";
                 boolean paid = rs.getBoolean("paid");
-
                 double marginPercentage = rs.getDouble("margin_percentage");
 
-                // TODO: skal beregnes ordenligt
                 double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
                 if (role.equals("Kunde") && paid) {
-                    orderlineList.add(new Orderline(name, lengthCm, description, quantity, salePriceInclVAT));
+                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, costPrice, salePriceInclVAT));
                 } else if (role.equals("salesrep")) {
-                    orderlineList.add(new Orderline(name, lengthCm, quantity, costPrice));
+                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, costPrice, salePriceInclVAT));
                 }
             }
         } catch (SQLException e) {
