@@ -27,7 +27,7 @@
                 </tr>
                 <tbody class="table-group-divider">
                 <tr th:if="${showOrder == null}">
-                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                    <td colspan="6" class="text-center">Under behandling</td>
                 </tr>
                 <td>
                     <a th:href="@{/kundesideordre(orderId=${showOrder.orderId})}" th:text="${showOrder.orderId}"></a>

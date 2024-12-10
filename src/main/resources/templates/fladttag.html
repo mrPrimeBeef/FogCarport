@@ -52,40 +52,51 @@
                    required
                    placeholder="Angiv et tal mellem 240 og 780 i cm">
         </div>
-
         <div class="mb-3">
-            <h4>Redskabstum</h4>
-            <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet*</p>
-        </div>
-
-        <div class="mb-3">
-            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>
+            <label for="carport-hoejde" class="form-label">Carport højde*</label>
             <input type="number"
                    class="form-control"
-                   id="redskabsrum-bredde"
-                   name="redskabsrum-bredde"
-                   min="0"
-                   max="720"
+                   id="carport-hoejde"
+                   name="carport-hoejde"
+                   min="210"
+                   max="300"
                    required
-                   placeholder="Angiv et tal mellem 210 og 720 i cm og vælg 0 for intet redskabsrum">
+                   placeholder="Angiv et tal mellem 210 og 300 i cm">
         </div>
 
-        <div class="mb-3">
-            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>
-            <input type="number"
-                   class="form-control"
-                   id="redskabsrum-laengde"
-                   name="redskabsrum-laengde"
-                   min="0"
-                   max="690"
-                   required
-                   placeholder="Angiv et tal mellem 150 og 690 i cm og vælg 0 for intet redskabsrum">
-        </div>
+<!--        <div class="mb-3">-->
+<!--            <h4>Redskabstum</h4>-->
+<!--            <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet*</p>-->
+<!--        </div>-->
 
-        <div class="mb-3">
-            <label for="bemaerkninger" class="form-label">Evt. bemærkninger / særlige ønsker</label>
-            <textarea class="form-control" id="bemaerkninger" rows="3" name="bemaerkninger"></textarea>
-        </div>
+<!--        <div class="mb-3">-->
+<!--            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>-->
+<!--            <input type="number"-->
+<!--                   class="form-control"-->
+<!--                   id="redskabsrum-bredde"-->
+<!--                   name="redskabsrum-bredde"-->
+<!--                   min="0"-->
+<!--                   max="720"-->
+<!--                   required-->
+<!--                   placeholder="Angiv et tal mellem 210 og 720 i cm og vælg 0 for intet redskabsrum">-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--            <label for="redskabsrum-bredde" class="form-label">Carport bredde*</label>-->
+<!--            <input type="number"-->
+<!--                   class="form-control"-->
+<!--                   id="redskabsrum-laengde"-->
+<!--                   name="redskabsrum-laengde"-->
+<!--                   min="0"-->
+<!--                   max="690"-->
+<!--                   required-->
+<!--                   placeholder="Angiv et tal mellem 150 og 690 i cm og vælg 0 for intet redskabsrum">-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--            <label for="bemaerkninger" class="form-label">Evt. bemærkninger / særlige ønsker</label>-->
+<!--            <textarea class="form-control" id="bemaerkninger" rows="3" name="bemaerkninger"></textarea>-->
+<!--        </div>-->
 
         <h4 class="fw-bold mt-4">Kontaktoplysninger:</h4>
         <div class="mb-3">
@@ -102,8 +113,8 @@
             <input type="text" class="form-control" id="postnummer" name="postnummer" placeholder="Postnummer" required>
         </div>
         <div class="mb-3">
-            <label for="telefon" class="form-label">Telefon</label>
-            <input type="tel" class="form-control" id="telefon" name="telefon" placeholder="Telefon nummer">
+            <label for="telefon" class="form-label">Telefon*</label>
+            <input type="tel" class="form-control" id="telefon" name="telefon" placeholder="Telefon nummer" required>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email*</label>
