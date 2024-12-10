@@ -3,17 +3,20 @@ package app.entities;
 public class Orderline {
     private String name;
     private String description;
+    private int lengthCm;
     private int quantity;
     private double price;
 
-    public Orderline(String name, String description, int quantity) {
+    public Orderline(String name, int lengthCm, String description, int quantity) {
         this.name = name;
+        this.lengthCm = lengthCm;
         this.quantity = quantity;
         this.description = description;
     }
 
-    public Orderline(String name, int quantity, double price) {
+    public Orderline(String name, int lengthCm, int quantity, double price) {
         this.name = name;
+        this.lengthCm = lengthCm;
         this.quantity = quantity;
         this.price = price;
     }
@@ -32,6 +35,10 @@ public class Orderline {
 
     public double getPrice() {
         return price;
+    }
+
+    public int getLengthCm() {
+        return lengthCm;
     }
 
     @Override
