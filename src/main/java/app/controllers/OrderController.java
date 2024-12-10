@@ -130,7 +130,6 @@ public class OrderController {
         int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {
-            // TODO: Det er ikke tydeligt at acountId er for brugeren og role er for sælgeren
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
             int accountId = detailOrderAccountDto.getAccountId();
             String role = activeAccount.getRole();
