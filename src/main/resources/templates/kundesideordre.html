@@ -40,11 +40,13 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="container-fluid">
-                <h2>Side View</h2>
-                <div class="mx-auto" id="carport-side-view" th:utext="${carportSvgSideView}"></div>
-                <h2>Top View</h2>
-                <div class="mx-auto" id="carport-top-view" th:utext="${carportSvgTopView}"></div>
+
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <h3 class="mt-5">Tegning fra siden</h3>
+                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${carportSvgSideView}"></div>
+                <h3 class="mt-5">Tegning fra oven</h3>
+                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${carportSvgTopView}"></div>
+                <p>* Mål udvendigt på stolper<br>** Afstand fra stern ved H=2,50m<br>*** Mål overkant rem</p>
             </div>
             <table class="table table-striped table-bordered mt-5">
                 <tr class="justify-content-around">
