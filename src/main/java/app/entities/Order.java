@@ -11,13 +11,14 @@ public class Order {
     String status;
 
     public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status) {
-    this.orderId = orderId;
-    this.datePlaced = datePlaced;
-    this.datePaid = datePaid;
-    this.dateCompleted = dateCompleted;
-    this.marginPercentage = marginPercentage;
-    this.status = status;
+        this.orderId = orderId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.marginPercentage = marginPercentage;
+        this.status = status;
     }
+
     public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
         this.orderId = orderId;
         this.datePlaced = datePlaced;

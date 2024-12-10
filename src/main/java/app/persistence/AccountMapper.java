@@ -117,8 +117,7 @@ public class AccountMapper {
 
     public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
         int accountId;
-        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?) ";
+        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone) VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

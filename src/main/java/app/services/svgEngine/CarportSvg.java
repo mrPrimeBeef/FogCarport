@@ -26,7 +26,6 @@ public class CarportSvg {
         List<Double> dimPointsX = new ArrayList<Double>();
         dimPointsX.add(0.0);
 
-
         for (PlacedMaterial placedMaterial : carport.getPlacedMaterials()) {
             double x = placedMaterial.getX();
             double y = placedMaterial.getY();

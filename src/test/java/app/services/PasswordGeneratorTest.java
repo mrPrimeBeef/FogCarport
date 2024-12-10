@@ -13,7 +13,6 @@ class PasswordGeneratorTest {
         PasswordGenerator pg;
         String password;
 
-
         String uppercasePattern = ".*[A-Z].*";
         String lowercasePattern = ".*[a-z].*";
         String numberPattern = ".*[0-9].*";

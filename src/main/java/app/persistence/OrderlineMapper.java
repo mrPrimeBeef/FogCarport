@@ -50,7 +50,7 @@ public class OrderlineMapper {
 
     public static void addOrderlines(int orderId, Map<Material, Integer> orderParts, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price)" + "VALUES(?, ?, ?, ?) ";
+        String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price) VALUES(?, ?, ?, ?) ";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

@@ -109,7 +109,7 @@ public class DetailOrderAccountDto {
         return svgTopView;
     }
 
-    // TODO: Fix så denne metode returnere det rigtige
+    // TODO: Fix så denne metode returnere det rigtige. Meget muligt skal mappere opdateres
     public double getSalePriceInclVAT() {
         return 0;
     }

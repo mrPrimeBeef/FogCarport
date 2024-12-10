@@ -15,11 +15,11 @@ class OrderlineMapperTest extends AbstractMapperTest {
 
     @Test
     void getOrderlinesForCustomerOrSalesrep() throws OrderException {
-        ArrayList<Orderline> orderlineList = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(2,"Kunde",connectionPool);
+        ArrayList<Orderline> orderlineList = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(2, "Kunde", connectionPool);
 
         assertNotNull(orderlineList);
-        assertEquals(2,orderlineList.size());
-        assertNotEquals(1,orderlineList.size());
+        assertEquals(2, orderlineList.size());
+        assertNotEquals(1, orderlineList.size());
     }
 
 //    @Test

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Carport extends Structure{
+public class Carport extends Structure {
 
     private int width;
     private int length;
@@ -54,7 +54,7 @@ public class Carport extends Structure{
     }
 
 
-    public Shed getShed(){
+    public Shed getShed() {
         return shed;
     }
 

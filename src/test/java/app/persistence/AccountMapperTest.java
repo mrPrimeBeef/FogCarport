@@ -3,6 +3,7 @@ package app.persistence;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.entities.Account;
@@ -65,25 +66,25 @@ class AccountMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    void getAccountByEmail() throws AccountException{
-        Account account = AccountMapper.getAccountByEmail("test@test.dk",connectionPool);
+    void getAccountByEmail() throws AccountException {
+        Account account = AccountMapper.getAccountByEmail("test@test.dk", connectionPool);
 
-        assertEquals(1,account.getAccountId());
+        assertEquals(1, account.getAccountId());
         assertEquals("test@test.dk", account.getEmail());
-        assertEquals("Kunde",account.getRole());
+        assertEquals("Kunde", account.getRole());
 
-        assertNotEquals(2,account.getAccountId());
-        assertNotEquals("test@testtest.dk",account.getEmail());
-        assertNotEquals("salesrep",account.getRole());
+        assertNotEquals(2, account.getAccountId());
+        assertNotEquals("test@testtest.dk", account.getEmail());
+        assertNotEquals("salesrep", account.getRole());
     }
 
     @Test
     void getPasswordAndEmail() throws AccountException {
-        Account account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+        Account account = AccountMapper.getPasswordAndEmail(1, connectionPool);
 
         String actual = account.getPassword();
         assertEquals("1234", actual);
-        assertNotEquals("234",actual);
+        assertNotEquals("234", actual);
 
         actual = account.getEmail();
         assertEquals("test@test.dk", actual);
@@ -92,17 +93,17 @@ class AccountMapperTest extends AbstractMapperTest {
 
     @Test
     void updatePassword() throws AccountException {
-        Account account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+        Account account = AccountMapper.getPasswordAndEmail(1, connectionPool);
         String actual = account.getPassword();
 
         assertEquals("1234", actual);
-        assertNotEquals("234",actual);
+        assertNotEquals("234", actual);
 
-        AccountMapper.updatePassword("test@test.dk","234", connectionPool);
-        account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+        AccountMapper.updatePassword("test@test.dk", "234", connectionPool);
+        account = AccountMapper.getPasswordAndEmail(1, connectionPool);
         actual = account.getPassword();
 
         assertEquals("234", actual);
-        assertNotEquals("1234",actual);
+        assertNotEquals("1234", actual);
     }
 }

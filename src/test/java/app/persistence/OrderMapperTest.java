@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import app.dto.DetailOrderAccountDto;
 import app.entities.Order;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.dto.OverviewOrderAccountDto;
@@ -29,7 +30,7 @@ class OrderMapperTest extends AbstractMapperTest {
 
     @Test
     void getOrdersFromAccountId() throws OrderException {
-        ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(1,connectionPool);
+        ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(1, connectionPool);
 
         assertEquals(2, orders.size());
         assertNotEquals(3, orders.size());
@@ -37,28 +38,30 @@ class OrderMapperTest extends AbstractMapperTest {
 
     @Test
     void getOrder() throws OrderException {
-        Order order = OrderMapper.getOrder(1,connectionPool);
+        Order order = OrderMapper.getOrder(1, connectionPool);
         String actual = order.getStatus();
 
         assertNotNull(order);
-        assertEquals("betalt",actual);
-        assertNotEquals("In progress",order.getStatus());
+        assertEquals("betalt", actual);
+        assertNotEquals("In progress", order.getStatus());
     }
 
     @Test
     void getDetailOrderAccountDtoByOrderId() throws DatabaseException {
-        DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(1,connectionPool);
+        DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(1, connectionPool);
         String actual = dto.getStatus();
         assertNotNull(dto);
-        assertEquals("henvendelse",actual);
-        assertNotEquals("In progress",dto.getStatus());
+        assertEquals("henvendelse", actual);
+        assertNotEquals("In progress", dto.getStatus());
     }
+
     @Test
     void updateMarginPercentage() throws DatabaseException {
-        OrderMapper.updateMarginPercentage(2,35,connectionPool);
+        OrderMapper.updateMarginPercentage(2, 35, connectionPool);
     }
+
     @Test
-    void updateCarport(){
+    void updateCarport() {
 
     }
 }
