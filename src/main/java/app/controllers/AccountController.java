@@ -118,19 +118,12 @@ public class AccountController {
             return;
         } else {
 
-
             try {
                 int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
                 DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderrId,connectionPool);
 
-//                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId, connectionPool);
-//                OrderlineMapper.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
-
-
-
                 Order orders = OrderMapper.getOrder(orderrId, connectionPool);
                 ctx.attribute("showOrder", orders);
-
 
                 ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
