@@ -9,6 +9,7 @@ public class Account {
     private String phone;
     private String email;
     private String role;
+    private String password;
 
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
@@ -38,13 +39,19 @@ public class Account {
         this.email = email;
         this.city = city;
     }
+    public Account(int accountId, String email, String password, String role) {
+        this.accountId = accountId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     public Account(int accountId, String email, String role) {
         this.accountId = accountId;
         this.email = email;
         this.role = role;
     }
-
+  
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
@@ -80,6 +87,12 @@ public class Account {
 
     public String getRole() {
         return role;
+    }
+
+    public String getPassword(){return password;}
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
