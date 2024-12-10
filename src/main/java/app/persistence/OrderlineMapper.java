@@ -42,7 +42,7 @@ public class OrderlineMapper {
         return orderlineList;
     }
 
-    public static void addOrderlines(Map<Material, Integer> orderParts, int orderId, ConnectionPool connectionPool) throws DatabaseException {
+    public static void addOrderlines(int orderId, Map<Material, Integer> orderParts, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price)" + "VALUES(?, ?, ?, ?) ";
 

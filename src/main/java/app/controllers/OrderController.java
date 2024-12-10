@@ -2,8 +2,10 @@ package app.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import app.services.StructureCalculationEngine.Entities.Material;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -195,6 +197,7 @@ public class OrderController {
         try {
 
             Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
+            Map<Material, Integer> partsList = carport.getPartsList();
             carportWidthCm = carport.getWidth();
             carportLengthCm = carport.getLength();
             carportHeightCm = carport.getHeight();
@@ -202,6 +205,8 @@ public class OrderController {
             String svgTopView = CarportSvg.topView(carport);
 
             OrderMapper.updateCarport(orderId, carportWidthCm, carportLengthCm, carportHeightCm, svgSideView, svgTopView, connectionPool);
+            OrderlineMapper.deleteOrderlinesFromOrderId(orderId, connectionPool);
+            OrderlineMapper.addOrderlines(orderId, partsList, connectionPool);
 
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
 
@@ -213,7 +218,7 @@ public class OrderController {
 
     }
 
-    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
+    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool) {
 
         Account activeAccount = ctx.sessionAttribute("account");
 
@@ -229,7 +234,7 @@ public class OrderController {
         String status = ctx.formParam("status");
         boolean isDone = false;
 
-        if(status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")){
+        if (status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")) {
             isDone = true;
         }
 
