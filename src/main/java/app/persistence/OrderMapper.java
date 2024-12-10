@@ -256,4 +256,23 @@ public class OrderMapper {
             throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId, e.getMessage());
         }
     }
+
+    public static void updateIsPaid(int orderId, ConnectionPool connectionPool) throws OrderException {
+        String sql = "UPDATE orderr SET paid = true WHERE orderid = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new OrderException("Fejl i køb af ordre");
+            }
+
+        } catch (OrderException | SQLException e){
+            LOGGER.severe("Error in updateIsPaid() " + e.getMessage());
+            throw new OrderException("Fejl i at oprette forbindelse til database");
+        }
+    }
 }

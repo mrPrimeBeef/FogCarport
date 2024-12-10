@@ -213,7 +213,7 @@ public class OrderController {
 
     }
 
-    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
+    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool) {
 
         Account activeAccount = ctx.sessionAttribute("account");
 
@@ -229,7 +229,7 @@ public class OrderController {
         String status = ctx.formParam("status");
         boolean isDone = false;
 
-        if(status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")){
+        if (status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")) {
             isDone = true;
         }
 

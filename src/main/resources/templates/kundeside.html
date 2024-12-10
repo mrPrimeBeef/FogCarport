@@ -50,7 +50,7 @@
                 </tr>
                 <tr th:each="order : ${showOrders}">
                     <td>
-                        <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
+                        <a th:href="@{/kundesideordre(ordrenr=${order.orderId})}" th:text="${order.orderId}"></a>
                     </td>
                     <td th:text="${order.datePlaced}"></td>
                     <td th:text="${order.dateCompleted}"></td>

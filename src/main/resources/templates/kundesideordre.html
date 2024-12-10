@@ -28,16 +28,14 @@
                 <tr th:if="${showOrder == null}">
                     <td colspan="6" class="text-center">Ingen ordrer fundet</td>
                 </tr>
-                <tr th:each="order : ${showOrder}">
                     <td>
-                        <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
+                        <a th:href="@{/kundesideordre(orderId=${showOrder.orderId})}" th:text="${showOrder.orderId}"></a>
                     </td>
-                    <td th:text="${order.datePlaced}"></td>
-                    <td th:text="${order.dateCompleted}"></td>
-                    <td th:text="${order.datePaid}"></td>
-                    <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                    <td th:text="${order.status}"></td>
-                </tr>
+                    <td th:text="${showOrder.datePlaced}"></td>
+                    <td th:text="${showOrder.dateCompleted}"></td>
+                    <td th:text="${showOrder.datePaid}"></td>
+                    <td th:text="${#numbers.formatDecimal(showOrder.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${showOrder.status}"></td>
                 </tbody>
             </table>
 
@@ -67,6 +65,10 @@
                 </tr>
                 </tbody>
             </table>
+            <form action="koebordre" method="post">
+                <input type="hidden" name="ordrenr" th:value="${showOrder.orderId}">
+                <button class="btn btn-primary" type="submit">Køb</button>
+            </form>
         </div>
     </div>
 </main>
