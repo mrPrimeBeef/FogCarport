@@ -47,6 +47,10 @@ public class Order {
         return marginPercentage;
     }
 
+    public double getSalePrice() {
+        return marginPercentage;
+    }
+
     public String getStatus() {
         return status;
     }
