@@ -1,15 +1,16 @@
 package app.persistence;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.services.StructureCalculationEngine.Entities.Carport;
-import org.junit.jupiter.api.Test;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderlineMapperTest extends AbstractMapperTest {
 

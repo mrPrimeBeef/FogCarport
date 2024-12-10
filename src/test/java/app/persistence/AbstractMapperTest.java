@@ -1,10 +1,10 @@
 package app.persistence;
 
-import org.junit.jupiter.api.BeforeEach;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractMapperTest {
     private static final String USER = "postgres";

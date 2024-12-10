@@ -1,12 +1,12 @@
 package app.services.StructureCalculationEngine.Entities;
 
-import app.services.StructureCalculationEngine.CalculationStrategy;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import app.services.StructureCalculationEngine.CalculationStrategy;
 
 public abstract class Structure {
     private CalculationStrategy strategy;

@@ -2,12 +2,12 @@ package app.persistence;
 
 import java.util.ArrayList;
 
-import app.dto.DetailOrderAccountDto;
-import app.entities.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.dto.DetailOrderAccountDto;
+import app.entities.Order;
 import app.dto.OverviewOrderAccountDto;
 import app.exceptions.OrderException;
 import app.exceptions.DatabaseException;

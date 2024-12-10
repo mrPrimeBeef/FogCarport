@@ -1,19 +1,16 @@
 package app.controllers;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
 
 import app.config.LoggerConfig;
 import app.dto.DetailOrderAccountDto;
 import app.services.PasswordGenerator;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
 import app.entities.Order;
 import app.entities.Orderline;
-import app.services.StructureCalculationEngine.Entities.Carport;
-import app.services.svgEngine.CarportSvg;
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
