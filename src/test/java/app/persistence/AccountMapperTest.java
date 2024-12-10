@@ -36,10 +36,10 @@ class AccountMapperTest extends AbstractMapperTest {
     @Test
     void getAllCustomerAccounts() throws AccountException {
         ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
-        String actual = accounts.get(2).getName();
+        String actual = accounts.get(0).getName();
 
         assertEquals("Test Testersen", actual);
-        assertEquals(3, accounts.size());
+        assertEquals(2, accounts.size());
 
         assertNotEquals("Test Testersen", accounts.get(1).getName());
     }
@@ -58,7 +58,7 @@ class AccountMapperTest extends AbstractMapperTest {
         Account account;
         account = AccountMapper.login("test@test.dk", "1234", connectionPool);
         assertEquals(1, account.getAccountId());
-        assertEquals("customer", account.getRole());
+        assertEquals("Kunde", account.getRole());
 
         assertNotEquals(2, account.getAccountId());
         assertNotEquals("admin", account.getRole());
@@ -75,5 +75,34 @@ class AccountMapperTest extends AbstractMapperTest {
         assertNotEquals(2,account.getAccountId());
         assertNotEquals("test@testtest.dk",account.getEmail());
         assertNotEquals("salesrep",account.getRole());
+    }
+
+    @Test
+    void getPasswordAndEmail() throws AccountException {
+        Account account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+
+        String actual = account.getPassword();
+        assertEquals("1234", actual);
+        assertNotEquals("234",actual);
+
+        actual = account.getEmail();
+        assertEquals("test@test.dk", actual);
+        assertNotEquals("hal@admin.dk", account.getEmail());
+    }
+
+    @Test
+    void updatePassword() throws AccountException {
+        Account account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+        String actual = account.getPassword();
+
+        assertEquals("1234", actual);
+        assertNotEquals("234",actual);
+
+        AccountMapper.updatePassword("test@test.dk","234", connectionPool);
+        account = AccountMapper.getPasswordAndEmail(1,connectionPool);
+        actual = account.getPassword();
+
+        assertEquals("234", actual);
+        assertNotEquals("1234",actual);
     }
 }

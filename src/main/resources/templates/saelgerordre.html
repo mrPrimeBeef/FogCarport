@@ -13,7 +13,7 @@
 <body class="bg-light">
 <header th:replace="fragments :: headerAdmin"></header>
 <main class="container text-center mt-5 mb-5">
-    <h1 class="mt-5 py-5">salesrepShowOrderPage</h1>
+    <h1 class="mt-5 py-5">Ordre: <span th:text="${detailOrderAccountDto.orderId}"></span></h1>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -38,8 +38,8 @@
         <form action="/sendbrugerinfo" method="post">
         <input type="hidden" name="accountId" th:value="${detailOrderAccountDto.accountId}">
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
-        <button type="submit" class="btn btn-primary">Send kundeinfo*</button>
-        <p class="d-inline">*Kunde info indbære at sende kunden en mail med brugernavn og password</p>
+        <button type="submit" class="btn btn-primary">Send Tilbud*</button>
+        <p class="d-inline">*At sende til tilbud indbære at sende kunden en mail med brugernavn og password, og besked om tilbudet er klar på deres konto</p>
         </form>
     </div>
     <table class="table table-bordered">
