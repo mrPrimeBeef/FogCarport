@@ -28,8 +28,8 @@ public class OrderController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("index"));
-        app.get("fladttag", ctx -> ctx.render("fladttag"));
+        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("fladttag", ctx -> ctx.render("fladttag.html"));
         app.post("fladttag", ctx -> postCarportCustomerInfo(ctx, connectionPool));
         app.get("saelgeralleordrer", ctx -> salesrepShowAllOrdersPage(ctx, connectionPool));
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));

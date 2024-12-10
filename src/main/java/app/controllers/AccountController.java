@@ -27,15 +27,15 @@ public class AccountController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("login", ctx -> ctx.render("login"));
+        app.get("login", ctx -> ctx.render("login.html"));
         app.post("login", ctx -> login(ctx, connectionPool));
         app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
-        app.get("glemtKode", ctx -> ctx.render("glemtKode"));
+        app.get("glemtKode", ctx -> ctx.render("glemtKode.html"));
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
-        app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo"));
+        app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo.html"));
         app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
         app.post("koebordre", ctx -> buyOrder(ctx, connectionPool));
     }
@@ -95,7 +95,7 @@ public class AccountController {
 
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
-            ctx.render("/error");
+            ctx.render("error.html");
             return;
         } else {
             try {
@@ -104,9 +104,9 @@ public class AccountController {
 
             } catch (OrderException e) {
                 ctx.attribute(e.getMessage());
-                ctx.render("/error");
+                ctx.render("error.html");
             }
-            ctx.render("/kundeside");
+            ctx.render("kundeside.html");
         }
     }
 
@@ -115,7 +115,7 @@ public class AccountController {
 
         if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
             ctx.attribute("Du er ikke logget ind");
-            ctx.render("/error");
+            ctx.render("error.html");
             return;
         } else {
 
@@ -134,9 +134,9 @@ public class AccountController {
 
             } catch (OrderException | DatabaseException e) {
                 ctx.attribute(e.getMessage());
-                ctx.render("/error");
+                ctx.render("error.html");
             }
-            ctx.render("/kundesideordre");
+            ctx.render("kundesideordre.html");
         }
     }
 
