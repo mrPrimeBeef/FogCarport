@@ -10,16 +10,16 @@ public class Order {
     double marginPercentage;
     String status;
 
-    public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status) {
-    this.orderId = orderrId;
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status) {
+    this.orderId = orderId;
     this.datePlaced = datePlaced;
     this.datePaid = datePaid;
     this.dateCompleted = dateCompleted;
     this.marginPercentage = marginPercentage;
     this.status = status;
     }
-    public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
-        this.orderId = orderrId;
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
+        this.orderId = orderId;
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
@@ -47,6 +47,7 @@ public class Order {
         return marginPercentage;
     }
 
+    // TODO: Skal rettest til getSalePriceInclVAT
     public double getSalePrice() {
         return marginPercentage;
     }
