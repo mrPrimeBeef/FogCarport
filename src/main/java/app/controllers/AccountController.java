@@ -30,14 +30,14 @@ public class AccountController {
         app.get("login", ctx -> ctx.render("login.html"));
         app.post("login", ctx -> login(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
-        app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
-        app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("glemtkode", ctx -> ctx.render("glemtkode.html"));
         app.post("glemtkode", ctx -> forgotPassword(ctx, connectionPool));
-        app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
         app.get("opdaterkundeinfo", ctx -> ctx.render("opdaterkundeinfo.html"));
         app.post("opdaterkundeinfo", ctx -> setNewPassword(ctx, connectionPool));
+        app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
+        app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.post("koebordre", ctx -> buyOrder(ctx, connectionPool));
+        app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
     }
 
     public static void login(Context ctx, ConnectionPool connectionPool) {
@@ -68,81 +68,6 @@ public class AccountController {
     private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
-    }
-
-    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
-            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
-                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
-
-            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
-            ctx.render("error.html");
-            return;
-        }
-        try {
-            LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
-
-            ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
-            ctx.attribute("accounts", accounts);
-            ctx.render("saelgerallekunder.html");
-        } catch (AccountException e) {
-            LOGGER.severe("Fejl ved hentning af kundeliste: " + e.getMessage());
-            ctx.attribute("errorMessage", e.getMessage());
-            ctx.render("error.html");
-        }
-    }
-
-    public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
-            ctx.attribute("Du er ikke logget ind");
-            ctx.render("error.html");
-            return;
-        } else {
-            try {
-                ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
-                ctx.attribute("showOrders", orders);
-
-            } catch (OrderException e) {
-                ctx.attribute(e.getMessage());
-                ctx.render("error.html");
-            }
-            ctx.render("kundeside.html");
-        }
-    }
-
-    public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
-            ctx.attribute("Du er ikke logget ind");
-            ctx.render("error.html");
-            return;
-        } else {
-
-            try {
-                int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
-                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
-
-                Order order = OrderMapper.getOrder(orderId, connectionPool);
-                ctx.attribute("showOrder", order);
-
-                ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
-                ctx.attribute("showOrderlines", orderlines);
-
-                ctx.attribute("carportSvgSideView", dto.getSvgSideView());
-                ctx.attribute("carportSvgTopView", dto.getSvgTopView());
-
-            } catch (OrderException | DatabaseException e) {
-                ctx.attribute(e.getMessage());
-                ctx.render("error.html");
-            }
-            ctx.render("kundesideordre.html");
-        }
     }
 
     public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
@@ -230,6 +155,57 @@ public class AccountController {
         }
     }
 
+    public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+            ctx.attribute("Du er ikke logget ind");
+            ctx.render("error.html");
+            return;
+        } else {
+            try {
+                ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
+                ctx.attribute("showOrders", orders);
+
+            } catch (OrderException e) {
+                ctx.attribute(e.getMessage());
+                ctx.render("error.html");
+            }
+            ctx.render("kundeside.html");
+        }
+    }
+
+    public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+            ctx.attribute("Du er ikke logget ind");
+            ctx.render("error.html");
+            return;
+        } else {
+
+            try {
+                int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
+                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
+
+                Order order = OrderMapper.getOrder(orderId, connectionPool);
+                ctx.attribute("showOrder", order);
+
+                ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+                ctx.attribute("showOrderlines", orderlines);
+
+                ctx.attribute("carportSvgSideView", dto.getSvgSideView());
+                ctx.attribute("carportSvgTopView", dto.getSvgTopView());
+
+            } catch (OrderException | DatabaseException e) {
+                ctx.attribute(e.getMessage());
+                ctx.render("error.html");
+            }
+            ctx.render("kundesideordre.html");
+        }
+    }
+
+
     private static void buyOrder(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
 
@@ -245,6 +221,31 @@ public class AccountController {
             ctx.redirect("kundesideordre?ordrenr=" + orderId);
         } catch (OrderException e) {
             LOGGER.severe(e.getMessage());
+        }
+    }
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
+            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+        try {
+            LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
+
+            ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
+            ctx.attribute("accounts", accounts);
+            ctx.render("saelgerallekunder.html");
+        } catch (AccountException e) {
+            LOGGER.severe("Fejl ved hentning af kundeliste: " + e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
     }
 }
