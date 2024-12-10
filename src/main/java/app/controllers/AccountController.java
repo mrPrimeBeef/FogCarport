@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import app.config.LoggerConfig;
+import app.dto.DetailOrderAccountDto;
 import app.services.PasswordGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -116,32 +117,21 @@ public class AccountController {
             ctx.render("/error");
             return;
         } else {
-            // TODO fix med rigtig måde at vise?
-            int carportLengthCm = 752;
-            int carportWidthCm = 600;
-            int carportHeightCm = 210;
-            Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-
-            // TODO
 
             try {
                 int orderrId = Integer.parseInt(ctx.queryParam("orderId"));
-
-                carport.getPlacedMaterials();
-                OrderlineMapper.deleteOrderlinesFromOrderId(orderrId, connectionPool);
-                OrderlineMapper.addOrderlines(carport.getPartsList(), orderrId, connectionPool);
+                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderrId,connectionPool);
 
                 Order orders = OrderMapper.getOrder(orderrId, connectionPool);
                 ctx.attribute("showOrder", orders);
 
-
                 ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
                 ctx.attribute("showOrderlines", orderlines);
 
-                ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-                ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
+                ctx.attribute("carportSvgSideView", dto.getSvgSideView());
+                ctx.attribute("carportSvgTopView", dto.getSvgTopView());
 
-            } catch (OrderException | DatabaseException | SQLException e) {
+            } catch (OrderException | DatabaseException e) {
                 ctx.attribute(e.getMessage());
                 ctx.render("/error");
             }
