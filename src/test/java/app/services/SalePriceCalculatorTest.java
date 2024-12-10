@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Bruger beregningseksempel fra dette link til at teste ud fra:
+// https://startupsvar.dk/efter-start/oeg-dit-overskud/daekningsbidrag
 class SalePriceCalculatorTest {
 
     @Test
