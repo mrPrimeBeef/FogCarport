@@ -76,6 +76,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         ItemSearchBuilder builderPillar = new ItemSearchBuilder();
         Map<String, Object> filtersPillar = builderPillar
                 .setItemType("Stolpe")
+                .setHeightMm(97)
                 .setLengthCm(carport.getHeight()+90)
                 .build();
         Material pillarMaterial = ItemMapper.searchSingleItem(filtersPillar, pool);
@@ -119,6 +120,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         ItemSearchBuilder builderBeam = new ItemSearchBuilder();
         Map<String, Object> filtersBeam = builderBeam
                 .setItemType("Spær")
+                .setWidthMm(45)
+                .setHeightMm(195)
                 .setLengthCm(carport.getLength())
                 .build();
         Material beamMaterial = ItemMapper.searchSingleItem(filtersBeam, pool);
@@ -153,6 +156,8 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         ItemSearchBuilder builderRafter = new ItemSearchBuilder();
         Map<String, Object> filtersRafter = builderRafter
                 .setItemType("Lægte")
+                .setWidthMm(38)
+                .setHeightMm(73)
                 .setLengthCm(carport.getWidth())
                 .build();
         Material rafterMaterial = ItemMapper.searchSingleItem(filtersRafter, pool);
@@ -188,15 +193,15 @@ public class CarportCalculationStrategy implements CalculationStrategy{
 
         ItemSearchBuilder builderRightBrackets = new ItemSearchBuilder();
         Map<String, Object> filtersRightBrackets = builderRightBrackets
-                .setName("Universal beslag")
-                .setDescription("190 mm højre")
+                .setName("Universal beslag 190 mm")
+                .setDescription("højre")
                 .build();
         Material rightBracketMaterial = ItemMapper.searchSingleItem(filtersRightBrackets, pool);
 
         ItemSearchBuilder builderLeftBrackets = new ItemSearchBuilder();
         Map<String, Object> filtersLeftBrackets = builderLeftBrackets
-                .setName("Universal beslag")
-                .setDescription("190 mm venstre")
+                .setName("Universal beslag 190 mm")
+                .setDescription("venstre")
                 .build();
         Material leftBracketMaterial = ItemMapper.searchSingleItem(filtersLeftBrackets, pool);
 
