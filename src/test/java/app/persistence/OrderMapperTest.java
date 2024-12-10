@@ -41,7 +41,7 @@ class OrderMapperTest extends AbstractMapperTest {
         String actual = order.getStatus();
 
         assertNotNull(order);
-        assertEquals("henvendelse",actual);
+        assertEquals("betalt",actual);
         assertNotEquals("In progress",order.getStatus());
     }
 
