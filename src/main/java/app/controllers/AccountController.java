@@ -32,8 +32,8 @@ public class AccountController {
         app.get("logout", ctx -> logout(ctx));
         app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
-        app.get("glemtKode", ctx -> ctx.render("glemtKode.html"));
-        app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
+        app.get("glemtkode", ctx -> ctx.render("glemtkode.html"));
+        app.post("glemtkode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
         app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo.html"));
         app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
@@ -154,7 +154,7 @@ public class AccountController {
 
             if (account == null || "salesrep".equals(role)) {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
-                ctx.render("glemtKode.html");
+                ctx.render("glemtkode.html");
                 return;
             }
 
@@ -168,7 +168,7 @@ public class AccountController {
                 ctx.render("login.html");
             } else {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede email. Prøv igen.");
-                ctx.render("glemtKode.html");
+                ctx.render("glemtkode.html");
             }
         } catch (AccountException e) {
             ctx.attribute("message", "Error in forgotPassword() " + e.getMessage());
