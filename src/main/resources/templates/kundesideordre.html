@@ -14,7 +14,7 @@
 <header th:replace="fragments :: headerCustomer"></header>
 <main class="text-center mt-5 mb-5">
     <div class="mt-5 py-5">
-        <h2 class="mt-5">Ordrenr. <span th:text="${order.orderId}"></span></h2>
+        <h2 class="mt-5">Ordrenr. <span th:text="${detailOrderAccountDto.orderId}"></span></h2>
         <div class="d-flex flex-column justify-content-around p-0 m-5">
             <table class="table table-striped table-bordered">
                 <tr class="justify-content-around">
@@ -26,25 +26,25 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${order == null}">
+                <tr th:if="${detailOrderAccountDto == null}">
                     <td colspan="6" class="text-center">Under behandling</td>
                 </tr>
                 <td>
-                    <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
+                    <a th:href="@{/kundesideordre(orderId=${detailOrderAccountDto.orderId})}" th:text="${detailOrderAccountDto.orderId}"></a>
                 </td>
-                <td th:text="${order.datePlaced}"></td>
-                <td th:text="${order.dateCompleted}"></td>
-                <td th:text="${order.datePaid}"></td>
-                <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${order.status}"></td>
+                <td th:text="${detailOrderAccountDto.datePlaced}"></td>
+                <td th:text="${detailOrderAccountDto.dateCompleted}"></td>
+                <td th:text="${detailOrderAccountDto.datePaid}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${detailOrderAccountDto.status}"></td>
                 </tbody>
             </table>
 
             <div class="d-flex flex-column align-items-center justify-content-center">
                 <h3 class="mt-5">Tegning fra siden</h3>
-                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${carportSvgSideView}"></div>
+                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${detailOrderAccountDto.svgSideView}"></div>
                 <h3 class="mt-5">Tegning fra oven</h3>
-                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${carportSvgTopView}"></div>
+                <div class="carport-svg-view p-3 w-75 min-vh-50" th:utext="${detailOrderAccountDto.svgTopView}"></div>
                 <p>* Mål udvendigt på stolper<br>** Afstand fra stern ved H=2,50m<br>*** Mål overkant rem</p>
             </div>
             <table class="table table-striped table-bordered mt-5">
@@ -71,15 +71,15 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${order.status != 'Afsluttet'
-                          and order.status != 'Annulleret'
-                          and order.status != 'Leveret'}">
+            <div th:if="${detailOrderAccountDto.status != 'Afsluttet'
+                          and detailOrderAccountDto.status != 'Annulleret'
+                          and detailOrderAccountDto.status != 'Leveret'}">
                 <form action="koebordre" method="post">
-                    <input type="hidden" name="ordrenr" th:value="${order.orderId}">
+                    <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
                     <button class="btn btn-primary" type="submit">Køb</button>
                 </form>
             </div>
