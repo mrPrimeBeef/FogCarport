@@ -35,8 +35,8 @@ public class AccountController {
         app.get("glemtkode", ctx -> ctx.render("glemtkode.html"));
         app.post("glemtkode", ctx -> forgotPassword(ctx, connectionPool));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
-        app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo.html"));
-        app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
+        app.get("opdaterkundeinfo", ctx -> ctx.render("opdaterkundeinfo.html"));
+        app.post("opdaterkundeinfo", ctx -> setNewPassword(ctx, connectionPool));
         app.post("koebordre", ctx -> buyOrder(ctx, connectionPool));
     }
 
@@ -201,19 +201,19 @@ public class AccountController {
 
             if (account.getPassword() == null) {
                 ctx.attribute("errorMessage", "Ingen adgangskode fundet til denne konto.");
-                ctx.render("opdaterKundeInfo.html");
+                ctx.render("opdaterkundeinfo.html");
                 return;
             }
 
             if (!account.getPassword().equals(currentPassword)) {
                 ctx.attribute("errorMessage", "Den nuværende adgangskode er forkert.");
-                ctx.render("opdaterKundeInfo.html");
+                ctx.render("opdaterkundeinfo.html");
                 return;
             }
 
             if (!newPassword1.equals(newPassword2)) {
                 ctx.attribute("errorMessage", "De nye adgangskoder matcher ikke.");
-                ctx.render("opdaterKundeInfo.html");
+                ctx.render("opdaterkundeinfo.html");
                 return;
             }
 
