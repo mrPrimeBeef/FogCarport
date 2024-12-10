@@ -192,8 +192,8 @@ public class AccountController {
 
         String email = activeAccount.getEmail();
         String currentPassword = ctx.formParam("currentPassword");
-        String newPassword1 = ctx.formParam("newPassword");
-        String newPassword2 = ctx.formParam("newPassword");
+        String newPassword1 = ctx.formParam("newPassword1");
+        String newPassword2 = ctx.formParam("newPassword2");
 
         try {
             Account account = AccountMapper.getPasswordByEmail(email, connectionPool);
