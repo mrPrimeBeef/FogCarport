@@ -4,10 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.persistence.*;
+import app.services.SalePriceCalculator;
 import app.config.LoggerConfig;
 import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
@@ -17,11 +18,6 @@ import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.persistence.AccountMapper;
-import app.dto.OverviewOrderAccountDto;
-import app.services.svgEngine.CarportSvg;
-import app.services.StructureCalculationEngine.Entities.Carport;
-
-
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 
@@ -132,12 +128,11 @@ public class OrderController {
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
-            // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
             double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
-            double salePrice = 100 * costPrice / (100 - marginPercentage);
-            double marginAmount = salePrice - costPrice;
-            double salePriceInclVAT = 1.25 * salePrice;
+            double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);
+            double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
+            double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("costPrice", costPrice);

@@ -14,6 +14,7 @@ import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.config.LoggerConfig;
 import app.exceptions.OrderException;
+import app.services.SalePriceCalculator;
 
 public class OrderMapper {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -21,7 +22,9 @@ public class OrderMapper {
     public static ArrayList<OverviewOrderAccountDto> getOverviewOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = new ArrayList<>();
 
-        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
+        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -35,9 +38,11 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salesPrice = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salesPrice, status));
+                double marginPercentage = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+                double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in getOverviewOrderAccountDtos() connection. E message: " + e.getMessage());
