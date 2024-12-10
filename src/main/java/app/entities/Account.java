@@ -61,10 +61,6 @@ public class Account {
         this.password = password;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public int getAccountId() {
         return accountId;
     }
