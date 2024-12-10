@@ -210,4 +210,29 @@ public class OrderMapper {
 
     }
 
+    public static void updateStatus(int orderId, String status, Boolean isDone, ConnectionPool connectionPool) throws DatabaseException {
+
+        String sql = "UPDATE orderr SET status=?";
+
+        if(isDone){
+            sql += ", date_completed=CURRENT_DATE";
+        }
+
+        sql += " WHERE orderr_id=?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId, e.getMessage());
+        }
+    }
 }
