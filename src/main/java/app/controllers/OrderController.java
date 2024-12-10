@@ -32,6 +32,7 @@ public class OrderController {
         app.get("saelgerordre", ctx -> salesrepShowOrderPage(ctx, connectionPool));
         app.post("daekningsgrad", ctx -> salesrepPostMarginPercentage(ctx, connectionPool));
         app.post("carportberegning", ctx -> salesrepPostCarportCalculation(ctx, connectionPool));
+        app.post("opdaterstatus", ctx -> salesrepPostStatus(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -212,4 +213,33 @@ public class OrderController {
 
     }
 
+    private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
+
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at ændre ordre status. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+
+        int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+        String status = ctx.formParam("status");
+        boolean isDone = false;
+
+        if(status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")){
+            isDone = true;
+        }
+
+        try {
+            OrderMapper.updateStatus(orderId, status, isDone, connectionPool);
+            ctx.redirect("saelgerordre?ordrenr=" + orderId);
+        } catch (DatabaseException e) {
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
+    }
 }
