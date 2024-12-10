@@ -29,40 +29,15 @@ public class AccountController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login.html"));
         app.post("login", ctx -> login(ctx, connectionPool));
+        app.get("logout", ctx -> logout(ctx));
         app.get("kundeside", ctx -> showCustomerOverview(ctx, connectionPool));
         app.get("kundesideordre", ctx -> showCustomerOrderPage(ctx, connectionPool));
         app.get("glemtKode", ctx -> ctx.render("glemtKode.html"));
         app.post("glemtKode", ctx -> forgotPassword(ctx, connectionPool));
-        app.get("logout", ctx -> logout(ctx));
         app.get("saelgerallekunder", ctx -> salesrepShowAllCustomersPage(ctx, connectionPool));
         app.get("opdaterKundeInfo", ctx -> ctx.render("opdaterKundeInfo.html"));
         app.post("opdaterKundeInfo", ctx -> setNewPassword(ctx, connectionPool));
         app.post("koebordre", ctx -> buyOrder(ctx, connectionPool));
-    }
-
-    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
-            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
-                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
-
-            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
-            ctx.render("error.html");
-            return;
-        }
-        try {
-            LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
-
-            ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
-            ctx.attribute("accounts", accounts);
-            ctx.render("saelgerallekunder.html");
-        } catch (AccountException e) {
-            LOGGER.severe("Fejl ved hentning af kundeliste: " + e.getMessage());
-            ctx.attribute("errorMessage", e.getMessage());
-            ctx.render("error.html");
-        }
     }
 
     public static void login(Context ctx, ConnectionPool connectionPool) {
@@ -87,6 +62,36 @@ public class AccountController {
         } catch (AccountException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
+        }
+    }
+
+    private static void logout(Context ctx) {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
+    }
+
+    public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+
+            LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+        try {
+            LOGGER.info("Sælger henter kundeliste. sælger: " + activeAccount.getAccountId());
+
+            ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
+            ctx.attribute("accounts", accounts);
+            ctx.render("saelgerallekunder.html");
+        } catch (AccountException e) {
+            LOGGER.severe("Fejl ved hentning af kundeliste: " + e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
     }
 
@@ -121,7 +126,7 @@ public class AccountController {
 
             try {
                 int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
-                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId,connectionPool);
+                DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
                 Order order = OrderMapper.getOrder(orderId, connectionPool);
                 ctx.attribute("showOrder", order);
@@ -138,11 +143,6 @@ public class AccountController {
             }
             ctx.render("kundesideordre.html");
         }
-    }
-
-    private static void logout(Context ctx) {
-        ctx.req().getSession().invalidate();
-        ctx.redirect("/");
     }
 
     public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
