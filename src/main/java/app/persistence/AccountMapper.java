@@ -22,7 +22,7 @@ public class AccountMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
-          
+
             while (rs.next()) {
                 String mail = rs.getString("email");
                 String name = rs.getString("name");
@@ -36,10 +36,11 @@ public class AccountMapper {
             return accounts;
 
         } catch (SQLException e) {
-        LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
-        throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
+            LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
+            throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
         }
     }
+
     public static Account login(String email, String password, ConnectionPool connectionPool) throws AccountException {
         Account account = null;
         String sql = "SELECT account_id, name, role, address, city, phone FROM account JOIN zip_code USING(zip_code) WHERE email=? AND password=?";
@@ -66,13 +67,12 @@ public class AccountMapper {
                     account = new Account(accountId, email, name, role, address, city, phone);
                 }
             }
+            return account;
         } catch (SQLException e) {
             LOGGER.severe("Error in login() connection. E message: " + e.getMessage());
             throw new AccountException("Fejl i login.", "Error in login()", e.getMessage());
         }
-        return account;
     }
-
 
     public static ArrayList<String> getAllAccountEmails(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<String> emails = new ArrayList<>();
@@ -176,6 +176,29 @@ public class AccountMapper {
         return account;
     }
 
+    public static Account getPasswordByEmail(String email, ConnectionPool connectionPool) throws AccountException {
+        Account account = null;
+        String sql = "SELECT account_id, password, email, role FROM account WHERE email = ?";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    account = new Account(
+                            rs.getInt("account_id"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("role")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new AccountException("Kunne ikke hente adgangskoden fra databasen: " + "Error in getPasswordByEmail " + e.getMessage());
+        }
+        return account;
+    }
+
     public static void updatePassword(String email, String newPassword, ConnectionPool connectionPool) throws AccountException {
         String sql = "UPDATE account SET password = ? WHERE email = ?";
 
@@ -217,4 +240,5 @@ public class AccountMapper {
         }
         return account;
     }
+  }
 }

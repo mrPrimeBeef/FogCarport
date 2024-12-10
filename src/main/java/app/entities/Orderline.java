@@ -11,6 +11,7 @@ public class Orderline {
         this.quantity = quantity;
         this.description = description;
     }
+
     public Orderline(String name, int quantity, double price) {
         this.name = name;
         this.quantity = quantity;

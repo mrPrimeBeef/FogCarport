@@ -40,7 +40,12 @@
                        th:text="${session.account.email}">
                         Bruger Email
                     </a>
-                    <a class="nav-link active btn-sm ms-2"
+                    <a class="nav-link active btn-sm ms-3"
+                        th:if="${session.account != null}"
+                        th:href="@{/opdaterKundeInfo}">
+                        Ændre adgangskode
+                    </a>
+                    <a class="nav-link active btn-sm ms-3"
                        th:if="${session.account != null}"
                        th:href="@{/logout}">
                         Log ud

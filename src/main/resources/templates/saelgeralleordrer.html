@@ -22,7 +22,7 @@
                 <th>Henvendelse</th>
                 <th>Dato betalt</th>
                 <th>Dato færdig</th>
-                <th>Pris</th>
+                <th>Salgspris inkl. moms</th>
                 <th>Status</th>
             </tr>
             <tbody class="table-group-divider">
@@ -31,9 +31,9 @@
                        th:text="${OverviewOrderAccountDto.orderId}"></a></td>
                 <td th:text="${OverviewOrderAccountDto.email}"></td>
                 <td th:text="${OverviewOrderAccountDto.datePlaced}"></td>
-                <td th:text="${OverviewOrderAccountDto.dateCompleted}"></td>
                 <td th:text="${OverviewOrderAccountDto.datePaid}"></td>
-                <td th:text="${OverviewOrderAccountDto.salesPrice}"></td>
+                <td th:text="${OverviewOrderAccountDto.dateCompleted}"></td>
+                <td th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 <td th:text="${OverviewOrderAccountDto.status}"></td>
             </tr>
             </tbody>

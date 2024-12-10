@@ -9,17 +9,17 @@ public class OverviewOrderAccountDto {
     private Date datePlaced;
     private Date datePaid;
     private Date dateCompleted;
-    private double salesPrice;
+    private double salePriceInclVAT;
     private String status;
 
-    public OverviewOrderAccountDto(int orderId, int accountId, String email, Date datePlaced, Date datePaid, Date dateCompleted, double salesPrice, String status) {
+    public OverviewOrderAccountDto(int orderId, int accountId, String email, Date datePlaced, Date datePaid, Date dateCompleted, double salePriceInclVAT, String status) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
-        this.salesPrice = salesPrice;
+        this.salePriceInclVAT = salePriceInclVAT;
         this.status = status;
     }
 
@@ -47,8 +47,8 @@ public class OverviewOrderAccountDto {
         return dateCompleted;
     }
 
-    public double getSalesPrice() {
-        return salesPrice;
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
     }
 
     public String getStatus() {

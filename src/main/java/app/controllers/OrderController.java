@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import app.persistence.*;
+import app.services.SalePriceCalculator;
 import app.config.LoggerConfig;
 import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
@@ -16,14 +18,6 @@ import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
 import app.persistence.AccountMapper;
-import app.persistence.OrderMapper;
-import app.persistence.AccountMapper;
-import app.persistence.ConnectionPool;
-import app.dto.OverviewOrderAccountDto;
-import app.services.svgEngine.CarportSvg;
-import app.services.StructureCalculationEngine.Entities.Carport;
-
-
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 
@@ -39,6 +33,7 @@ public class OrderController {
         app.post("daekningsgrad", ctx -> salesrepPostMarginPercentage(ctx, connectionPool));
         app.post("carportberegning", ctx -> salesrepPostCarportCalculation(ctx, connectionPool));
         app.post("sendbrugerinfo", ctx -> sendCustomerInfo(ctx, connectionPool));
+        app.post("opdaterstatus", ctx -> salesrepPostStatus(ctx, connectionPool));
     }
 
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
@@ -69,21 +64,6 @@ public class OrderController {
         showThankYouPage(name, email, ctx);
     }
 
-//    private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
-//
-//        int carportLengthCm = 752;
-//        int carportWidthCm = 600;
-//        int carportHeightCm = 210;
-//
-//        Carport carport = new Carport(carportWidthCm, carportLengthCm, carportHeightCm, null, false, 0, connectionPool);
-//
-//        try {
-//            ctx.attribute("carportSvgSideView", CarportSvg.sideView(carport));
-//            ctx.attribute("carportSvgTopView", CarportSvg.topView(carport));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
@@ -133,22 +113,28 @@ public class OrderController {
         ctx.render("tak.html");
     }
 
-    // TODO: Fix the exception handling to show error page
+
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Tilføj guard condition her
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til ordresiden for sælgere. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
-            // TODO: Disse beregninger skal evt. ligges ud i en service klasse. Så bliver de også muligt at unit teste
-            double costPrice = 10000;  // TODO: Skal beregnes ved at summere cost price fra orderlines, f.eks: OrderlineMapper.getSumCostPriceByOrderId(orderId, connectionPool)
+            double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
             double marginPercentage = detailOrderAccountDto.getMarginPercentage();
-            double salePrice = 100 * costPrice / (100 - marginPercentage);
-            double marginAmount = salePrice - costPrice;
-            double salePriceInclVAT = 1.25 * salePrice;
+            double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);
+            double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
+            double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("costPrice", costPrice);
@@ -156,15 +142,23 @@ public class OrderController {
             ctx.attribute("salePrice", salePrice);
             ctx.attribute("salePriceInclVAT", salePriceInclVAT);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
-        ctx.render("saelgerordre.html");
+       ctx.render("saelgerordre.html");
     }
 
-    // TODO: Fix the exception handling to show error page
     private static void salesrepPostMarginPercentage(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Tilføj guard condition her
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at ændre dækningsgrad. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         Double marginPercentage = Double.parseDouble(ctx.formParam("daekningsgrad"));
@@ -173,15 +167,23 @@ public class OrderController {
             OrderMapper.updateMarginPercentage(orderId, marginPercentage, connectionPool);
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
 
     }
 
-    // TODO: Fix the exception handling to show error page
     private static void salesrepPostCarportCalculation(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Tilføj guard condition her
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at køre carport beregning. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
 
         int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
         int carportWidthCm = Integer.parseInt(ctx.formParam("carport-bredde"));
@@ -202,10 +204,43 @@ public class OrderController {
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
 
         } catch (DatabaseException | SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
         }
     }
-    public static void sendCustomerInfo(Context ctx, ConnectionPool connectionPool) {
+  
+  private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool){
+
+        Account activeAccount = ctx.sessionAttribute("account");
+
+        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at ændre ordre status. Rolle: " +
+                    (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
+            ctx.attribute("errorMessage", "Kun adgang for sælgere.");
+            ctx.render("error.html");
+            return;
+        }
+
+        int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
+        String status = ctx.formParam("status");
+        boolean isDone = false;
+
+        if(status.equalsIgnoreCase("afsluttet") || status.equalsIgnoreCase("annulleret")){
+            isDone = true;
+        }
+
+        try {
+            OrderMapper.updateStatus(orderId, status, isDone, connectionPool);
+            ctx.redirect("saelgerordre?ordrenr=" + orderId);
+        } catch (DatabaseException e) {
+            LOGGER.severe(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
+            ctx.render("error.html");
+        }
+    }
+    
+  public static void sendCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
 
         if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
@@ -219,6 +254,7 @@ public class OrderController {
             int accountId = Integer.parseInt(ctx.formParam("accountId"));
             Account account = AccountMapper.getPasswordAndEmail(accountId,connectionPool);
 
+            // Sending mock email via System.out.println
             System.out.println("Her er din fog konto:");
             System.out.println("Dit brugernavn: " + account.getEmail());
             System.out.println("Dit kodeord: " + account.getPassword());
