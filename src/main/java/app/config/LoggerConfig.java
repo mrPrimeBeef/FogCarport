@@ -1,16 +1,16 @@
 package app.config;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.LogRecord;
+
 import java.util.logging.Logger;
 
 public class LoggerConfig {
     private static Logger LOGGER;
+
+    private LoggerConfig() {
+        // Privat constructor for at forhindre instansiering
+    }
 
     public static Logger getLOGGER() {
         if (LOGGER == null) {

@@ -17,35 +17,35 @@ class CustomLogFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder logMessage = new StringBuilder();
 
         // Timestamp format
-        sb.append(dateFormat.format(new Date(record.getMillis())))
+        logMessage.append(dateFormat.format(new Date(record.getMillis())))
                 .append(" UTC --- ");
 
         // Class name and method name
         if (record.getSourceClassName() != null) {
-            sb.append(record.getSourceClassName());
+            logMessage.append(record.getSourceClassName());
         } else {
-            sb.append("Unknown Class/Package");
+            logMessage.append("Unknown Class/Package");
         }
 
         if (record.getSourceMethodName() != null) {
-            sb.append(" ")
+            logMessage.append(" ")
                     .append(record.getSourceMethodName())
                     .append("()");
         } else {
-            sb.append(" Unknown Method");
+            logMessage.append(" Unknown Method");
         }
 
         // Log level and message
-        sb.append(System.lineSeparator())
+        logMessage.append(System.lineSeparator())
                 .append(record.getLevel())
                 .append(": ")
                 .append(formatMessage(record))
                 .append(System.lineSeparator())
                 .append(System.lineSeparator());
 
-        return sb.toString();
+        return logMessage.toString();
     }
 }
