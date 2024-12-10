@@ -66,6 +66,13 @@
                     <td th:text="${orderline.quantity}"></td>
                     <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
+                <tr>
+                    <td>TOTAL PRIS</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td th:text="${#numbers.formatDecimal(showOrder.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                </tr>
                 </tbody>
             </table>
             <div th:if="${showOrder.status != 'Afsluttet'
