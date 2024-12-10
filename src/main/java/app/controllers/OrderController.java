@@ -42,9 +42,9 @@ public class OrderController {
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
-        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
-        String notes = ctx.formParam("bemaerkninger");
+        int shedWidth = 0; //Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
+        int shedLength = 0; //Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
+        String notes = ""; //ctx.formParam("bemaerkninger");
 
         String name = ctx.formParam("navn");
         String address = ctx.formParam("adresse");
