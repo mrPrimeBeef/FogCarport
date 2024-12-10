@@ -164,7 +164,7 @@ public class AccountController {
 
         try {
             ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
-            ctx.attribute("showOrders", orders);
+            ctx.attribute("orders", orders);
             ctx.render("kundeside.html");
         } catch (OrderException e) {
             ctx.attribute(e.getMessage());
@@ -185,10 +185,10 @@ public class AccountController {
             DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
 
             Order order = OrderMapper.getOrder(orderId, connectionPool);
-            ctx.attribute("showOrder", order);
+            ctx.attribute("order", order);
 
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
-            ctx.attribute("showOrderlines", orderlines);
+            ctx.attribute("orderlines", orderlines);
 
             ctx.attribute("carportSvgSideView", dto.getSvgSideView());
             ctx.attribute("carportSvgTopView", dto.getSvgTopView());

@@ -46,10 +46,10 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${showOrders == null}">
+                <tr th:if="${orders == null}">
                     <td colspan="6" class="text-center">Ingen ordrer fundet</td>
                 </tr>
-                <tr th:each="order : ${showOrders}">
+                <tr th:each="order : ${orders}">
                     <td>
                         <a th:href="@{/kundesideordre(ordrenr=${order.orderId})}" th:text="${order.orderId}"></a>
                     </td>

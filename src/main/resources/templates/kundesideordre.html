@@ -14,7 +14,7 @@
 <header th:replace="fragments :: headerCustomer"></header>
 <main class="text-center mt-5 mb-5">
     <div class="mt-5 py-5">
-        <h2 class="mt-5">Ordrenr. <span th:text="${showOrder.orderId}"></span></h2>
+        <h2 class="mt-5">Ordrenr. <span th:text="${order.orderId}"></span></h2>
         <div class="d-flex flex-column justify-content-around p-0 m-5">
             <table class="table table-striped table-bordered">
                 <tr class="justify-content-around">
@@ -26,17 +26,17 @@
                     <th>Status</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${showOrder == null}">
+                <tr th:if="${order == null}">
                     <td colspan="6" class="text-center">Under behandling</td>
                 </tr>
                 <td>
-                    <a th:href="@{/kundesideordre(orderId=${showOrder.orderId})}" th:text="${showOrder.orderId}"></a>
+                    <a th:href="@{/kundesideordre(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
                 </td>
-                <td th:text="${showOrder.datePlaced}"></td>
-                <td th:text="${showOrder.dateCompleted}"></td>
-                <td th:text="${showOrder.datePaid}"></td>
-                <td th:text="${#numbers.formatDecimal(showOrder.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${showOrder.status}"></td>
+                <td th:text="${order.datePlaced}"></td>
+                <td th:text="${order.dateCompleted}"></td>
+                <td th:text="${order.datePaid}"></td>
+                <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${order.status}"></td>
                 </tbody>
             </table>
 
@@ -56,10 +56,10 @@
                     <th>Samlet pris inkl. moms</th>
                 </tr>
                 <tbody class="table-group-divider">
-                <tr th:if="${showOrderlines == null}">
+                <tr th:if="${orderlines == null}">
                     <td colspan="6" class="text-center">Ingen stykliste fundet endnu</td>
                 </tr>
-                <tr th:each="orderline : ${showOrderlines}">
+                <tr th:each="orderline : ${orderlines}">
                     <td th:text="${orderline.name}"></td>
                     <td th:text="${orderline.lengthCm}"></td>
                     <td th:text="${orderline.description}"></td>
@@ -71,15 +71,15 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td th:text="${#numbers.formatDecimal(showOrder.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${showOrder.status != 'Afsluttet'
-                          and showOrder.status != 'Annulleret'
-                          and showOrder.status != 'Leveret'}">
+            <div th:if="${order.status != 'Afsluttet'
+                          and order.status != 'Annulleret'
+                          and order.status != 'Leveret'}">
                 <form action="koebordre" method="post">
-                    <input type="hidden" name="ordrenr" th:value="${showOrder.orderId}">
+                    <input type="hidden" name="ordrenr" th:value="${order.orderId}">
                     <button class="btn btn-primary" type="submit">Køb</button>
                 </form>
             </div>
