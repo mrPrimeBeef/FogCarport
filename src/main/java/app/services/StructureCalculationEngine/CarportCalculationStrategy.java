@@ -194,7 +194,7 @@ public class CarportCalculationStrategy implements CalculationStrategy{
         ItemSearchBuilder builderLeftBrackets = new ItemSearchBuilder();
         Map<String, Object> filtersLeftBrackets = builderLeftBrackets
                 .setName("Universal beslag")
-                .setDescription("190 mm højre")
+                .setDescription("190 mm venstre")
                 .build();
         Material leftBracketMaterial = ItemMapper.searchSingleItem(filtersLeftBrackets, pool);
 
