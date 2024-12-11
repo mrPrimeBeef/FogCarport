@@ -155,7 +155,10 @@ public class OrderMapper {
 
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, " +
+                "margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view, " +
+                "(SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id) " +
+                "FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -180,7 +183,11 @@ public class OrderMapper {
                 int carportHeightCm = rs.getInt("carport_height_cm");
                 String svgSideView = rs.getString("svg_side_view");
                 String svgTopView = rs.getString("svg_top_view");
-                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
+                double costPrice = rs.getDouble("sum");
+                double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
+                double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+
+                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, costPrice, salePrice, salePriceInclVAT, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
             }
             throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId);
         } catch (SQLException e) {

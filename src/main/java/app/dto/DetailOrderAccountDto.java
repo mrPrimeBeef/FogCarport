@@ -14,6 +14,9 @@ public class DetailOrderAccountDto {
     private Date datePaid;
     private Date dateCompleted;
     private double marginPercentage;
+    private double costPrice;
+    private double salePrice;
+    private double salePriceInclVAT;
     private String status;
     private int carportLengthCm;
     private int carportWidthCm;
@@ -21,7 +24,7 @@ public class DetailOrderAccountDto {
     private String svgSideView;
     private String svgTopView;
 
-    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm, String svgSideView, String svgTopView) {
+    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, double costPrice, double salePrice, double salePriceInclVAT, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm, String svgSideView, String svgTopView) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
@@ -33,6 +36,9 @@ public class DetailOrderAccountDto {
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
         this.marginPercentage = marginPercentage;
+        this.costPrice = costPrice;
+        this.salePrice = salePrice;
+        this.salePriceInclVAT = salePriceInclVAT;
         this.status = status;
         this.carportLengthCm = carportLengthCm;
         this.carportWidthCm = carportWidthCm;
@@ -85,6 +91,18 @@ public class DetailOrderAccountDto {
         return marginPercentage;
     }
 
+    public double getCostPrice() {
+        return costPrice;
+    }
+
+    public double getSalePrice() {
+        return salePrice;
+    }
+
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -109,8 +127,4 @@ public class DetailOrderAccountDto {
         return svgTopView;
     }
 
-    // TODO: Fix så denne metode returnere det rigtige. Meget muligt skal mappere opdateres
-    public double getSalePriceInclVAT() {
-        return 0;
-    }
 }
