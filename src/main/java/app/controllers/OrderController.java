@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -54,6 +55,15 @@ public class OrderController {
         int zip = Integer.parseInt(ctx.formParam("postnummer"));
         String phone = ctx.formParam("telefon");
         String email = ctx.formParam("email");
+
+        ArrayList<Integer> validPostnumre = AccountMapper.getAllZips(connectionPool);
+
+        if (!validPostnumre.contains(zip)) {
+            ctx.attribute("ErrorMessage", "Postnummeret skal være et gyldigt.");
+            ctx.render("fladttag.html");
+            return;
+        }
+
         try {
             int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
