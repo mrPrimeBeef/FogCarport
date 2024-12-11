@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -42,21 +43,32 @@ public class OrderController {
     private static void postCarportCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         int carportWidth = Integer.parseInt(ctx.formParam("carport-bredde"));
         int carportLength = Integer.parseInt(ctx.formParam("carport-laengde"));
-        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
-        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
-        String notes = ctx.formParam("bemaerkninger");
+        int carportHeight = Integer.parseInt(ctx.formParam("carport-hoejde"));
+
+        // Feature not ready yet
+//        int shedWidth = Integer.parseInt(ctx.formParam("redskabsrum-bredde"));
+//        int shedLength = Integer.parseInt(ctx.formParam("redskabsrum-laengde"));
+//        String notes = ctx.formParam("bemaerkninger");
 
         String name = ctx.formParam("navn");
         String address = ctx.formParam("adresse");
         int zip = Integer.parseInt(ctx.formParam("postnummer"));
-        String city = ctx.formParam("by");
         String phone = ctx.formParam("telefon");
         String email = ctx.formParam("email");
+
+        ArrayList<Integer> validPostnumre = AccountMapper.getAllZips(connectionPool);
+
+        if (!validPostnumre.contains(zip)) {
+            ctx.attribute("ErrorMessage", "Postnummeret skal være et gyldigt.");
+            ctx.render("fladttag.html");
+            return;
+        }
+
         try {
             int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
-            OrderMapper.createOrder(accountId, carportWidth, carportLength, shedWidth, shedLength, connectionPool);
+            OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
-            new EmailReceipt(carportWidth, carportLength, shedWidth, shedLength, notes, name, address, zip, city, phone, email);
+            new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
         } catch (AccountException | OrderException | DatabaseException e) {
 
             LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
