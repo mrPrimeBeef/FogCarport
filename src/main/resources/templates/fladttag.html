@@ -12,7 +12,9 @@
 </head>
 <body class="bg-light">
 
-<header th:replace="fragments :: headerCustomer"></header>
+<header th:replace="~{fragments :: ${session.account.role.equals('Kunde') ? 'headerCustomer' :
+                     (session.account.role.equals('salesrep') ? 'headerAdmin' : 'headerCustomer')}}">
+</header>
 
 <main class="container py-5 mb-5 mt-5">
     <h2 class="text-center fw-bold mb-4">Bestil Quick-Byg tilbud - carport med fladt tag</h2>
