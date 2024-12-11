@@ -17,6 +17,14 @@ public class Orderline {
         this.salePriceInclVAT = salePriceInclVAT;
     }
 
+    public Orderline(String name, String description, int lengthCm, int quantity, double salePriceInclVAT) {
+        this.name = name;
+        this.description = description;
+        this.lengthCm = lengthCm;
+        this.quantity = quantity;
+        this.salePriceInclVAT = salePriceInclVAT;
+    }
+
     public String getName() {
         return name;
     }
@@ -41,15 +49,4 @@ public class Orderline {
         return salePriceInclVAT;
     }
 
-
-    // TODO: Opdater denne toString metode
-    @Override
-    public String toString() {
-        return "Orderline{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", quantity=" + quantity +
-                ", costPrice=" + costPrice +
-                '}';
-    }
 }

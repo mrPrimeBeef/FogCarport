@@ -17,7 +17,9 @@ public class OrderlineMapper {
 
     public static ArrayList<Orderline> getOrderlinesForCustomerOrSalesrep(int orderId, String role, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Orderline> orderlineList = new ArrayList<>();
-        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, item.length_cm, orderr.paid, orderr.margin_percentage FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
+        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, " +
+                "item.length_cm, orderr.paid, orderr.margin_percentage FROM orderline " +
+                "JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -37,7 +39,7 @@ public class OrderlineMapper {
                 double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
                 if (role.equals("Kunde") && paid) {
-                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, costPrice, salePriceInclVAT));
+                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, salePriceInclVAT));
                 } else if (role.equals("salesrep")) {
                     orderlineList.add(new Orderline(name, description, lengthCm, quantity, costPrice, salePriceInclVAT));
                 }
