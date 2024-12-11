@@ -52,11 +52,11 @@ public class OrderMapper {
         return OverviewOrderAccountDtos;
     }
 
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int carportHeight, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
-        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm) " +
+                " VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -64,9 +64,9 @@ public class OrderMapper {
             ps.setString(2, "Henvendelse");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 210 cm //TODO opdater faldttag.html
-            ps.setInt(6, shedWidth);
-            ps.setInt(7, shedLength);
+            ps.setInt(5, carportHeight);
+//            ps.setInt(6, shedWidth);
+//            ps.setInt(7, shedLength);
 
             int rowsAffected = ps.executeUpdate();
 

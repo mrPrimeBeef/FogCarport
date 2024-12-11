@@ -240,4 +240,22 @@ public class AccountMapper {
         }
         return account;
     }
+
+    public static ArrayList<Integer> getAllZips(ConnectionPool connectionPool) {
+        String sql = "SELECT zip_code FROM zip_code ORDER BY zip_code ASC";
+        ArrayList<Integer> zips = new ArrayList<>();
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                zips.add(rs.getInt("zip_code"));
+            }
+
+        } catch (SQLException e){
+            LOGGER.severe("Error in getAllZips() connection. E message: " + e.getMessage());
+        }
+        return zips;
+    }
 }

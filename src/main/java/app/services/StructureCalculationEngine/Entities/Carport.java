@@ -1,12 +1,12 @@
 package app.services.StructureCalculationEngine.Entities;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import app.persistence.ConnectionPool;
 import app.services.StructureCalculationEngine.CarportCalculationStrategy;
 import app.services.StructureCalculationEngine.RoofType;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Carport extends Structure {
 

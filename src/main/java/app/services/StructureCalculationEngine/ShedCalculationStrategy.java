@@ -1,9 +1,9 @@
 package app.services.StructureCalculationEngine;
 
-import java.util.List;
-
 import app.services.StructureCalculationEngine.Entities.PlacedMaterial;
 import app.services.StructureCalculationEngine.Entities.Structure;
+
+import java.util.List;
 
 public class ShedCalculationStrategy implements CalculationStrategy {
 
