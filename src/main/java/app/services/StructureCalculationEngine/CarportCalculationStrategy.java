@@ -374,7 +374,7 @@ public class CarportCalculationStrategy implements CalculationStrategy {
         carport.addFixatingStrapListXY(fixatingStrapTwoCoordinates);
 
         double fixatingStrapsLength = Math.sqrt(Math.pow(carport.getLength(), 2) + Math.pow(carport.getWidth(), 2)) * 2;
-        int quantity = (int) (Math.ceil(fixatingStrapsLength / 100) * 0.1);
+        int quantity = (int) Math.ceil(fixatingStrapsLength / 100 * 0.1);
 
         calculatePartsList(carport, fixatingStrap, quantity);
     }
