@@ -79,9 +79,8 @@ public class OrderController {
     }
 
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
-
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til ordresiden for sælgere. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -121,14 +120,14 @@ public class OrderController {
 
     public static void sendCustomerInfo(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-            LOGGER.warning("Uautoriseret adgangsforsøg til at sende brugerinfo. Rolle: " +
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at prøve at sende kundeinfo. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
         }
+
         try {
             int accountId = Integer.parseInt(ctx.formParam("accountId"));
             Account account = AccountMapper.getPasswordAndEmail(accountId, connectionPool);
@@ -149,11 +148,9 @@ public class OrderController {
     }
 
     private static void salesrepPostStatus(Context ctx, ConnectionPool connectionPool) {
-
         Account activeAccount = ctx.sessionAttribute("account");
-
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-            LOGGER.warning("Uautoriseret adgangsforsøg til at ændre ordre status. Rolle: " +
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
+            LOGGER.warning("Uautoriseret adgangsforsøg til at prøve at ændre status på en ordre. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
@@ -179,9 +176,8 @@ public class OrderController {
     }
 
     private static void salesrepPostMarginPercentage(Context ctx, ConnectionPool connectionPool) {
-
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til at ændre dækningsgrad. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -204,9 +200,8 @@ public class OrderController {
     }
 
     private static void salesrepPostCarportCalculation(Context ctx, ConnectionPool connectionPool) {
-
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til at køre carport beregning. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
@@ -244,16 +239,13 @@ public class OrderController {
 
     static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
-
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
-
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
             ctx.render("error.html");
             return;
         }
-
         try {
             ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = OrderMapper.getOverviewOrderAccountDtos(connectionPool);
             ctx.attribute("OverviewOrderAccountDtos", OverviewOrderAccountDtos);
@@ -267,6 +259,12 @@ public class OrderController {
     }
 
     private static void showThankYouPage(String name, String email, Context ctx) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
+            ctx.attribute("errorMessage", "Kun adgang for kunder");
+            ctx.render("error.html");
+            return;
+        }
         ctx.attribute("navn", name);
         ctx.attribute("email", email);
         ctx.render("tak.html");

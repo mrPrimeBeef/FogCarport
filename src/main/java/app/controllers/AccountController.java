@@ -71,19 +71,26 @@ public class AccountController {
     }
 
     public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
+        Account activeAccount = ctx.sessionAttribute("account");
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
+            ctx.attribute("errorMessage", "Du skal være logget ind som kunde for at ændre din adgangskode.");
+            ctx.render("login.html");
+            return;
+        }
+
         String email = ctx.formParam("email");
 
         try {
             Account account = AccountMapper.getAccountByEmail(email, connectionPool);
             String role = account.getRole();
 
-            if (account == null || "salesrep".equals(role)) {
+            if (account == null || !activeAccount.getEmail().equals(account.getEmail())) {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
                 ctx.render("glemtkode.html");
                 return;
             }
 
-            if ("Kunde".equals(role)) {
+            if ("Kunde".equalsIgnoreCase(role) && activeAccount.getEmail().equals(account.getEmail())) {
                 String newPassword = PasswordGenerator.generatePassword();
                 AccountMapper.updatePassword(email, newPassword, connectionPool);
 
@@ -103,7 +110,7 @@ public class AccountController {
 
     public static void setNewPassword(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
             ctx.attribute("errorMessage", "Du skal være logget ind for at ændre din adgangskode.");
             ctx.render("login.html");
             return;
@@ -156,12 +163,11 @@ public class AccountController {
 
     public static void showCustomerOverview(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
-            ctx.attribute("Du er ikke logget ind");
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
+            ctx.attribute("errorMessage", "Du er ikke logget ind");
             ctx.render("error.html");
             return;
         }
-
         try {
             ArrayList<Order> orders = OrderMapper.getOrdersFromAccountId(activeAccount.getAccountId(), connectionPool);
             ctx.attribute("orders", orders);
@@ -174,8 +180,8 @@ public class AccountController {
 
     public static void showCustomerOrderPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
-            ctx.attribute("Du er ikke logget ind");
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
+            ctx.attribute("errorMessage", "Du er ikke logget ind");
             ctx.render("error.html");
             return;
         }
@@ -199,12 +205,11 @@ public class AccountController {
 
     private static void buyOrder(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("Kunde")) {
+        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
             ctx.attribute("errorMessage", "Kun adgang for kunder");
             ctx.render("error.html");
             return;
         }
-
         try {
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             OrderMapper.updateIsPaid(orderId, connectionPool);
@@ -217,7 +222,7 @@ public class AccountController {
 
     public static void salesrepShowAllCustomersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !activeAccount.getRole().equals("salesrep")) {
+        if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
                     (activeAccount != null ? activeAccount.getRole() : "Ingen konto"));
             ctx.attribute("errorMessage", "Kun adgang for sælgere.");
