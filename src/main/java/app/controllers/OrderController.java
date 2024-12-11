@@ -121,7 +121,7 @@ public class OrderController {
             Account account = AccountMapper.getPasswordAndEmail(accountId, connectionPool);
 
             // Sending mock email via System.out.println
-            System.out.println("Her er din fog konto:");
+            System.out.println("Nu kan du logge på din Fog konto og se dit carport tilbud:");
             System.out.println("Dit brugernavn: " + account.getEmail());
             System.out.println("Dit kodeord: " + account.getPassword());
 

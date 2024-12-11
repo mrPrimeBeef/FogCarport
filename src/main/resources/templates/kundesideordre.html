@@ -29,9 +29,7 @@
                 <tr th:if="${detailOrderAccountDto == null}">
                     <td colspan="6" class="text-center">Under behandling</td>
                 </tr>
-                <td>
-                    <a th:href="@{/kundesideordre(orderId=${detailOrderAccountDto.orderId})}" th:text="${detailOrderAccountDto.orderId}"></a>
-                </td>
+                <td th:text="${detailOrderAccountDto.orderId}"></td>
                 <td th:text="${detailOrderAccountDto.datePlaced}"></td>
                 <td th:text="${detailOrderAccountDto.dateCompleted}"></td>
                 <td th:text="${detailOrderAccountDto.datePaid}"></td>
