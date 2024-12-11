@@ -14,6 +14,7 @@ public class DetailOrderAccountDto {
     private Date datePaid;
     private Date dateCompleted;
     private double marginPercentage;
+    private double marginAmount;
     private double costPrice;
     private double salePrice;
     private double salePriceInclVAT;
@@ -24,7 +25,7 @@ public class DetailOrderAccountDto {
     private String svgSideView;
     private String svgTopView;
 
-    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, double costPrice, double salePrice, double salePriceInclVAT, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm, String svgSideView, String svgTopView) {
+    public DetailOrderAccountDto(int orderId, int accountId, String email, String name, String phone, int zip, String city, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, double marginAmount, double costPrice, double salePrice, double salePriceInclVAT, String status, int carportLengthCm, int carportWidthCm, int carportHeightCm, String svgSideView, String svgTopView) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.email = email;
@@ -36,6 +37,7 @@ public class DetailOrderAccountDto {
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
         this.marginPercentage = marginPercentage;
+        this.marginAmount = marginAmount;
         this.costPrice = costPrice;
         this.salePrice = salePrice;
         this.salePriceInclVAT = salePriceInclVAT;
@@ -89,6 +91,10 @@ public class DetailOrderAccountDto {
 
     public double getMarginPercentage() {
         return marginPercentage;
+    }
+
+    public double getMarginAmount() {
+        return marginAmount;
     }
 
     public double getCostPrice() {

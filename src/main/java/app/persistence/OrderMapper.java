@@ -184,10 +184,11 @@ public class OrderMapper {
                 String svgSideView = rs.getString("svg_side_view");
                 String svgTopView = rs.getString("svg_top_view");
                 double costPrice = rs.getDouble("sum");
+                double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);
                 double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
                 double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
 
-                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, costPrice, salePrice, salePriceInclVAT, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
+                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, marginAmount, costPrice, salePrice, salePriceInclVAT, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
             }
             throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId);
         } catch (SQLException e) {

@@ -95,18 +95,8 @@ public class OrderController {
             String role = activeAccount.getRole();
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(orderId, role, connectionPool);
 
-            double costPrice = OrderlineMapper.getTotalCostPriceFromOrderId(orderId, connectionPool);
-            double marginPercentage = detailOrderAccountDto.getMarginPercentage();
-            double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);
-            double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
-            double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
-
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("orderlines", orderlines);
-            ctx.attribute("costPrice", costPrice);
-            ctx.attribute("marginAmount", marginAmount);
-            ctx.attribute("salePrice", salePrice);
-            ctx.attribute("salePriceInclVAT", salePriceInclVAT);
             ctx.render("saelgerordre.html");
 
         } catch (DatabaseException | OrderException e) {

@@ -119,11 +119,11 @@
             </thead>
             <tbody>
             <tr>
-                <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
                 <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginPercentage, 1, 1, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
             </tr>
             </tbody>
         </table>
@@ -206,8 +206,8 @@
             <td><b>TOTAL PRIS</b></td>
             <td></td>
             <td></td>
-            <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
-            <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
         </tbody>
     </table>
