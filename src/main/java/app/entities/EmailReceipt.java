@@ -7,11 +7,10 @@ public class EmailReceipt {
     private String name;
     private String address;
     private int zip;
-    private String city;
     private String phone;
     private String email;
 
-    public EmailReceipt(int carportWidth, int carportLength, int carportHeight, String name, String address, int zip, String mobil, String email) {
+    public EmailReceipt(int carportWidth, int carportLength, int carportHeight, String name, String address, int zip, String phone, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.carportHeight = carportHeight;
@@ -29,7 +28,6 @@ public class EmailReceipt {
         System.out.println("Navn: " + name);
         System.out.println("Addresse: " + address);
         System.out.println("Postnummer: " + zip);
-        System.out.println("By: " + city);
         System.out.println("Telfon: " + phone);
         System.out.println("Email: " + email);
         System.out.println();

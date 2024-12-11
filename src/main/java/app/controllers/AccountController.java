@@ -189,7 +189,6 @@ public class AccountController {
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("orderlines", orderlines);
-            System.out.println(orderlines);
             ctx.render("kundesideordre.html");
 
         } catch (OrderException | DatabaseException e) {
