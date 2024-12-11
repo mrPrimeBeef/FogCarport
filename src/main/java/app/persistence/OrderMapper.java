@@ -24,7 +24,7 @@ public class OrderMapper {
 
         String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, status, margin_percentage," +
                 " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
-                " FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
+                " FROM orderr JOIN account USING(account_id) ORDER BY date_placed ASC , orderr_id ASC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
