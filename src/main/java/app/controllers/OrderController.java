@@ -274,7 +274,7 @@ public class OrderController {
 
     private static int createOrGetAccountId(String email, String name, String address, int zip, String
             phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
-        int accountId;
+
         boolean allreadyUser = false;
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
@@ -285,7 +285,7 @@ public class OrderController {
         }
 
         if (!allreadyUser) {
-            return accountId = AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
+            return AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
         }
         return AccountMapper.getAccountIdFromEmail(email, connectionPool);
     }
