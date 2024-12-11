@@ -95,7 +95,6 @@ public class AccountMapper {
     }
 
     public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountException {
-        int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
         try (Connection connection = connectionPool.getConnection();
@@ -105,14 +104,17 @@ public class AccountMapper {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                accountId = rs.getInt("account_id");
+                int accountId = rs.getInt("account_id");
+                return accountId;
             }
+            LOGGER.severe("Error in getAccountIdFromEmail()");
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email);
 
         } catch (SQLException e) {
-            LOGGER.severe("Error in getAccountIdFromEmail() connection. E message: " + e.getMessage());
+            LOGGER.severe("Error in getAccountIdFromEmail(). E message: " + e.getMessage());
             throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email, e.getMessage());
         }
-        return accountId;
+
     }
 
     public static int createAccount(String name, String address, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
