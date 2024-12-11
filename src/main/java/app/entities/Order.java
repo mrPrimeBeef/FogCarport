@@ -7,15 +7,15 @@ public class Order {
     Date datePlaced;
     Date datePaid;
     Date dateCompleted;
-    double marginPercentage;
+    double salePriceInclVAT;
     String status;
 
-    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status) {
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double salePriceInclVAT, String status) {
         this.orderId = orderId;
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
-        this.marginPercentage = marginPercentage;
+        this.salePriceInclVAT = salePriceInclVAT;
         this.status = status;
     }
 
@@ -24,7 +24,6 @@ public class Order {
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
-        this.marginPercentage = marginPercentage;
         this.status = status;
     }
 
@@ -44,13 +43,8 @@ public class Order {
         return dateCompleted;
     }
 
-    public double getmarginPercentage() {
-        return marginPercentage;
-    }
-
-    // TODO: Skal rettest til getSalePriceInclVAT
-    public double getSalePrice() {
-        return marginPercentage;
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
     }
 
     public String getStatus() {
@@ -60,11 +54,11 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "orderr_id=" + orderId +
+                "orderId=" + orderId +
                 ", datePlaced=" + datePlaced +
                 ", datePaid=" + datePaid +
                 ", dateCompleted=" + dateCompleted +
-                ", saleprice=" + marginPercentage +
+                ", salePriceInclVAT=" + salePriceInclVAT +
                 ", status='" + status + '\'' +
                 '}';
     }

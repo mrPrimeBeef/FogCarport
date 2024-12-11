@@ -56,7 +56,7 @@
                     <td th:text="${order.datePlaced}"></td>
                     <td th:text="${order.dateCompleted}"></td>
                     <td th:text="${order.datePaid}"></td>
-                    <td th:text="${#numbers.formatDecimal(order.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(order.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                     <td th:text="${order.status}"></td>
                 </tr>
                 </tbody>
