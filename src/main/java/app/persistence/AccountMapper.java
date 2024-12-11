@@ -37,7 +37,7 @@ public class AccountMapper {
 
         } catch (SQLException e) {
             LOGGER.severe("Error in getAllAccounts() connection. E message: " + e.getMessage());
-            throw new AccountException("fejl", "Error in getAllAccounts", e.getMessage());
+            throw new AccountException("Der skete en fejl i at hente alle kunderne");
         }
     }
 
@@ -70,7 +70,7 @@ public class AccountMapper {
             return account;
         } catch (SQLException e) {
             LOGGER.severe("Error in login() connection. E message: " + e.getMessage());
-            throw new AccountException("Fejl i login.", "Error in login()", e.getMessage());
+            throw new AccountException("Der skete en fejl i login.");
         }
     }
 
@@ -90,7 +90,7 @@ public class AccountMapper {
 
         } catch (SQLException e) {
             LOGGER.severe("Error in getAllAccountEmails() connection. E message: " + e.getMessage());
-            throw new DatabaseException("Fejl i at hente emails", "Error in getAllEmailsFromAccount()", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at hente alle emails for kunderne");
         }
     }
 
@@ -110,7 +110,7 @@ public class AccountMapper {
 
         } catch (SQLException e) {
             LOGGER.severe("Error in getAccountIdFromEmail() connection. E message: " + e.getMessage());
-            throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email, e.getMessage());
+            throw new AccountException("Der skete en fejl ved søgning efter account ID");
         }
         return accountId;
     }
@@ -135,7 +135,7 @@ public class AccountMapper {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
                 LOGGER.info("Fejl ved oprettelse af ny bruger.");
-                throw new AccountException("Fejl ved oprettelse af ny bruger.");
+                throw new AccountException("Der skete en fejl ved oprettelse af ny bruger.");
             } else {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -148,7 +148,7 @@ public class AccountMapper {
 
         } catch (SQLException e) {
             LOGGER.severe("Error in createAccount() connection. E message: " + e.getMessage());
-            throw new AccountException("Fejl i at oprette en konto", "Error in createAccount()", e.getMessage());
+            throw new AccountException("Der skete en fejl i at oprette en konto");
         }
         return accountId;
     }
@@ -170,7 +170,8 @@ public class AccountMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new AccountException("Kunne ikke hente konto fra databasen: " + "Error in getAccountByEmail " + e.getMessage());
+            LOGGER.severe("Error in getAccountByEmail() connection. E message: " + e.getMessage());
+            throw new AccountException("Der skete en fejl i at hente en konto fra databasen");
         }
         return account;
     }
@@ -193,7 +194,8 @@ public class AccountMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new AccountException("Kunne ikke hente adgangskoden fra databasen: " + "Error in getPasswordByEmail " + e.getMessage());
+            LOGGER.severe("Error in getAccountByEmail() connection. E message: " + e.getMessage());
+            throw new AccountException("Der skete en fejl i at hente adgangskoden fra databasen");
         }
         return account;
     }
@@ -210,11 +212,13 @@ public class AccountMapper {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected == 0) {
+                LOGGER.severe("Error in updatePassword()");
                 throw new AccountException("Kunne ikke opdatere adgangskoden, da ingen konto blev fundet for den indtastet email.");
             }
 
         } catch (SQLException e) {
-            throw new AccountException("Fejl ved opdatering af adgangskoden: " + "Error in updatePassword " + e.getMessage());
+            LOGGER.severe("Error in updatePassword() connection. E message: " + e.getMessage());
+            throw new AccountException("Der skete en fejl i at opdater adgangskoden");
         }
     }
 
