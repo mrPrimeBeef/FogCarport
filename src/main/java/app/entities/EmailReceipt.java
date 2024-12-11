@@ -11,14 +11,13 @@ public class EmailReceipt {
     private String phone;
     private String email;
 
-    public EmailReceipt(int carportWidth, int carportLength, int carportHeight, String name, String address, int zip, String city, String mobil, String email) {
+    public EmailReceipt(int carportWidth, int carportLength, int carportHeight, String name, String address, int zip, String mobil, String email) {
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.carportHeight = carportHeight;
         this.name = name;
         this.address = address;
         this.zip = zip;
-        this.city = city;
         this.phone = phone;
         this.email = email;
 

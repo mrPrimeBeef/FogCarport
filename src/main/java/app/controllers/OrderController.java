@@ -52,14 +52,13 @@ public class OrderController {
         String name = ctx.formParam("navn");
         String address = ctx.formParam("adresse");
         int zip = Integer.parseInt(ctx.formParam("postnummer"));
-        String city = ctx.formParam("by");
         String phone = ctx.formParam("telefon");
         String email = ctx.formParam("email");
         try {
             int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
-            new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, city, phone, email);
+            new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
         } catch (AccountException | OrderException | DatabaseException e) {
 
             LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
