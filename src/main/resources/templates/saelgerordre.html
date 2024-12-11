@@ -14,6 +14,7 @@
 <header th:replace="fragments :: headerAdmin"></header>
 <main class="container text-center mt-5 mb-5">
     <h2 class="mt-5 py-5">Ordrenr. <span th:text="${detailOrderAccountDto.orderId}"></span></h2>
+    <h3>Kundeinfo</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -34,15 +35,18 @@
         </tr>
         </tbody>
     </table>
+
     <div class="mt-1 mb-5">
         <form action="/sendbrugerinfo" method="post">
             <input type="hidden" name="accountId" th:value="${detailOrderAccountDto.accountId}">
             <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
             <button type="submit" class="btn btn-dark-blue text-light">Send Tilbud*</button>
-            <p class="d-inline">*At sende til tilbud indbære at sende kunden en mail med brugernavn og password, og
-                besked om tilbudet er klar på deres konto</p>
+            <br>
+            <p class="d-inline">*Når der trykkes Send Tilbud sendes en mail til kunden med brugernavn og password samt
+                besked om tilbudet er klar på deres konto </p>
         </form>
     </div>
+    <h3>Ordrestatus</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -68,7 +72,8 @@
     <form method="post" action="opdaterstatus" class="d-flex align-items-center">
 
         <div class="me-2">
-            <select name="status" id="status" class="form-select">
+            <select th:if="${detailOrderAccountDto.status != 'Afsluttet'}"
+                    name="status" id="status" class="form-select">
                 <option th:if="${detailOrderAccountDto.status != 'Igangværende'
                                         and detailOrderAccountDto.status != 'Leveret'
                                         and detailOrderAccountDto.status != 'Annulleret'
@@ -101,33 +106,35 @@
                 </option>
             </select>
         </div>
-        <button type="submit" class="btn btn-dark-blue text-light">Opdater Status</button>
+        <button th:if="${detailOrderAccountDto.status != 'Afsluttet'}" type="submit" class="btn btn-dark-blue text-light">Opdater Status</button>
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
     </form>
 
     </table>
     <h2 class="mt-5">Dækningsgrad og salgspris</h2>
-    <form method="post" action="daekningsgrad">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Kostpris<br>DKK</th>
-                <th>Dækningsgrad<br>%</th>
-                <th>Dækningsbidrag<br>DKK</th>
-                <th>Salgspris<br>DKK</th>
-                <th>Salgspris inkl. moms<br>DKK</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginPercentage, 1, 1, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Kostpris<br>DKK</th>
+            <th>Dækningsgrad<br>%</th>
+            <th>Dækningsbidrag<br>DKK</th>
+            <th>Salgspris<br>DKK</th>
+            <th>Salgspris inkl. moms<br>DKK</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginPercentage, 1, 1, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.marginAmount, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:if="${detailOrderAccountDto.status != 'Leveret'
+                and detailOrderAccountDto.status != 'Afsluttet'}"
+            method="post" action="daekningsgrad">
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
         <div class="mt-1 mb-5">
             <input type="number" class="form-control w-25 d-inline" id="daekningsgrad" name="daekningsgrad" min="30"
@@ -135,11 +142,15 @@
                    step="0.1" required placeholder="Dækningsgrad %"
                    th:value="${detailOrderAccountDto.marginPercentage}">
             <button type="submit" class="btn btn-dark-blue text-light">Ændre dækningsgrad</button>
+            <br>
             <p class="d-inline">*Dækningsgraden må ikke være under 30%</p>
         </div>
     </form>
-    <h2 class="mt-5">Carport beregning</h2>
-    <form method="post" action="carportberegning">
+
+    <form th:if="${detailOrderAccountDto.status != 'Leveret'
+           and detailOrderAccountDto.status != 'Afsluttet'}"
+            method="post" action="carportberegning">
+        <h2 class="mt-5">Carport beregning</h2>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -156,18 +167,21 @@
             </tr>
             <tr>
                 <td>
-                    <input type="number" class="form-control" id="carport-bredde" name="carport-bredde" min="240"
+                    <input type="number" class="form-control text-center" id="carport-bredde" name="carport-bredde"
+                           min="240"
                            max="600" required placeholder="Angiv et tal mellem 240 og 600 i cm"
                            th:value="${detailOrderAccountDto.carportWidthCm}">
                 </td>
                 <td>
-                    <input type="number" class="form-control" id="carport-laengde" name="carport-laengde" min="240"
+                    <input type="number" class="form-control text-center" id="carport-laengde" name="carport-laengde"
+                           min="240"
                            max="780" required placeholder="Angiv et tal mellem 240 og 780 i cm"
                            th:value="${detailOrderAccountDto.carportLengthCm}">
                 </td>
                 <td>
-                    <input type="number" class="form-control" id="carport-hoejde" name="carport-hoejde" min="210"
-                           max="500" required placeholder="Angiv et tal mellem 210 og 500 i cm"
+                    <input type="number" class="form-control text-center" id="carport-hoejde" name="carport-hoejde"
+                           min="210"
+                           max="300" required placeholder="Angiv et tal mellem 210 og 300 i cm"
                            th:value="${detailOrderAccountDto.carportHeightCm}">
                 </td>
             </tr>
@@ -207,8 +221,11 @@
             <td><b>TOTAL PRIS</b></td>
             <td></td>
             <td></td>
-            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
-            <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td><b th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></b>
+            </td>
+            <td>
+                <b th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></b>
+            </td>
         </tr>
         </tbody>
     </table>
