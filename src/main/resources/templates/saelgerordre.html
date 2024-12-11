@@ -186,7 +186,8 @@
     <table class="table table-striped table-bordered mt-5">
         <tr class="justify-content-around">
             <th>Navn</th>
-            <th>Mængde</th>
+            <th>Længde</th>
+            <th>Antal</th>
             <th>Samlet kostpris</th>
             <th>Samlet salgspris inkl. moms</th>
         </tr>
@@ -196,12 +197,14 @@
         </tr>
         <tr th:each="orderline : ${orderlines}">
             <td th:text="${orderline.name}"></td>
+            <td th:text="${orderline.lengthCm != 0 ? orderline.lengthCm : ''}"></td>
             <td th:text="${orderline.quantity}"></td>
             <td th:text="${#numbers.formatDecimal(orderline.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
         <tr>
-            <td>TOTAL PRIS</td>
+            <td><b>TOTAL PRIS</b></td>
+            <td></td>
             <td></td>
             <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
