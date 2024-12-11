@@ -70,11 +70,11 @@
                     <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
                 <tr>
-                    <td>TOTAL PRIS</td>
+                    <td><b>TOTAL PRIS</b></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td><b th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></b></td>
                 </tr>
                 </tbody>
             </table>
