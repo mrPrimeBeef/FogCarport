@@ -38,7 +38,7 @@
         <form action="/sendbrugerinfo" method="post">
             <input type="hidden" name="accountId" th:value="${detailOrderAccountDto.accountId}">
             <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
-            <button type="submit" class="btn btn-primary">Send Tilbud*</button>
+            <button type="submit" class="btn btn-dark-blue text-light">Send Tilbud*</button>
             <p class="d-inline">*At sende til tilbud indbære at sende kunden en mail med brugernavn og password, og
                 besked om tilbudet er klar på deres konto</p>
         </form>
@@ -96,7 +96,7 @@
                             </option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Opdater Status</button>
+                    <button type="submit" class="btn btn-dark-blue text-light">Opdater Status</button>
                     <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
                 </form>
             </td>
@@ -133,7 +133,7 @@
                    max="99"
                    step="0.1" required placeholder="Dækningsgrad %"
                    th:value="${detailOrderAccountDto.marginPercentage}">
-            <button type="submit" class="btn btn-primary">Ændre dækningsgrad</button>
+            <button type="submit" class="btn btn-dark-blue text-light">Ændre dækningsgrad</button>
             <p class="d-inline">*Dækningsgraden må ikke være under 30%</p>
         </div>
     </form>
@@ -173,7 +173,7 @@
             </tbody>
         </table>
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
-        <button type="submit" class="btn btn-primary">Kør beregning</button>
+        <button type="submit" class="btn btn-dark-blue text-light">Kør beregning</button>
     </form>
     <div class="d-flex flex-column align-items-center justify-content-center">
         <h3 class="mt-5">Tegning fra siden</h3>
