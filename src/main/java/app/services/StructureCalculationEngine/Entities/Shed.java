@@ -2,7 +2,7 @@ package app.services.StructureCalculationEngine.Entities;
 
 import app.services.StructureCalculationEngine.ShedCalculationStrategy;
 
-public class Shed extends Structure{
+public class Shed extends Structure {
 
     int width;
     int length;
@@ -17,7 +17,7 @@ public class Shed extends Structure{
         this.height = height;
     }
 
-    public Carport getAttachedCarport(){
+    public Carport getAttachedCarport() {
         return attachedCarport;
     }
 
@@ -36,7 +36,7 @@ public class Shed extends Structure{
         return 0;
     }
 
-    void setHeight(int height){
+    void setHeight(int height) {
         this.height = height;
     }
 }
