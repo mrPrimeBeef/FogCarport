@@ -31,8 +31,8 @@
                 </tr>
                 <td th:text="${detailOrderAccountDto.orderId}"></td>
                 <td th:text="${detailOrderAccountDto.datePlaced}"></td>
-                <td th:text="${detailOrderAccountDto.dateCompleted}"></td>
                 <td th:text="${detailOrderAccountDto.datePaid}"></td>
+                <td th:text="${detailOrderAccountDto.dateCompleted}"></td>
                 <td th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 <td th:text="${detailOrderAccountDto.status}"></td>
                 </tbody>
@@ -52,7 +52,6 @@
                 <tr class="justify-content-around">
                     <th>Navn</th>
                     <th>Længde i cm</th>
-                    <th>Beskrivelse</th>
                     <th>Mængde</th>
                     <th>Samlet pris inkl. moms</th>
                 </tr>
@@ -63,13 +62,11 @@
                 <tr th:each="orderline : ${orderlines}">
                     <td th:text="${orderline.name}"></td>
                     <td th:text="${orderline.lengthCm}"></td>
-                    <td th:text="${orderline.description}"></td>
                     <td th:text="${orderline.quantity}"></td>
                     <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
                 <tr>
                     <td><b>TOTAL PRIS</b></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td><b th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></b></td>
