@@ -71,26 +71,21 @@ public class AccountController {
     }
 
     public static void forgotPassword(Context ctx, ConnectionPool connectionPool) {
-        Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
-            ctx.attribute("errorMessage", "Du skal være logget ind som kunde for at ændre din adgangskode.");
-            ctx.render("login.html");
-            return;
-        }
-
         String email = ctx.formParam("email");
 
         try {
-            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
-            String role = account.getRole();
+            ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
-            if (account == null || !activeAccount.getEmail().equals(account.getEmail())) {
+            if (!emails.contains(email)) {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede e-mail.");
                 ctx.render("glemtkode.html");
                 return;
             }
 
-            if ("Kunde".equalsIgnoreCase(role) && activeAccount.getEmail().equals(account.getEmail())) {
+            Account account = AccountMapper.getAccountByEmail(email, connectionPool);
+            String role = account.getRole();
+
+            if ("Kunde".equalsIgnoreCase(role)) {
                 String newPassword = PasswordGenerator.generatePassword();
                 AccountMapper.updatePassword(email, newPassword, connectionPool);
 
@@ -102,7 +97,7 @@ public class AccountController {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede email. Prøv igen.");
                 ctx.render("glemtkode.html");
             }
-        } catch (AccountException e) {
+        } catch (AccountException | DatabaseException e) {
             ctx.attribute("message", "Error in forgotPassword() " + e.getMessage());
             ctx.render("error.html");
         }

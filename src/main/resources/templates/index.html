@@ -11,8 +11,9 @@
     <link rel="icon" type="image/x-icon" href="../public/images/favicon-fog.png" th:href="@{images/favicon-fog.png}">
 </head>
 <body class="bg-light">
-<header th:replace="~{fragments :: ${session.account.role.equals('Kunde') ? 'headerCustomer' :
-                     (session.account.role.equals('salesrep') ? 'headerAdmin' : 'headerCustomer')}}">
+<header th:replace="~{fragments :: ${session.account == null ? 'headerCustomer' :
+                     (session.account.role.equals('Kunde') ? 'headerCustomer' :
+                     (session.account.role.equals('salesrep') ? 'headerAdmin' : 'headerCustomer'))}}">
 </header>
 <main class="mb-5 mt-5">
     <div class="container text-center py-5">

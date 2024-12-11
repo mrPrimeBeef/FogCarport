@@ -259,12 +259,6 @@ public class OrderController {
     }
 
     private static void showThankYouPage(String name, String email, Context ctx) {
-        Account activeAccount = ctx.sessionAttribute("account");
-        if (activeAccount == null || !"Kunde".equalsIgnoreCase(activeAccount.getRole())) {
-            ctx.attribute("errorMessage", "Kun adgang for kunder");
-            ctx.render("error.html");
-            return;
-        }
         ctx.attribute("navn", name);
         ctx.attribute("email", email);
         ctx.render("tak.html");
