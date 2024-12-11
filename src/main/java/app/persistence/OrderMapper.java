@@ -24,7 +24,7 @@ public class OrderMapper {
 
         String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, status, margin_percentage," +
                 " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
-                " FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
+                " FROM orderr JOIN account USING(account_id) ORDER BY date_placed ASC , orderr_id ASC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -47,7 +47,7 @@ public class OrderMapper {
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in getOverviewOrderAccountDtos() connection. E message: " + e.getMessage());
-            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos()", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at hente kundedata");
         }
         return OverviewOrderAccountDtos;
     }
@@ -74,11 +74,11 @@ public class OrderMapper {
                 success = true;
             } else {
                 LOGGER.severe("Error in createOrder() SQL query was not a sucessful execution");
-                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()");
+                throw new OrderException("Der skete en fejl i at oprette din ordre");
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in createOrder() connection. E message: " + e.getMessage());
-            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at oprette en ordre");
         }
         return success;
     }
@@ -114,7 +114,8 @@ public class OrderMapper {
             }
             return orders;
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in showCustomerOrder()", e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din ordre");
         }
     }
 
@@ -149,7 +150,8 @@ public class OrderMapper {
             return order;
 
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din ordre");
         }
     }
 
@@ -190,9 +192,11 @@ public class OrderMapper {
 
                 return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, marginAmount, costPrice, salePrice, salePriceInclVAT, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
             }
-            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId);
+            LOGGER.severe("Error happen in showCustomerOrder()");
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId);
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId);
         }
     }
 
@@ -208,13 +212,14 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateMarginPercentage()");
+                throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateMarginPercentage() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId);
         }
     }
-
 
     public static void updateCarport(int orderId, int carportWidthCm, int carportLengthCm, int carportHeightCm, String svgSideView, String svgTopView, ConnectionPool connectionPool) throws DatabaseException {
 
@@ -232,10 +237,12 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateCarport()");
+                throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateCarport() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId);
         }
 
     }
@@ -256,11 +263,13 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateStatus()");
+                throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId);
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateStatus() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId);
         }
     }
 
@@ -278,7 +287,7 @@ public class OrderMapper {
             }
 
         } catch (OrderException | SQLException e) {
-            LOGGER.severe("Error in updateIsPaid() " + e.getMessage());
+            LOGGER.severe("Error in updateIsPaid() e.Message: " + e.getMessage());
             throw new OrderException("Fejl i at oprette forbindelse til database");
         }
     }

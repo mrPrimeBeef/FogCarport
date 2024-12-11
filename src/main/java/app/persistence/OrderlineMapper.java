@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import app.config.LoggerConfig;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
@@ -14,6 +16,7 @@ import app.services.SalePriceCalculator;
 import app.services.StructureCalculationEngine.Entities.Material;
 
 public class OrderlineMapper {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static ArrayList<Orderline> getOrderlinesForCustomerOrSalesrep(int orderId, String role, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Orderline> orderlineList = new ArrayList<>();
@@ -45,7 +48,8 @@ public class OrderlineMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din stykliste", "Error in getOrderlinesForCustomerOrSalesrep()", e.getMessage());
+            LOGGER.severe("Error in getOrderlinesForCustomerOrSalesrep() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din stykliste");
         }
         return orderlineList;
     }
@@ -75,7 +79,8 @@ public class OrderlineMapper {
             connection.commit();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl: Der skete en fejl i at oprette din ordre", "Error in addOrderline() in OrderLineMapper", e.getMessage());
+            LOGGER.severe("Error in addOrderlines() e.Message: " + e.getMessage());
+            throw new DatabaseException("Databasefejl: Der skete en fejl i at oprette din ordre");
         }
     }
 
@@ -90,7 +95,8 @@ public class OrderlineMapper {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl", "Error in deleteOrderlinesFromOrderId()", e.getMessage());
+            LOGGER.severe("Error in deleteOrderlinesFromOrderId() e.Message: " + e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at slette orderlinjer");
         }
     }
 
@@ -107,10 +113,12 @@ public class OrderlineMapper {
                 double totalCostPrice = rs.getDouble("sum");
                 return totalCostPrice;
             }
-            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId, "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId);
+            LOGGER.severe("Error in getTotalCostPriceFromOrderId()");
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId);
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId, "Error in getTotalCostPriceFromOrderId() for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error in getTotalCostPriceFromOrderId() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId);
         }
     }
 
