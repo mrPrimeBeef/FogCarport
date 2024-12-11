@@ -56,7 +56,7 @@ public class OrderMapper {
         boolean success = false;
 
         String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+                " VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
