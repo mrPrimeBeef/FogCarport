@@ -108,7 +108,7 @@ public class AccountMapper {
                 return accountId;
             }
             LOGGER.severe("Error in getAccountIdFromEmail()");
-            throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email);
+            throw new AccountException("Fejl ved søgning efter account ID");
 
         } catch (SQLException e) {
             LOGGER.severe("Error in getAccountIdFromEmail() connection. E message: " + e.getMessage());
