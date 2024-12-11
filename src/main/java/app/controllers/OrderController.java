@@ -9,7 +9,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import app.persistence.*;
-import app.services.SalePriceCalculator;
 import app.config.LoggerConfig;
 import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
@@ -68,6 +67,7 @@ public class OrderController {
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
             new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
+            showThankYouPage(name, email, ctx);
         } catch (AccountException | OrderException | DatabaseException e) {
 
             LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
@@ -75,7 +75,6 @@ public class OrderController {
             ctx.attribute("ErrorMessage", e.getMessage());
             ctx.render("error.html");
         }
-        showThankYouPage(name, email, ctx);
     }
 
     private static void salesrepShowOrderPage(Context ctx, ConnectionPool connectionPool) {
