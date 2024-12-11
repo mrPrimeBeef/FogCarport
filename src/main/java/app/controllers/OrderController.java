@@ -92,7 +92,6 @@ public class OrderController {
 
         try {
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
-            int accountId = detailOrderAccountDto.getAccountId();
             String role = activeAccount.getRole();
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(orderId, role, connectionPool);
 

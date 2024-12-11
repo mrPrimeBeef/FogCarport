@@ -148,7 +148,7 @@ public class AccountController {
             System.out.println("Den indtastede email: " + email + "\n" + "Din nye adgangskode er: " + newPassword1);
 
             ctx.attribute("successMessage", "Din adgangskode er blevet opdateret.");
-            ctx.render("opdaterKundeInfo.html");
+            ctx.render("opdaterkundeinfo.html");
 
         } catch (AccountException e) {
             ctx.attribute("errorMessage", "Error in setNewPassword() " + e.getMessage());
