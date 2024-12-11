@@ -1,8 +1,8 @@
 package app.services;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.regex.Pattern;
+
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +12,6 @@ class PasswordGeneratorTest {
     void generatePasswordContainsElements() {
         PasswordGenerator pg;
         String password;
-
 
         String uppercasePattern = ".*[A-Z].*";
         String lowercasePattern = ".*[a-z].*";

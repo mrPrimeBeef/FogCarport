@@ -14,6 +14,7 @@ import app.dto.OverviewOrderAccountDto;
 import app.exceptions.DatabaseException;
 import app.config.LoggerConfig;
 import app.exceptions.OrderException;
+import app.services.SalePriceCalculator;
 
 public class OrderMapper {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -21,7 +22,9 @@ public class OrderMapper {
     public static ArrayList<OverviewOrderAccountDto> getOverviewOrderAccountDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OverviewOrderAccountDto> OverviewOrderAccountDtos = new ArrayList<>();
 
-        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr JOIN account USING(account_id) ORDER BY status DESC , date_placed DESC";
+        String sql = "SELECT orderr_id, account_id, email, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr JOIN account USING(account_id) ORDER BY date_placed ASC , orderr_id ASC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -35,22 +38,25 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salesPrice = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salesPrice, status));
+                double marginPercentage = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+
+                double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in getOverviewOrderAccountDtos() connection. E message: " + e.getMessage());
-            throw new DatabaseException("Fejl til sælger", "Error in getAllOrderAccountDtos()", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at hente kundedata");
         }
         return OverviewOrderAccountDtos;
     }
 
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int carportHeight, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
-        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm) " +
+                " VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -58,9 +64,9 @@ public class OrderMapper {
             ps.setString(2, "Henvendelse");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 210 cm //TODO opdater faldttag.html
-            ps.setInt(6, shedWidth);
-            ps.setInt(7, shedLength);
+            ps.setInt(5, carportHeight);
+//            ps.setInt(6, shedWidth);
+//            ps.setInt(7, shedLength);
 
             int rowsAffected = ps.executeUpdate();
 
@@ -68,18 +74,20 @@ public class OrderMapper {
                 success = true;
             } else {
                 LOGGER.severe("Error in createOrder() SQL query was not a sucessful execution");
-                throw new OrderException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()");
+                throw new OrderException("Der skete en fejl i at oprette din ordre");
             }
         } catch (SQLException e) {
             LOGGER.severe("Error in createOrder() connection. E message: " + e.getMessage());
-            throw new DatabaseException("Der skete en fejl i at oprette din ordre", "Error in CreateOrder()", e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at oprette en ordre");
         }
         return success;
     }
 
     public static ArrayList<Order> getOrdersFromAccountId(int account_id, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Order> orders = new ArrayList<>();
-        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE account_id = ?";
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr WHERE account_id = ? ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -88,26 +96,34 @@ public class OrderMapper {
 
             ResultSet rs = ps.executeQuery();
 
-
             while (rs.next()) {
                 int orderId = rs.getInt("orderr_id");
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
 
-                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status));
+                if (!status.equals("Henvendelse")) {
+                    double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                    orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
+                } else {
+                    orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, status));
+                }
             }
             return orders;
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in showCustomerOrder()", e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din ordre");
         }
     }
 
     public static Order getOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
-        String sql = "SELECT date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr WHERE account_id = ? ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -120,20 +136,31 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status);
+
+                if (!status.equals("Henvendelse")) {
+                    double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                    order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status);
+                } else {
+                    order = new Order(orderId, datePlaced, datePaid, dateCompleted, status);
+                }
             }
             return order;
 
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din ordre", "Error happen in: showCustomerOrder", e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din ordre");
         }
     }
 
     public static DetailOrderAccountDto getDetailOrderAccountDtoByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, account_id, email, name, phone, zip_code, city, date_placed, date_paid, date_completed, " +
+                "margin_percentage, status, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view, " +
+                "(SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id) " +
+                "FROM orderr JOIN account USING(account_id) JOIN zip_code USING(zip_code) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -158,11 +185,18 @@ public class OrderMapper {
                 int carportHeightCm = rs.getInt("carport_height_cm");
                 String svgSideView = rs.getString("svg_side_view");
                 String svgTopView = rs.getString("svg_top_view");
-                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
+                double costPrice = rs.getDouble("sum");
+                double marginAmount = SalePriceCalculator.calculateMarginAmount(costPrice, marginPercentage);
+                double salePrice = SalePriceCalculator.calculateSalePrice(costPrice, marginPercentage);
+                double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+
+                return new DetailOrderAccountDto(orderId, accountId, email, name, phone, zip, city, datePlaced, datePaid, dateCompleted, marginPercentage, marginAmount, costPrice, salePrice, salePriceInclVAT, status, carportLengthCm, carportWidthCm, carportHeightCm, svgSideView, svgTopView);
             }
-            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId);
+            LOGGER.severe("Error happen in showCustomerOrder()");
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId);
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId, "Error in getDetailOrderAccountDtoByOrderId for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in showCustomerOrder() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af ordrenr: " + orderId);
         }
     }
 
@@ -178,13 +212,14 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateMarginPercentage()");
+                throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId, "Error in updateMarginPercentage for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateMarginPercentage() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at ændre dækningsgrad for ordrenr: " + orderId);
         }
     }
-
 
     public static void updateCarport(int orderId, int carportWidthCm, int carportLengthCm, int carportHeightCm, String svgSideView, String svgTopView, ConnectionPool connectionPool) throws DatabaseException {
 
@@ -202,10 +237,12 @@ public class OrderMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateCarport()");
+                throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId, "Error in updateCarport for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateCarport() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at opdatere carport beregning for ordrenr: " + orderId);
         }
 
     }
@@ -213,26 +250,45 @@ public class OrderMapper {
     public static void updateStatus(int orderId, String status, Boolean isDone, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "UPDATE orderr SET status=?";
-
-        if(isDone){
+        if (isDone) {
             sql += ", date_completed=CURRENT_DATE";
         }
-
         sql += " WHERE orderr_id=?";
 
-        try(Connection connection = connectionPool.getConnection();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setInt(2, orderId);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId);
+                LOGGER.severe("Error happen in updateStatus()");
+                throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId);
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId, e.getMessage());
+            LOGGER.severe("Error happen in updateStatus() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId);
+        }
+    }
+
+    public static void updateIsPaid(int orderId, ConnectionPool connectionPool) throws OrderException {
+        String sql = "UPDATE orderr SET paid = true, status = 'Afsluttet' WHERE orderr_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new OrderException("Fejl i køb af ordre");
+            }
+
+        } catch (OrderException | SQLException e) {
+            LOGGER.severe("Error in updateIsPaid() e.Message: " + e.getMessage());
+            throw new OrderException("Fejl i at oprette forbindelse til database");
         }
     }
 }

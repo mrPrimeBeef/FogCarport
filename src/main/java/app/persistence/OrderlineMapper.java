@@ -6,17 +6,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import app.config.LoggerConfig;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
 import app.exceptions.OrderException;
+import app.services.SalePriceCalculator;
 import app.services.StructureCalculationEngine.Entities.Material;
 
 public class OrderlineMapper {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     public static ArrayList<Orderline> getOrderlinesForCustomerOrSalesrep(int orderId, String role, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Orderline> orderlineList = new ArrayList<>();
-        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, orderr.paid FROM orderline JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
+        String sql = "SELECT orderline.quantity, orderline.cost_price, item.name, item.description, " +
+                "item.length_cm, orderr.paid, orderr.margin_percentage FROM orderline " +
+                "JOIN item USING(item_id) JOIN orderr USING(orderr_id) WHERE orderr_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -28,23 +34,29 @@ public class OrderlineMapper {
                 int quantity = rs.getInt("quantity");
                 double costPrice = rs.getDouble("cost_price");
                 String name = rs.getString("name");
+                int lengthCm = rs.getInt("length_cm");
                 String description = rs.getString("description") != null ? rs.getString("description") : "";
                 boolean paid = rs.getBoolean("paid");
+                double marginPercentage = rs.getDouble("margin_percentage");
+
+                double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+
                 if (role.equals("Kunde") && paid) {
-                    orderlineList.add(new Orderline(name, description, quantity));
+                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, salePriceInclVAT));
                 } else if (role.equals("salesrep")) {
-                    orderlineList.add(new Orderline(name, quantity, costPrice));
+                    orderlineList.add(new Orderline(name, description, lengthCm, quantity, costPrice, salePriceInclVAT));
                 }
             }
         } catch (SQLException e) {
-            throw new OrderException("Der skete en fejl i at hente din stykliste", "Error in getOrderlinesForCustomerOrSalesrep()", e.getMessage());
+            LOGGER.severe("Error in getOrderlinesForCustomerOrSalesrep() e.Message: " + e.getMessage());
+            throw new OrderException("Der skete en fejl i at hente din stykliste");
         }
         return orderlineList;
     }
 
-    public static void addOrderlines(Map<Material, Integer> orderParts, int orderId, ConnectionPool connectionPool) throws DatabaseException {
+    public static void addOrderlines(int orderId, Map<Material, Integer> orderParts, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price)" + "VALUES(?, ?, ?, ?) ";
+        String sql = "INSERT INTO orderline (item_id, quantity, orderr_id, cost_price) VALUES(?, ?, ?, ?) ";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -67,7 +79,8 @@ public class OrderlineMapper {
             connection.commit();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl: Der skete en fejl i at oprette din ordre", "Error in addOrderline() in OrderLineMapper", e.getMessage());
+            LOGGER.severe("Error in addOrderlines() e.Message: " + e.getMessage());
+            throw new DatabaseException("Databasefejl: Der skete en fejl i at oprette din ordre");
         }
     }
 
@@ -82,7 +95,31 @@ public class OrderlineMapper {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl", "Error in deleteOrderlinesFromOrderId()", e.getMessage());
+            LOGGER.severe("Error in deleteOrderlinesFromOrderId() e.Message: " + e.getMessage());
+            throw new DatabaseException("Der skete en fejl i at slette orderlinjer");
         }
     }
+
+
+    public static double getTotalCostPriceFromOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT SUM(cost_price) FROM orderline WHERE orderr_id=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                double totalCostPrice = rs.getDouble("sum");
+                return totalCostPrice;
+            }
+            LOGGER.severe("Error in getTotalCostPriceFromOrderId()");
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId);
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error in getTotalCostPriceFromOrderId() e.Message: " + e.getMessage());
+            throw new DatabaseException("Fejl ved hentning af total kostpris for ordrenr: " + orderId);
+        }
+    }
+
 }

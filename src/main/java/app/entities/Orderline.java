@@ -3,43 +3,50 @@ package app.entities;
 public class Orderline {
     private String name;
     private String description;
+    private int lengthCm;
     private int quantity;
-    private double price;
+    private double costPrice;
+    private double salePriceInclVAT;
 
-    public Orderline(String name, String description, int quantity) {
+    public Orderline(String name, String description, int lengthCm, int quantity, double costPrice, double salePriceInclVAT) {
         this.name = name;
-        this.quantity = quantity;
         this.description = description;
-    }
-    public Orderline(String name, int quantity, double price) {
-        this.name = name;
+        this.lengthCm = lengthCm;
         this.quantity = quantity;
-        this.price = price;
+        this.costPrice = costPrice;
+        this.salePriceInclVAT = salePriceInclVAT;
     }
 
-    public String getDescription() {
-        return description;
+    public Orderline(String name, String description, int lengthCm, int quantity, double salePriceInclVAT) {
+        this.name = name;
+        this.description = description;
+        this.lengthCm = lengthCm;
+        this.quantity = quantity;
+        this.salePriceInclVAT = salePriceInclVAT;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getLengthCm() {
+        return lengthCm;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getCostPrice() {
+        return costPrice;
     }
 
-    @Override
-    public String toString() {
-        return "Orderline{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                '}';
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
     }
+
 }

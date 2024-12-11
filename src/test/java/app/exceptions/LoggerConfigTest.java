@@ -24,8 +24,11 @@ class LoggerConfigTest {
             String lastLine = "";
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                lastLine = currentLine;
+                if(currentLine.length() > 0){
+                    lastLine = currentLine;
+                }
             }
+
             assertTrue(lastLine.contains("Test logging-besked"), "Log-filen skal indeholde test-beskeden");
         } catch (IOException e) {
             fail("Kunne ikke læse log-filen: " + e.getMessage());

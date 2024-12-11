@@ -1,12 +1,12 @@
 package app.services.StructureCalculationEngine.Entities;
 
-import app.services.StructureCalculationEngine.CalculationStrategy;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import app.services.StructureCalculationEngine.CalculationStrategy;
 
 public abstract class Structure {
     private CalculationStrategy strategy;
@@ -15,7 +15,9 @@ public abstract class Structure {
     private List<List<Float>> fixatingStrapListXY = new ArrayList<>();
 
     public abstract int getWidth();
+
     public abstract int getLength();
+
     public abstract int getHeight();
 
     public Structure(CalculationStrategy strategy) {
@@ -51,11 +53,11 @@ public abstract class Structure {
         return partsList;
     }
 
-    public void addFixatingStrapListXY(List<Float> oneStrap){
+    public void addFixatingStrapListXY(List<Float> oneStrap) {
         fixatingStrapListXY.add(oneStrap);
     }
 
-    public List<List<Float>> getFixatingStrapListXY(){
+    public List<List<Float>> getFixatingStrapListXY() {
         return fixatingStrapListXY;
     }
 }

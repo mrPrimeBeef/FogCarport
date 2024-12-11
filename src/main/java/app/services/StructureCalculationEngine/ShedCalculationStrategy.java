@@ -5,7 +5,7 @@ import app.services.StructureCalculationEngine.Entities.Structure;
 
 import java.util.List;
 
-public class ShedCalculationStrategy implements CalculationStrategy{
+public class ShedCalculationStrategy implements CalculationStrategy {
 
     @Override
     public List<PlacedMaterial> calculateStructure(Structure structure) {

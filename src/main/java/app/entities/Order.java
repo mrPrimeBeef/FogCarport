@@ -7,16 +7,24 @@ public class Order {
     Date datePlaced;
     Date datePaid;
     Date dateCompleted;
-    double saleprice;
+    double salePriceInclVAT;
     String status;
 
-    public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, double saleprice, String status) {
-    this.orderId = orderrId;
-    this.datePlaced = datePlaced;
-    this.datePaid = datePaid;
-    this.dateCompleted = dateCompleted;
-    this.saleprice = saleprice;
-    this.status = status;
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double salePriceInclVAT, String status) {
+        this.orderId = orderId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.salePriceInclVAT = salePriceInclVAT;
+        this.status = status;
+    }
+
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
+        this.orderId = orderId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.status = status;
     }
 
     public int getOrderId() {
@@ -35,8 +43,8 @@ public class Order {
         return dateCompleted;
     }
 
-    public double getSaleprice() {
-        return saleprice;
+    public double getSalePriceInclVAT() {
+        return salePriceInclVAT;
     }
 
     public String getStatus() {
@@ -46,11 +54,11 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "orderr_id=" + orderId +
+                "orderId=" + orderId +
                 ", datePlaced=" + datePlaced +
                 ", datePaid=" + datePaid +
                 ", dateCompleted=" + dateCompleted +
-                ", saleprice=" + saleprice +
+                ", salePriceInclVAT=" + salePriceInclVAT +
                 ", status='" + status + '\'' +
                 '}';
     }

@@ -9,6 +9,7 @@ public class Account {
     private String phone;
     private String email;
     private String role;
+    private String password;
 
     public Account(int accountId, String name, String address, int zip, String phone, String email, String role) {
         this.accountId = accountId;
@@ -29,8 +30,8 @@ public class Account {
         this.city = city;
         this.phone = phone;
     }
-  
-    public  Account(String name, String address, int zip, String phone, String email, String city) {
+
+    public Account(String name, String address, int zip, String phone, String email, String city) {
         this.name = name;
         this.address = address;
         this.zip = zip;
@@ -38,14 +39,28 @@ public class Account {
         this.email = email;
         this.city = city;
     }
+
+    public Account(int accountId, String email, String password, String role) {
+        this.accountId = accountId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public Account(int accountId, String email, String role) {
         this.accountId = accountId;
         this.email = email;
         this.role = role;
     }
+
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
+    }
+
+    public Account(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public int getAccountId() {
@@ -79,6 +94,11 @@ public class Account {
     public String getRole() {
         return role;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
