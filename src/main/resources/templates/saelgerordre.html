@@ -184,7 +184,8 @@
         <tr class="justify-content-around">
             <th>Navn</th>
             <th>Mængde</th>
-            <th>Kostpris for mængden</th>
+            <th>Samlet kostpris</th>
+            <th>Samlet salgspris inkl. moms</th>
         </tr>
         <tbody class="table-group-divider">
         <tr th:if="${orderlines == null}">
@@ -193,7 +194,14 @@
         <tr th:each="orderline : ${orderlines}">
             <td th:text="${orderline.name}"></td>
             <td th:text="${orderline.quantity}"></td>
-            <td th:text="${#numbers.formatDecimal(orderline.price, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(orderline.costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+        </tr>
+        <tr>
+            <td>TOTAL PRIS</td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(costPrice, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
         </tbody>
     </table>
