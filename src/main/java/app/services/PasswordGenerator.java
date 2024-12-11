@@ -8,7 +8,6 @@ public class PasswordGenerator {
     private static final String NUMBER_CHARS = "0123456789";
     private static final String SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
-
     private static final String ALL_CHARS =
             UPPERCASE_CHARS + LOWERCASE_CHARS + NUMBER_CHARS + SPECIAL_CHARS;
 

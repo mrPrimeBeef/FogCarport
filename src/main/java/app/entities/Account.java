@@ -39,6 +39,7 @@ public class Account {
         this.email = email;
         this.city = city;
     }
+
     public Account(int accountId, String email, String password, String role) {
         this.accountId = accountId;
         this.email = email;
@@ -51,10 +52,15 @@ public class Account {
         this.email = email;
         this.role = role;
     }
-  
+
     public Account(int accountId, String role) {
         this.accountId = accountId;
         this.role = role;
+    }
+
+    public Account(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public int getAccountId() {
@@ -89,7 +95,9 @@ public class Account {
         return role;
     }
 
-    public String getPassword(){return password;}
+    public String getPassword() {
+        return password;
+    }
 
     public void setPassword(String password) {
         this.password = password;

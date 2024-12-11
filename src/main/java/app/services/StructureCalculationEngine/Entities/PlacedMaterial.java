@@ -27,15 +27,15 @@ public class PlacedMaterial {
         return z;
     }
 
-    public void setX(double x){
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(double y){
+    public void setY(double y) {
         this.y = y;
     }
 
-    public void setZ(double z){
+    public void setZ(double z) {
         this.z = z;
     }
 }

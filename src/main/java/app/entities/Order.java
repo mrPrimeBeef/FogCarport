@@ -7,15 +7,24 @@ public class Order {
     Date datePlaced;
     Date datePaid;
     Date dateCompleted;
-    double saleprice;
+    double marginPercentage;
     String status;
 
-    public Order(int orderrId, Date datePlaced, Date datePaid, Date dateCompleted, double saleprice, String status) {
-        this.orderId = orderrId;
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, double marginPercentage, String status) {
+        this.orderId = orderId;
         this.datePlaced = datePlaced;
         this.datePaid = datePaid;
         this.dateCompleted = dateCompleted;
-        this.saleprice = saleprice;
+        this.marginPercentage = marginPercentage;
+        this.status = status;
+    }
+
+    public Order(int orderId, Date datePlaced, Date datePaid, Date dateCompleted, String status) {
+        this.orderId = orderId;
+        this.datePlaced = datePlaced;
+        this.datePaid = datePaid;
+        this.dateCompleted = dateCompleted;
+        this.marginPercentage = marginPercentage;
         this.status = status;
     }
 
@@ -35,8 +44,13 @@ public class Order {
         return dateCompleted;
     }
 
-    public double getSaleprice() {
-        return saleprice;
+    public double getmarginPercentage() {
+        return marginPercentage;
+    }
+
+    // TODO: Skal rettest til getSalePriceInclVAT
+    public double getSalePrice() {
+        return marginPercentage;
     }
 
     public String getStatus() {
@@ -50,7 +64,7 @@ public class Order {
                 ", datePlaced=" + datePlaced +
                 ", datePaid=" + datePaid +
                 ", dateCompleted=" + dateCompleted +
-                ", saleprice=" + saleprice +
+                ", saleprice=" + marginPercentage +
                 ", status='" + status + '\'' +
                 '}';
     }

@@ -41,6 +41,7 @@ public class OrderMapper {
                 String status = rs.getString("status");
                 double marginPercentage = rs.getDouble("margin_percentage");
                 double costPrice = rs.getDouble("sum");
+
                 double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
                 OverviewOrderAccountDtos.add(new OverviewOrderAccountDto(orderId, accountId, email, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
             }
@@ -51,11 +52,11 @@ public class OrderMapper {
         return OverviewOrderAccountDtos;
     }
 
-    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int shedWidth, int shedLength, ConnectionPool connectionPool) throws OrderException, DatabaseException {
+    public static boolean createOrder(int accountId, int carportWidth, int carportLength, int carportHeight, ConnectionPool connectionPool) throws OrderException, DatabaseException {
         boolean success = false;
 
-        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm, shed_width_cm, shed_length_cm) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orderr (account_id, status, carport_length_cm, carport_width_cm, carport_height_cm) " +
+                " VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -63,9 +64,9 @@ public class OrderMapper {
             ps.setString(2, "Henvendelse");
             ps.setInt(3, carportLength);
             ps.setInt(4, carportWidth);
-            ps.setInt(5, 210); // carport height 210 cm //TODO opdater faldttag.html
-            ps.setInt(6, shedWidth);
-            ps.setInt(7, shedLength);
+            ps.setInt(5, carportHeight);
+//            ps.setInt(6, shedWidth);
+//            ps.setInt(7, shedLength);
 
             int rowsAffected = ps.executeUpdate();
 
@@ -84,7 +85,9 @@ public class OrderMapper {
 
     public static ArrayList<Order> getOrdersFromAccountId(int account_id, ConnectionPool connectionPool) throws OrderException {
         ArrayList<Order> orders = new ArrayList<>();
-        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE account_id = ?";
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr WHERE account_id = ? ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -93,16 +96,21 @@ public class OrderMapper {
 
             ResultSet rs = ps.executeQuery();
 
-
             while (rs.next()) {
                 int orderId = rs.getInt("orderr_id");
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
 
-                orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status));
+                if (!status.equals("Henvendelse")) {
+                    double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                    orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status));
+                } else {
+                    orders.add(new Order(orderId, datePlaced, datePaid, dateCompleted, status));
+                }
             }
             return orders;
         } catch (SQLException e) {
@@ -112,7 +120,9 @@ public class OrderMapper {
 
     public static Order getOrder(int orderId, ConnectionPool connectionPool) throws OrderException {
         Order order = null;
-        String sql = "SELECT date_placed, date_paid, date_completed, margin_percentage, status FROM orderr WHERE orderr_id = ?";
+        String sql = "SELECT orderr_id, date_placed, date_paid, date_completed, status, margin_percentage," +
+                " (SELECT SUM(cost_price) FROM orderline WHERE orderline.orderr_id=orderr.orderr_id)" +
+                " FROM orderr WHERE account_id = ? ORDER BY status DESC , date_placed DESC";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -125,9 +135,16 @@ public class OrderMapper {
                 Date datePlaced = rs.getDate("date_placed");
                 Date datePaid = rs.getDate("date_paid");
                 Date dateCompleted = rs.getDate("date_completed");
-                double salePrice = rs.getDouble("margin_percentage");
+                double costPrice = rs.getDouble("sum");
+                double marginPercentage = rs.getDouble("margin_percentage");
                 String status = rs.getString("status");
-                order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePrice, status);
+
+                if (!status.equals("Henvendelse")) {
+                    double salePriceInclVAT = SalePriceCalculator.calculateSalePriceInclVAT(costPrice, marginPercentage);
+                    order = new Order(orderId, datePlaced, datePaid, dateCompleted, salePriceInclVAT, status);
+                } else {
+                    order = new Order(orderId, datePlaced, datePaid, dateCompleted, status);
+                }
             }
             return order;
 
@@ -218,15 +235,13 @@ public class OrderMapper {
     public static void updateStatus(int orderId, String status, Boolean isDone, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "UPDATE orderr SET status=?";
-
-        if(isDone){
+        if (isDone) {
             sql += ", date_completed=CURRENT_DATE";
         }
-
         sql += " WHERE orderr_id=?";
 
-        try(Connection connection = connectionPool.getConnection();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setInt(2, orderId);
@@ -238,6 +253,25 @@ public class OrderMapper {
 
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i at opdatere status for ordrenr: " + orderId, "Error in updateStatus() in OrderMapper for orderId: " + orderId, e.getMessage());
+        }
+    }
+
+    public static void updateIsPaid(int orderId, ConnectionPool connectionPool) throws OrderException {
+        String sql = "UPDATE orderr SET paid = true, status = 'Afsluttet' WHERE orderr_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new OrderException("Fejl i køb af ordre");
+            }
+
+        } catch (OrderException | SQLException e) {
+            LOGGER.severe("Error in updateIsPaid() " + e.getMessage());
+            throw new OrderException("Fejl i at oprette forbindelse til database");
         }
     }
 }

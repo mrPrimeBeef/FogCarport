@@ -50,7 +50,7 @@ public class Svg {
         Line dimLine = new Line();
         Line extLine1 = new Line();
         Line extLine2 = new Line();
-      
+
         double textX = Double.NaN;
         double textY = Double.NaN;
         double textRotation = Double.NaN;
