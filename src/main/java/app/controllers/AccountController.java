@@ -185,10 +185,11 @@ public class AccountController {
             int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(activeAccount.getAccountId(), activeAccount.getRole(), connectionPool);
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(orderId, activeAccount.getRole(), connectionPool);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
             ctx.attribute("orderlines", orderlines);
+            System.out.println(orderlines);
             ctx.render("kundesideordre.html");
 
         } catch (OrderException | DatabaseException e) {
