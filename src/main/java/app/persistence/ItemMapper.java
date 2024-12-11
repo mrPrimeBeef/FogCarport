@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import app.config.LoggerConfig;
 import app.services.StructureCalculationEngine.Entities.Material;
 import app.exceptions.DatabaseException;
 
 public class ItemMapper {
+    private static final Logger LOGGER = LoggerConfig.getLOGGER();
 
     // Dynamically searches for an item with the help of ItemSearchBuilder
     public static Material searchSingleItem(Map<String, Object> filters, ConnectionPool connectionPool) throws DatabaseException {
@@ -42,10 +45,12 @@ public class ItemMapper {
                 StringBuilder offendingFields = new StringBuilder();
                 filters.forEach((key, value) -> offendingFields.append(key).append("=").append(value).append(", "));
 
-                throw new DatabaseException("Databasefejl", "Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
+                LOGGER.severe("Error in searchSingleItem() in ItemMapper for query: " + offendingFields);
+                throw new DatabaseException("Databasefejl");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl: ingen forbindelse", "Error in DB connection in searchSingleItem() for ItemMapper", e.getMessage());
+            LOGGER.severe("Error in DB connection in searchSingleItem() for ItemMapper e.Message: " + e.getMessage());
+            throw new DatabaseException("Databasefejl: ingen forbindelse");
         }
     }
 
@@ -61,11 +66,13 @@ public class ItemMapper {
                 if (rs.next()) {
                     return mapRowToMaterial(rs);
                 } else {
-                    throw new DatabaseException("Database error", "Error in getItemById() in ItemMapper: No item found with item_id " + itemId);
+                    LOGGER.severe("Error in getItemById() in ItemMapper");
+                    throw new DatabaseException("Database fejl");
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Database error", "Connection error in getItemById() in ItemMapper: " + itemId, e.getMessage());
+            LOGGER.severe("Connection error in getItemById() in ItemMapper. e.Message: " + e.getMessage());
+            throw new DatabaseException("Database forbindelse fejl");
         }
     }
 
