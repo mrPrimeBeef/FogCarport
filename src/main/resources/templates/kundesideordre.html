@@ -61,7 +61,7 @@
                 </tr>
                 <tr th:each="orderline : ${orderlines}">
                     <td th:text="${orderline.name}"></td>
-                    <td th:text="${orderline.lengthCm}"></td>
+                    <td th:text="${orderline.lengthCm != 0 ? orderline.lengthCm : ''}"></td>
                     <td th:text="${orderline.quantity}"></td>
                     <td th:text="${#numbers.formatDecimal(orderline.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
                 </tr>
