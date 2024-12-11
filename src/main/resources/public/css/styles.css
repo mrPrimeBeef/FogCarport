@@ -11,3 +11,7 @@ main {
 .carport-svg-view {
     max-width: 800px;
 }
+
+.bg-dark-blue, .btn-dark-blue {
+    background-color: #14488C !important;
+}

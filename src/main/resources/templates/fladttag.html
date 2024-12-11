@@ -12,8 +12,9 @@
 </head>
 <body class="bg-light">
 
-<header th:replace="~{fragments :: ${session.account.role.equals('Kunde') ? 'headerCustomer' :
-                     (session.account.role.equals('salesrep') ? 'headerAdmin' : 'headerCustomer')}}">
+<header th:replace="~{fragments :: ${session.account == null ? 'headerCustomer' :
+                     (session.account.role.equals('Kunde') ? 'headerCustomer' :
+                     (session.account.role.equals('salesrep') ? 'headerAdmin' : 'headerCustomer'))}}">
 </header>
 
 <main class="container py-5 mb-5 mt-5">
@@ -134,7 +135,7 @@
             </label>
         </div>
         <div class="row justify-content-center">
-            <button type="submit" class="btn btn-primary w-50 mx-auto">Bestil tilbud</button>
+            <button type="submit" class="btn btn-dark-blue text-light w-50 mx-auto">Bestil tilbud</button>
         </div>
     </form>
 </main>
