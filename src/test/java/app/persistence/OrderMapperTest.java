@@ -15,7 +15,7 @@ import app.exceptions.DatabaseException;
 class OrderMapperTest extends AbstractMapperTest {
     @Test
     void createOrder() throws OrderException, DatabaseException {
-        boolean actual = OrderMapper.createOrder(1, 200, 200, 200, 200, connectionPool);
+        boolean actual = OrderMapper.createOrder(1, 200, 200, 200, connectionPool);
         assertTrue(actual);
     }
 

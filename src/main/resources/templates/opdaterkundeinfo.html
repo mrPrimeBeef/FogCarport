@@ -10,11 +10,6 @@
           crossorigin="anonymous">
     <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" href="../public/images/favicon-fog.png" th:href="@{images/favicon-fog.png}">
-    <style>
-        .bg-dark-blue, .btn-dark-blue {
-            background-color: #14488C !important;
-        }
-    </style>
 </head>
 <body class="bg-dark-blue">
 <main class="container vh-100 d-flex justify-content-center align-items-center">
@@ -28,9 +23,6 @@
                 <h2 id="log-text mb-1">Opdater adgangskode</h2>
                 <p class="mt-1 mb-3 text-success" th:if="${successMessage != null}" th:text="${successMessage}"></p>
                 <p class="mt-1 mb-3 text-danger" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
-
-                <p>Indtast din nuværende adgangskode og skriv derefter din nye adgangskode <br> og gentag den nye
-                    adgangskode</p>
                 <form method="post">
                     <input type="hidden" name="email" th:value="${email}"/>
                     <div class="mb-2">
@@ -56,7 +48,4 @@
     </div>
 </main>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </html>

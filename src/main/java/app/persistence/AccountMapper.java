@@ -95,7 +95,6 @@ public class AccountMapper {
     }
 
     public static int getAccountIdFromEmail(String email, ConnectionPool connectionPool) throws AccountException {
-        int accountId = 0;
         String sql = "SELECT account_id FROM account WHERE email = ?";
 
         try (Connection connection = connectionPool.getConnection();
@@ -105,22 +104,25 @@ public class AccountMapper {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                accountId = rs.getInt("account_id");
+                int accountId = rs.getInt("account_id");
+                return accountId;
             }
+            LOGGER.severe("Error in getAccountIdFromEmail()");
+            throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email);
 
         } catch (SQLException e) {
-            LOGGER.severe("Error in getAccountIdFromEmail() connection. E message: " + e.getMessage());
+            LOGGER.severe("Error in getAccountIdFromEmail(). E message: " + e.getMessage());
             throw new AccountException("Fejl ved søgning efter account ID", "Error in getAccountIdFromEmail(): " + email, e.getMessage());
         }
-        return accountId;
+
     }
 
-    public static int createAccount(String name, String adress, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
-        int accountId;
-        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone) VALUES (?, ?, ?, ?, ?, ?, ?) ";
+    public static int createAccount(String name, String address, int zip, String phone, String email, ConnectionPool connectionPool) throws AccountException {
+
+        String sql = "INSERT INTO account (email, password, name, role, address, zip_code, phone) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING account_id";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
             String password = PasswordGenerator.generatePassword();
 
@@ -128,29 +130,23 @@ public class AccountMapper {
             ps.setString(2, password);
             ps.setString(3, name);
             ps.setString(4, "Kunde");
-            ps.setString(5, adress);
+            ps.setString(5, address);
             ps.setInt(6, zip);
             ps.setString(7, phone);
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
-                LOGGER.info("Fejl ved oprettelse af ny bruger.");
-                throw new AccountException("Fejl ved oprettelse af ny bruger.");
-            } else {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    accountId = rs.getInt(1);
-                } else {
-                    LOGGER.severe("Error in createAccount()");
-                    throw new AccountException("Kunne ikke hente det genererede account ID.");
-                }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                return accountId;
             }
+            LOGGER.severe("Error in createAccount()");
+            throw new AccountException("Fejl i at oprette en konto");
 
         } catch (SQLException e) {
-            LOGGER.severe("Error in createAccount() connection. E message: " + e.getMessage());
+            LOGGER.severe("Error in createAccount(). E message: " + e.getMessage());
             throw new AccountException("Fejl i at oprette en konto", "Error in createAccount()", e.getMessage());
         }
-        return accountId;
+
     }
 
     public static Account getAccountByEmail(String email, ConnectionPool connectionPool) throws AccountException {
@@ -253,7 +249,7 @@ public class AccountMapper {
                 zips.add(rs.getInt("zip_code"));
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             LOGGER.severe("Error in getAllZips() connection. E message: " + e.getMessage());
         }
         return zips;
