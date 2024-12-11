@@ -277,10 +277,8 @@ public class OrderController {
 
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
-        for (String mail : emails) {
-            if (mail.equals(email)) {
-                return AccountMapper.getAccountIdFromEmail(email, connectionPool);
-            }
+        if (emails.contains(email)) {
+            return AccountMapper.getAccountIdFromEmail(email, connectionPool);
         }
 
         return AccountMapper.createAccount(name, address, zip, phone, email, connectionPool);
