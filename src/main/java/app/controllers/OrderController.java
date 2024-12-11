@@ -64,7 +64,7 @@ public class OrderController {
         }
 
         try {
-            int accountId = createOrGetAccountId(email, name, address, zip, phone, ctx, connectionPool);
+            int accountId = getOrCreateAccountId(email, name, address, zip, phone, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
             new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
@@ -272,8 +272,8 @@ public class OrderController {
         ctx.render("tak.html");
     }
 
-    private static int createOrGetAccountId(String email, String name, String address, int zip, String
-            phone, Context ctx, ConnectionPool connectionPool) throws DatabaseException, AccountException {
+    private static int getOrCreateAccountId(String email, String name, String address, int zip, String
+            phone, ConnectionPool connectionPool) throws DatabaseException, AccountException {
 
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
 
