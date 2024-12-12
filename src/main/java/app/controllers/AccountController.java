@@ -53,10 +53,10 @@ public class AccountController {
 
             switch (activeAccount.getRole()) {
                 case "salesrep":
-                    OrderController.salesrepShowAllOrdersPage(ctx, connectionPool);
+                    ctx.redirect("saelgeralleordrer");
                     break;
                 case "Kunde":
-                    showCustomerOverview(ctx, connectionPool);
+                    ctx.redirect("kundeside");
                     break;
             }
         } catch (AccountException e) {
