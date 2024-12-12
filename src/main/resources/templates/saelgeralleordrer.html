@@ -14,31 +14,57 @@
 <header th:replace="fragments :: headerAdmin"></header>
 <main class=" text-center">
     <h2 class="mt-5 py-5">Alle ordrer for alle kunder</h2>
-    <div class="d-flex flex-column justify-content-around p-0 m-5">
-        <table class="table table-striped table-bordered">
-            <tr class="justify-content-around">
-                <th>Ordrenr.</th>
-                <th>Email</th>
-                <th>Henvendelse</th>
-                <th>Dato betalt</th>
-                <th>Dato færdig</th>
-                <th>Salgspris inkl. moms</th>
-                <th>Status</th>
-            </tr>
-            <tbody class="table-group-divider">
-            <tr th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
-                <td><a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}"
-                       th:text="${OverviewOrderAccountDto.orderId}"></a></td>
-                <td th:text="${OverviewOrderAccountDto.email}"></td>
-                <td th:text="${OverviewOrderAccountDto.datePlaced}"></td>
-                <td th:text="${OverviewOrderAccountDto.datePaid}"></td>
-                <td th:text="${OverviewOrderAccountDto.dateCompleted}"></td>
-                <td th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
-                <td th:text="${OverviewOrderAccountDto.status}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="row">
+            <!-- Tabelvisning til store skærme -->
+            <div class="col-lg-12 d-none d-lg-block">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Ordrenr.</th>
+                        <th>Email</th>
+                        <th>Henvendelse</th>
+                        <th>Dato betalt</th>
+                        <th>Dato færdig</th>
+                        <th>Salgspris inkl. moms</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
+                        <td>
+                            <a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}" th:text="${OverviewOrderAccountDto.orderId}"></a>
+                        </td>
+                        <td th:text="${OverviewOrderAccountDto.email}"></td>
+                        <td th:text="${OverviewOrderAccountDto.datePlaced}"></td>
+                        <td th:text="${OverviewOrderAccountDto.datePaid}"></td>
+                        <td th:text="${OverviewOrderAccountDto.dateCompleted}"></td>
+                        <td th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+                        <td th:text="${OverviewOrderAccountDto.status}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Kortvisning til små skærme -->
+            <div class="d-lg-none">
+                <div class="card mb-3" th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="'Ordrenr. ' + ${OverviewOrderAccountDto.orderId}">Ordrenr.</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> <span th:text="${OverviewOrderAccountDto.email}"></span><br>
+                            <strong>Henvendelse:</strong> <span th:text="${OverviewOrderAccountDto.datePlaced}"></span><br>
+                            <strong>Dato betalt:</strong> <span th:text="${OverviewOrderAccountDto.datePaid}"></span><br>
+                            <strong>Dato færdig:</strong> <span th:text="${OverviewOrderAccountDto.dateCompleted}"></span><br>
+                            <strong>Salgspris inkl. moms:</strong> <span th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></span><br>
+                            <strong>Status:</strong> <span th:text="${OverviewOrderAccountDto.status}"></span>
+                        </p>
+                        <a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}" class="btn btn-primary">Se ordren</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </main>
 <footer th:replace="fragments :: footer"></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

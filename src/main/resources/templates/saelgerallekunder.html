@@ -13,27 +13,50 @@
 <body class="bg-light">
 <header th:replace="fragments :: headerAdmin"></header>
 <main class=" text-center">
-    <h2 class="mt-5 py-5">Alle kunder</h2>
-    <div class="d-flex flex-column justify-content-around p-0 m-5">
-        <table class="table table-striped table-bordered">
-            <tr class="justify-content-around">
-                <th>Email</th>
-                <th>Navn</th>
-                <th>Telefon</th>
-                <th>Postnummer</th>
-                <th>By</th>
-            </tr>
-            <tbody class="table-group-divider">
-            <tr th:each="account: ${accounts}">
-                <td th:text="${account.email}"></td>
-                <td th:text="${account.name}"></td>
-                <td th:text="${account.phone}"></td>
-                <td th:text="${account.zip}"></td>
-                <td th:text="${account.city}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <<h2 class="mt-5 py-5">Alle kunder</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 d-none d-lg-block">
+                <!-- Normal tabel visning til store skærme -->
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Navn</th>
+                        <th>Telefon</th>
+                        <th>Postnummer</th>
+                        <th>By</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="account: ${accounts}">
+                        <td th:text="${account.email}"></td>
+                        <td th:text="${account.name}"></td>
+                        <td th:text="${account.phone}"></td>
+                        <td th:text="${account.zip}"></td>
+                        <td th:text="${account.city}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Kortvisning til små skærme -->
+            <div class="d-lg-none">
+                <div class="card mb-3" th:each="account: ${accounts}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${account.name}">Navn</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> <span th:text="${account.email}"></span><br>
+                            <strong>Telefon:</strong> <span th:text="${account.phone}"></span><br>
+                            <strong>Postnummer:</strong> <span th:text="${account.zip}"></span><br>
+                            <strong>By:</strong> <span th:text="${account.city}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </main>
 <footer th:replace="fragments :: footer"></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
