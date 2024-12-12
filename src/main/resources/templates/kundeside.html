@@ -13,57 +13,67 @@
 <body class="bg-light">
 <header th:replace="fragments :: headerCustomer"></header>
 <main class="text-center mt-5 mb-5 min-vh-100">
-    <div class="mt-5 py-5">
-
-        <h2>Dine oplysninger</h2>
-        <div class="d-flex flex-column justify-content-around p-0 m-5">
-            <table class="table table-striped table-bordered">
-                <tr class="justify-content-around">
-                    <th>Email</th>
-                    <th>Navn</th>
-                    <th>Telefon</th>
-                    <th>Adresse</th>
-                    <th>By</th>
-                </tr>
-                <tbody>
-                <td th:text="${session.account.email}"></td>
-                <td th:text="${session.account.name}"></td>
-                <td th:text="${session.account.phone}"></td>
-                <td th:text="${session.account.address}"></td>
-                <td th:text="${session.account.city}"></td>
-                </tbody>
-            </table>
+    <div class="container">
+        <div class="mt-5 py-5">
+            <h2>Dine oplysninger</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Navn</th>
+                        <th>Telefon</th>
+                        <th>Adresse</th>
+                        <th>By</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${session.account.email}"></td>
+                        <td th:text="${session.account.name}"></td>
+                        <td th:text="${session.account.phone}"></td>
+                        <td th:text="${session.account.address}"></td>
+                        <td th:text="${session.account.city}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <h2 class="mt-5">Dine ordrer</h2>
-        <div class="d-flex flex-column justify-content-around p-0 m-5">
-            <table class="table table-striped table-bordered">
-                <tr class="justify-content-around">
-                    <th>Ordrenr.</th>
-                    <th>Henvendelse</th>
-                    <th>Dato betalt</th>
-                    <th>Dato færdig</th>
-                    <th>Pris</th>
-                    <th>Status</th>
-                </tr>
-                <tbody class="table-group-divider">
-                <tr th:if="${orders == null}">
-                    <td colspan="6" class="text-center">Ingen ordrer fundet</td>
-                </tr>
-                <tr th:each="order : ${orders}">
-                    <td>
-                        <a th:href="@{/kundesideordre(ordrenr=${order.orderId})}" th:text="${order.orderId}"></a>
-                    </td>
-                    <td th:text="${order.datePlaced}"></td>
-                    <td th:text="${order.datePaid}"></td>
-                    <td th:text="${order.dateCompleted}"></td>
-                    <td th:text="${#numbers.formatDecimal(order.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
-                    <td th:text="${order.status}"></td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="mt-5">
+            <h2>Dine ordrer</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Ordrenr.</th>
+                        <th>Henvendelse</th>
+                        <th>Dato betalt</th>
+                        <th>Dato færdig</th>
+                        <th>Pris</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:if="${orders == null}">
+                        <td colspan="6" class="text-center">Ingen ordrer fundet</td>
+                    </tr>
+                    <tr th:each="order : ${orders}">
+                        <td>
+                            <a th:href="@{/kundesideordre(ordrenr=${order.orderId})}" th:text="${order.orderId}"></a>
+                        </td>
+                        <td th:text="${order.datePlaced}"></td>
+                        <td th:text="${order.datePaid}"></td>
+                        <td th:text="${order.dateCompleted}"></td>
+                        <td th:text="${#numbers.formatDecimal(order.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></td>
+                        <td th:text="${order.status}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>
+
 <footer th:replace="fragments :: footer"></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
