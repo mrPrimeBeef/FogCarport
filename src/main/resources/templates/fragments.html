@@ -12,7 +12,6 @@
     <link rel="icon" type="image/x-icon" href="../public/images/favicon-fog.png" th:href="@{images/favicon-fog.png}">
 </head>
 
-<!-- HEADER FOR CUSTOMER-->
 <header th:fragment="headerCustomer">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
@@ -20,7 +19,11 @@
                 <img class="logo" src="../public/images/fog-logo.png" width="60" height="60"
                      th:src="@{/images/fog-logo.png}"/>
             </a>
-            <div class="collapse navbar-collapse">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" th:href="@{/}" href="index.html" aria-current="page">Byg-selv
@@ -64,7 +67,6 @@
     </nav>
 </header>
 
-<!-- HEADER FOR ADMIN-->
 <header th:fragment="headerAdmin">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
@@ -72,7 +74,11 @@
                 <img class="logo" src="../public/images/fog-logo.png" width="60" height="60"
                      th:src="@{/images/fog-logo.png}"/>
             </a>
-            <div class="collapse navbar-collapse">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar"
+                    aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="saelgeralleordrer.html" th:href="@{/saelgeralleordrer}"
@@ -101,7 +107,6 @@
     </nav>
 </header>
 
-<!-- FOOTER -->
 <footer class="navbar navbar-light bg-white" th:fragment="footer">
     <div class="container-fluid">
         <a class="nav-link active">Skoleopgave</a>

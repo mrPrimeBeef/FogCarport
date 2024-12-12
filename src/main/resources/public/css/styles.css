@@ -18,3 +18,9 @@ main{
 .atag{
     color:blue;
 }
+
+@media (max-width: 767.98px) {
+    .w-100-mobile {
+        width: 100% !important;
+    }
+}
