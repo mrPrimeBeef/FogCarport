@@ -185,6 +185,12 @@ public class AccountController {
             int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
             DetailOrderAccountDto detailOrderAccountDto = OrderMapper.getDetailOrderAccountDtoByOrderId(orderId, connectionPool);
+            if (activeAccount.getAccountId() != detailOrderAccountDto.getAccountId()) {
+                ctx.attribute("errorMessage", "Du har ikke adgang til at se denne ordre");
+                ctx.render("error.html");
+                return;
+            }
+
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesForCustomerOrSalesrep(orderId, activeAccount.getRole(), connectionPool);
 
             ctx.attribute("detailOrderAccountDto", detailOrderAccountDto);
