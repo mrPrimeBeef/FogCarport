@@ -44,7 +44,8 @@
             <input type="hidden" name="accountId" th:value="${detailOrderAccountDto.accountId}">
             <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
             <button type="submit" class="btn btn-dark-blue text-light mb-2">Send Tilbud*</button>
-            <p class="small text-muted text-center px-3">*Når der trykkes Send Tilbud sendes en mail til kunden med brugernavn og password samt besked om tilbudet er klar på deres konto</p>
+            <p class="small text-muted text-center px-3">*Når der trykkes Send Tilbud sendes en mail til kunden med
+                brugernavn og password samt besked om tilbudet er klar på deres konto</p>
         </form>
     </div>
 
@@ -66,15 +67,14 @@
                 <td th:text="${detailOrderAccountDto.datePlaced}">X</td>
                 <td th:text="${detailOrderAccountDto.datePaid}">X</td>
                 <td th:text="${detailOrderAccountDto.dateCompleted}">X</td>
-                <td>
-                    <p th:text="${detailOrderAccountDto.status}"></p>
-                </td>
+                <td th:text="${detailOrderAccountDto.status}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <form method="post" action="opdaterstatus" class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
+    <form method="post" action="opdaterstatus"
+          class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
         <div class="mb-2 mb-md-0 me-md-2">
             <select th:if="${detailOrderAccountDto.status != 'Afsluttet'}"
                     name="status" id="status" class="form-select form-select-sm">
@@ -112,7 +112,8 @@
         </div>
         <button th:if="${detailOrderAccountDto.status != 'Afsluttet'}"
                 type="submit"
-                class="btn btn-dark-blue text-light btn-sm">Opdater Status</button>
+                class="btn btn-dark-blue text-light btn-sm">Opdater Status
+        </button>
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
     </form>
 
@@ -146,7 +147,8 @@
         <input type="hidden" name="ordrenr" th:value="${detailOrderAccountDto.orderId}">
         <div class="mt-1 mb-5 d-flex flex-column align-items-center">
             <div class="d-flex align-items-center mb-2">
-                <input type="number" class="form-control form-control-sm w-auto me-2" id="daekningsgrad" name="daekningsgrad" min="30"
+                <input type="number" class="form-control form-control-sm w-auto me-2" id="daekningsgrad"
+                       name="daekningsgrad" min="30"
                        max="99" step="0.1" required placeholder="Dækningsgrad %"
                        th:value="${detailOrderAccountDto.marginPercentage}">
                 <button type="submit" class="btn btn-dark-blue text-light btn-sm">Ændre dækningsgrad</button>
@@ -176,17 +178,20 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="number" class="form-control form-control-sm text-center" id="carport-bredde" name="carport-bredde"
+                        <input type="number" class="form-control form-control-sm text-center" id="carport-bredde"
+                               name="carport-bredde"
                                min="240" max="600" required placeholder="Angiv et tal mellem 240 og 600 i cm"
                                th:value="${detailOrderAccountDto.carportWidthCm}">
                     </td>
                     <td>
-                        <input type="number" class="form-control form-control-sm text-center" id="carport-laengde" name="carport-laengde"
+                        <input type="number" class="form-control form-control-sm text-center" id="carport-laengde"
+                               name="carport-laengde"
                                min="240" max="780" required placeholder="Angiv et tal mellem 240 og 780 i cm"
                                th:value="${detailOrderAccountDto.carportLengthCm}">
                     </td>
                     <td>
-                        <input type="number" class="form-control form-control-sm text-center" id="carport-hoejde" name="carport-hoejde"
+                        <input type="number" class="form-control form-control-sm text-center" id="carport-hoejde"
+                               name="carport-hoejde"
                                min="210" max="300" required placeholder="Angiv et tal mellem 210 og 300 i cm"
                                th:value="${detailOrderAccountDto.carportHeightCm}">
                     </td>
@@ -203,7 +208,8 @@
         <div class="carport-svg-view p-3 w-100 w-md-75 min-vh-50" th:utext="${detailOrderAccountDto.svgSideView}"></div>
         <h3 class="mt-5">Tegning fra oven</h3>
         <div class="carport-svg-view p-3 w-100 w-md-75 min-vh-50" th:utext="${detailOrderAccountDto.svgTopView}"></div>
-        <p class="small text-muted text-center px-3">* Mål udvendigt på stolper<br>** Afstand fra stern ved H=2,50m<br>*** Mål overkant rem</p>
+        <p class="small text-muted text-center px-3">* Mål udvendigt på stolper<br>** Afstand fra stern ved H=2,50m<br>***
+            Mål overkant rem</p>
     </div>
 
     <h3>Stykliste</h3>
@@ -233,7 +239,8 @@
                 <td><b>TOTAL PRIS</b></td>
                 <td></td>
                 <td></td>
-                <td><b th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></b></td>
+                <td><b th:text="${#numbers.formatDecimal(detailOrderAccountDto.costPrice, 1, 'POINT', 2, 'COMMA')}"></b>
+                </td>
                 <td>
                     <b th:text="${#numbers.formatDecimal(detailOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></b>
                 </td>
