@@ -225,7 +225,7 @@ public class OrderController {
         }
     }
 
-    static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
+    public static void salesrepShowAllOrdersPage(Context ctx, ConnectionPool connectionPool) {
         Account activeAccount = ctx.sessionAttribute("account");
         if (activeAccount == null || !"salesrep".equalsIgnoreCase(activeAccount.getRole())) {
             LOGGER.warning("Uautoriseret adgangsforsøg til kundeliste. Rolle: " +
