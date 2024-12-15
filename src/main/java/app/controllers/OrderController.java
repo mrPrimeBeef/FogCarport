@@ -130,7 +130,7 @@ public class OrderController {
 
         } catch (AccountException e) {
             LOGGER.severe(e.getMessage());
-            ctx.attribute("message", "Error in sendCustomerInfo " + e.getMessage());
+            ctx.attribute("errorMessage","Error in sendCustomerInfo " + e.getMessage());
             ctx.render("error.html");
         }
     }
