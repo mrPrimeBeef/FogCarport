@@ -46,7 +46,6 @@ object Vare{
 +Beskrivelse
 +Kostpris ekskl. moms
 +Salgspris inkl. moms
-+Dækningsgrad
 }
 
 Kunde "1" -- "1..*" Ordre
