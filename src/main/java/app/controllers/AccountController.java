@@ -98,7 +98,7 @@ public class AccountController {
                 ctx.render("glemtkode.html");
             }
         } catch (AccountException | DatabaseException e) {
-            ctx.attribute("message", "Error in forgotPassword() " + e.getMessage());
+            ctx.attribute("errorMessage", "Error in forgotPassword() " + e.getMessage());
             ctx.render("error.html");
         }
     }
@@ -168,7 +168,7 @@ public class AccountController {
             ctx.attribute("orders", orders);
             ctx.render("kundeside.html");
         } catch (OrderException e) {
-            ctx.attribute(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
     }
@@ -198,7 +198,7 @@ public class AccountController {
             ctx.render("kundesideordre.html");
 
         } catch (OrderException | DatabaseException e) {
-            ctx.attribute(e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
 

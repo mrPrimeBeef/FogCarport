@@ -72,7 +72,7 @@ public class OrderController {
 
             LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
 
-            ctx.attribute("ErrorMessage", e.getMessage());
+            ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
     }
@@ -130,7 +130,7 @@ public class OrderController {
 
         } catch (AccountException e) {
             LOGGER.severe(e.getMessage());
-            ctx.attribute("errorMessage","Error in sendCustomerInfo " + e.getMessage());
+            ctx.attribute("errorMessage", "Error in sendCustomerInfo " + e.getMessage());
             ctx.render("error.html");
         }
     }
