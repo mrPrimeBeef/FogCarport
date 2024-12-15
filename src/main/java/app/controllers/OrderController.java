@@ -57,7 +57,7 @@ public class OrderController {
         ArrayList<Integer> validPostnumre = AccountMapper.getAllZips(connectionPool);
 
         if (!validPostnumre.contains(zip)) {
-            ctx.attribute("ErrorMessage", "Postnummeret skal være et gyldigt.");
+            ctx.attribute("errorMessage", "Postnummeret skal være et gyldigt.");
             ctx.render("fladttag.html");
             return;
         }

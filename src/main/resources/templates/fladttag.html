@@ -19,7 +19,7 @@
 
 <main class="container py-5 mb-5 mt-5">
     <h2 class="text-center fw-bold mb-4">Bestil Quick-Byg tilbud - carport med fladt tag</h2>
-    <div><h2 class="text-center fw-bold mb-4" th:text="${ErrorMessage}"></h2></div>
+    <div><h2 class="text-center fw-bold mb-4" th:text="${errorMessage}"></h2></div>
 
     <p class="text-center">
         Med et specialudviklet computerprogram kan vi lynhurtigt beregne prisen og udskrive en
@@ -115,9 +115,10 @@
         </div>
         <div class="mb-3">
             <label for="postnummer" class="form-label">Postnummer*</label>
-            <input type="text" class="form-control" id="postnummer" name="postnummer" placeholder="Postnummer" required pattern="\d{4}"
+            <input type="text" class="form-control" id="postnummer" name="postnummer" placeholder="Postnummer" required
+                   pattern="\d{4}"
                    title="Postnummer skal bestå af 4 tal">
-            <div><p th:text="${ErrorMessage}"></p></div>
+            <div><p th:text="${errorMessage}"></p></div>
         </div>
         <div class="mb-3">
             <label for="telefon" class="form-label">Telefon*</label>
