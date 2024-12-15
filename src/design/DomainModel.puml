@@ -7,6 +7,10 @@ object Sælger {
 men i tilfælde af fravær skal sælgerne
 kunne servicere hinandens kunder)
 }
+object Admin {
+(En eller flere admins,
+som har de fulde rettigheder til systemet)
+}
 object Carport {
 +Stolper
 +Rem
