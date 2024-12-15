@@ -6,7 +6,7 @@ package app {
     - static final String PASSWORD
     - static final String URL
     - static final String DB
-    - static ConnectionPool connectionPool
+    - static final ConnectionPool connectionPool
     + static void main(String[] args)
 
   }
@@ -34,6 +34,16 @@ package app {
   }
 
   package persistence {
+    class ConnectionPool {
+      + static ConnectionPool instance
+      + static HikariDataSource ds
+      - ConnectionPool()
+      + static ConnectionPool getInstance(String user, String password, String url, String db)
+      + synchronized Connection getConnection()
+      + synchronized void close()
+      - static HikariDataSource createHikariConnectionPool(String user, String password, String url, String db)
+    }
+
     class AccountMapper{
       + static Account login(Context ctx, ConnectionPool connectionPool)
       + static int(accountId) createAccount(Context ctx, ConnectionPool connectionPool)
@@ -210,11 +220,15 @@ package app {
   package exceptions {
 
   class DatabaseException{
+    + DatabaseException(String userMessage)
   }
 
-  class AccountCreationException{
+  class AccountException{
+    + AccountException(String userMessage)
   }
-  class OrderCreationException{
+  class OrderException {
+    extends Exception
+    + public OrderException(String userMessage)
   }
   }
 
