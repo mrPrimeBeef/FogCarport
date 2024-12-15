@@ -20,12 +20,16 @@ object Carport {
 }
 object Stykliste
 object Tegningssæt {
-(Ovenfra, fra siden, forfra, evt. 3D)
++Tegning fra siden
++Tegning fra oven
++Evt. 3D tegning
 }
 object Ordre {
 +Ordrenr.
 +Dato
-+Total pris
++Total kostpris ekskl. moms
++Total salgspris inkl. moms
++Justeret dækningsgrad
 }
 object Ordrelinje {
 +Varenr.
@@ -33,11 +37,12 @@ object Ordrelinje {
 +Pris for dette antal
 }
 object Vare{
-(Alle vare i Fogs sortiment)
+(Alle varer i Fogs sortiment)
 +Varenr.
 +Beskrivelse
-+Kostpris eks. moms
-+Salgspris eks. moms
++Kostpris ekskl. moms
++Salgspris inkl. moms
++Dækningsgrad
 }
 
 Kunde "1" -- "1..*" Ordre
