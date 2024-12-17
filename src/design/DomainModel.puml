@@ -31,6 +31,7 @@ object Tegningssæt {
 object Ordre {
 +Ordrenr.
 +Dato
++Status
 +Total kostpris ekskl. moms
 +Total salgspris inkl. moms
 +Justeret dækningsgrad
@@ -43,7 +44,13 @@ object Ordrelinje {
 object Vare{
 (Alle varer i Fogs sortiment)
 +Varenr.
++Navn
 +Beskrivelse
++Varetype
++Længde
++Bredde
++Højde
++Antal i pakken
 +Kostpris ekskl. moms
 +Salgspris inkl. moms
 }
