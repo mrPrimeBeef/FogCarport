@@ -7,10 +7,8 @@ Dette repository indholder vores Fog carport webapplikations projekt.
 - [Video-demo af vores web app](https://www.youtube.com/watch?v=kcoIhAZ_xQo)
 - [Figma filer](https://github.com/mrPrimeBeef/FogCarport/tree/main/Figma)
 
-## Installationsvejledning
-1. Klon dette repository
-2. Opret en `??` database i PostgreSQL
-3. Åbn IntelliJ og importer alle dependencies
-4. Kopiér SQL scriptet fra `??` til PostgreSQL og kør det
-5. Byg og kør projektet i IntelliJ
-6. Se web appen ved at åbne `??` i din browser
+AUTHORS:
+Rolf Lundsgaard Josephsen, cph-rj17@cphbusiness.dk, MrPrimeBeef
+Peter Bollhorn, cph-pb274@cphbusiness.dk, pbollhorn 
+Lasse Jensen, cph-lj481@cphbusiness.dk, Lorsayden
+Agnethe Christensen, cph-ac331@cphbusiness.dk, Agnethechr 
