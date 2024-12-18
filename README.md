@@ -4,7 +4,7 @@ Dette repository indholder vores Fog carport webapplikations projekt.
 
 ## Links
 - [Vores rapport som PDF]()
-- [Video-demo af vores web app]()
+- [Video-demo af vores web app](https://www.youtube.com/watch?v=kcoIhAZ_xQo)
 - [Figma filer]()
 
 ## Installationsvejledning
