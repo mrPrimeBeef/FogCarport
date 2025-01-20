@@ -32,6 +32,7 @@ public class Main {
 
             sender.sendEmail("Rolf", "williamjosephsen1993@gmail.com", "1234");
         } catch (Exception e){
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
