@@ -1,5 +1,6 @@
 package app;
 
+import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -21,9 +22,17 @@ public class Main {
             config.staticFiles.add("/public");
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
             config.staticFiles.add("/templates");
-        }).start(7070);
+        }).start(7071);
 
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
+
+        try{
+            EmailSender sender = new EmailSender();
+
+            sender.sendEmail("Rolf", "williamjosephsen1993@gmail.com", "1234");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

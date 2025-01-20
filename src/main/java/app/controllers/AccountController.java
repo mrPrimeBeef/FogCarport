@@ -180,7 +180,6 @@ public class AccountController {
             ctx.render("error.html");
             return;
         }
-
         try {
             int orderId = Integer.parseInt(ctx.queryParam("ordrenr"));
 
@@ -201,7 +200,6 @@ public class AccountController {
             ctx.attribute("errorMessage", e.getMessage());
             ctx.render("error.html");
         }
-
     }
 
     private static void buyOrder(Context ctx, ConnectionPool connectionPool) {

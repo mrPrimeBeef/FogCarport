@@ -1,10 +1,12 @@
 package app.controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -22,6 +24,8 @@ import app.persistence.AccountMapper;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.StructureCalculationEngine.Entities.Material;
+
+import javax.imageio.IIOException;
 
 public class OrderController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -67,6 +71,8 @@ public class OrderController {
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
             new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
+
+
             showThankYouPage(name, email, ctx);
         } catch (AccountException | OrderException | DatabaseException e) {
 
