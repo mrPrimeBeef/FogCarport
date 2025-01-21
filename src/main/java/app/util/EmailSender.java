@@ -12,28 +12,29 @@ import java.io.IOException;
 
 public class EmailSender {
 
+    private static final String FROM_EMAIL_ADDRESS = System.getenv("FROM_EMAIL_ADDRESS");
+    private static final String SENDGRID_API_KEY = System.getenv("SENDGRID_API_KEY");
+
     public void sendEmail(String name, String email, String password) throws IOException {
-        Email from = new Email("williamjosephsen1993@gmail.com");
-        from.setName("Johannes Fog Byggemarked");
+        Email from = new Email(FROM_EMAIL_ADDRESS);
+        from.setName("Byggemarked");
 
         Mail mail = new Mail();
         mail.setFrom(from);
-
-        String API_KEY = System.getenv("SENDGRID_API_KEY");
 
         Personalization personalization = new Personalization();
 
         /* Erstat kunde@gmail.com, name, email og zip med egne værdier ****/
         /* I test-fasen - brug din egen email, så du kan modtage beskeden */
-        personalization.addTo(new Email("williamjosephsen1993@gmail.com"));
-        personalization.addDynamicTemplateData("navn", name);
+        personalization.addTo(new Email(email));
+        personalization.addDynamicTemplateData("name", name);
         personalization.addDynamicTemplateData("email", email);
-        personalization.addDynamicTemplateData("kode", password);
+        personalization.addDynamicTemplateData("zip", password);
         mail.addPersonalization(personalization);
 
         mail.addCategory("carportapp");
 
-        SendGrid sg = new SendGrid(API_KEY);
+        SendGrid sg = new SendGrid(SENDGRID_API_KEY);
         Request request = new Request();
 
         try {
@@ -41,7 +42,7 @@ public class EmailSender {
             request.setEndpoint("mail/send");
 
             // indsæt dit skabelonid herunder
-            mail.templateId = "d-0180debe8dc442af94a8bf7df90d5576";
+            mail.templateId = "d-2ffc20e92ae94388b6b25a2277ec6f06";
             request.setBody(mail.build());
             Response response = sg.api(request);
             System.out.println(response.getStatusCode());

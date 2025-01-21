@@ -22,7 +22,7 @@ public class Main {
             config.staticFiles.add("/public");
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
             config.staticFiles.add("/templates");
-        }).start(7071);
+        }).start(7070);
 
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
@@ -30,7 +30,7 @@ public class Main {
         try{
             EmailSender sender = new EmailSender();
 
-            sender.sendEmail("Rolf", "williamjosephsen1993@gmail.com", "1234");
+            sender.sendEmail("Anders And", "anders@and.dk", "2100");
         } catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
