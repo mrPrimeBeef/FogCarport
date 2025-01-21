@@ -73,7 +73,6 @@ public class OrderController {
 
             new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
 
-
             showThankYouPage(name, email, ctx);
         } catch (AccountException | OrderException | DatabaseException e) {
 
@@ -135,8 +134,7 @@ public class OrderController {
             HashMap<String, String> map = new HashMap<>();
             map.put("email", account.getEmail());
             map.put("password", account.getPassword());
-            EmailSender.sendEmail("anders@and.dk", "d-17c17b1fc6f9456789908966e895c1cc", map);
-
+            EmailSender.sendEmail(account.getEmail(), EmailSender.TEMPLATE_ID_QUOTE_READY_MAIL, map);
 
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             ctx.redirect("saelgerordre?ordrenr=" + orderId);

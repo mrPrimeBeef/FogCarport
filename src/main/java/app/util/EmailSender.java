@@ -15,8 +15,9 @@ public class EmailSender {
 
     private static final String FROM_EMAIL_ADDRESS = System.getenv("FROM_EMAIL_ADDRESS");
     private static final String SENDGRID_API_KEY = System.getenv("SENDGRID_API_KEY");
+    public static final String TEMPLATE_ID_QUOTE_READY_MAIL = System.getenv("TEMPLATE_ID_QUOTE_READY_MAIL");
 
-    public static void sendEmail(String toEmailAddress, String sendgridTemplateID, HashMap<String, String> map) {
+    public static void sendEmail(String toEmailAddress, String sendgridTemplateId, HashMap<String, String> map) {
         Email from = new Email(FROM_EMAIL_ADDRESS);
         from.setName("Byggemarked");
 
@@ -28,9 +29,11 @@ public class EmailSender {
 
         Mail mail = new Mail();
         mail.setFrom(from);
-        mail.templateId = sendgridTemplateID;
+        mail.templateId = sendgridTemplateId;
         mail.addPersonalization(personalization);
         mail.addCategory("carportapp");
+
+        System.out.println(mail.templateId);
 
         SendGrid sg = new SendGrid(SENDGRID_API_KEY);
         Request request = new Request();

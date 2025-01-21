@@ -1,6 +1,5 @@
 package app;
 
-import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -27,13 +26,5 @@ public class Main {
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
 
-        try{
-//            EmailSender sender = new EmailSender();
-//
-//            sender.sendEmail("Anders And", "anders@and.dk", "2100");
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
     }
 }
