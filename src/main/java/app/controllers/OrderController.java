@@ -73,6 +73,17 @@ public class OrderController {
 
             new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
 
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("carportWidth", carportWidth);
+            map.put("carportLength", carportLength);
+            map.put("carportHeight", carportHeight);
+            map.put("name", name);
+            map.put("address", address);
+            map.put("zip", zip);
+            map.put("phone", phone);
+            map.put("email", email);
+            EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_QUOTE_CONFIRMATION, map);
+
             showThankYouPage(name, email, ctx);
         } catch (AccountException | OrderException | DatabaseException e) {
 
@@ -131,10 +142,10 @@ public class OrderController {
             System.out.println("Dit brugernavn: " + account.getEmail());
             System.out.println("Dit kodeord: " + account.getPassword());
 
-            HashMap<String, String> map = new HashMap<>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put("email", account.getEmail());
             map.put("password", account.getPassword());
-            EmailSender.sendEmail(account.getEmail(), EmailSender.TEMPLATE_ID_QUOTE_READY_MAIL, map);
+            EmailSender.sendEmail(account.getEmail(), EmailSender.TEMPLATE_ID_QUOTE_READY, map);
 
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
