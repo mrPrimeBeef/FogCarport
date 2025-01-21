@@ -28,9 +28,9 @@ public class Main {
         OrderController.addRoutes(app, connectionPool);
 
         try{
-            EmailSender sender = new EmailSender();
-
-            sender.sendEmail("Anders And", "anders@and.dk", "2100");
+//            EmailSender sender = new EmailSender();
+//
+//            sender.sendEmail("Anders And", "anders@and.dk", "2100");
         } catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();

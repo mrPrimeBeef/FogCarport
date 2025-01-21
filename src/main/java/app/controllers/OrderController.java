@@ -3,6 +3,7 @@ package app.controllers;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -130,6 +131,12 @@ public class OrderController {
             System.out.println("Nu kan du logge på din Fog konto og se dit carport tilbud:");
             System.out.println("Dit brugernavn: " + account.getEmail());
             System.out.println("Dit kodeord: " + account.getPassword());
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("email", account.getEmail());
+            map.put("password", account.getPassword());
+            EmailSender.sendEmail("anders@and.dk", "d-17c17b1fc6f9456789908966e895c1cc", map);
+
 
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             ctx.redirect("saelgerordre?ordrenr=" + orderId);

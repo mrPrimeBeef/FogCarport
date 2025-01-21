@@ -24,6 +24,9 @@ public class EmailReceipt {
     }
 
     private void printEmail() {
+
+
+
         System.out.println("---- Email kvittering ----");
         System.out.println("Navn: " + name);
         System.out.println("Addresse: " + address);
