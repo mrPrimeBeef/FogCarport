@@ -25,6 +25,5 @@ public class Main {
 
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
-
     }
 }

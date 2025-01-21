@@ -1,6 +1,5 @@
 package app.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ import app.config.LoggerConfig;
 import app.dto.DetailOrderAccountDto;
 import app.dto.OverviewOrderAccountDto;
 import app.entities.Account;
-import app.entities.EmailReceipt;
 import app.entities.Orderline;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
@@ -25,8 +23,6 @@ import app.persistence.AccountMapper;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.StructureCalculationEngine.Entities.Material;
-
-import javax.imageio.IIOException;
 
 public class OrderController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -70,8 +66,6 @@ public class OrderController {
         try {
             int accountId = getOrCreateAccountId(email, name, address, zip, phone, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
-
-            new EmailReceipt(carportWidth, carportLength, carportHeight, name, address, zip, phone, email);
 
             HashMap<String, Object> map = new HashMap<>();
             map.put("carportWidth", carportWidth);
@@ -136,11 +130,6 @@ public class OrderController {
         try {
             int accountId = Integer.parseInt(ctx.formParam("accountId"));
             Account account = AccountMapper.getPasswordAndEmail(accountId, connectionPool);
-
-            // Sending mock email via System.out.println
-            System.out.println("Nu kan du logge på din Fog konto og se dit carport tilbud:");
-            System.out.println("Dit brugernavn: " + account.getEmail());
-            System.out.println("Dit kodeord: " + account.getPassword());
 
             HashMap<String, Object> map = new HashMap<>();
             map.put("email", account.getEmail());

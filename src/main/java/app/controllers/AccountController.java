@@ -1,8 +1,10 @@
 package app.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
+import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -89,7 +91,10 @@ public class AccountController {
                 String newPassword = PasswordGenerator.generatePassword();
                 AccountMapper.updatePassword(email, newPassword, connectionPool);
 
-                System.out.println("Den indtastede email: " + email + "\n" + "Adgangskoden for den indtastede mail er: " + newPassword);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("email", email);
+                map.put("newPassword", newPassword);
+                EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_FORGOT_PASSWORD, map);
 
                 ctx.attribute("message", "Din adgangskode er blevet nulstillet. Log ind med den nye adgangskode.");
                 ctx.render("login.html");
