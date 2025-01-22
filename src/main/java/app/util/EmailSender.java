@@ -18,8 +18,8 @@ public class EmailSender {
     private static final String FROM_EMAIL_ADDRESS = System.getenv("FROM_EMAIL_ADDRESS");
     private static final String SENDGRID_API_KEY = System.getenv("SENDGRID_API_KEY");
 
-    public static final String TEMPLATE_ID_QUOTE_READY = System.getenv("TEMPLATE_ID_QUOTE_READY");
     public static final String TEMPLATE_ID_QUOTE_CONFIRMATION = System.getenv("TEMPLATE_ID_QUOTE_CONFIRMATION");
+    public static final String TEMPLATE_ID_QUOTE_READY = System.getenv("TEMPLATE_ID_QUOTE_READY");
     public static final String TEMPLATE_ID_FORGOT_PASSWORD = System.getenv("TEMPLATE_ID_FORGOT_PASSWORD");
 
     public static void sendEmail(String toEmailAddress, String sendgridTemplateId, Map<String, Object> emailParams) throws EmailException {
@@ -49,7 +49,7 @@ public class EmailSender {
             Response response = sg.api(request);
             if (response.getStatusCode() != 202) {
                 throw new EmailException("Error when sending email: RESPONSE STATUS CODE: " + response.getStatusCode()
-                        + "RESPONSE HEADER: " + response.getHeaders() + "RESPONSE BODY: " + response.getBody());
+                        + " RESPONSE HEADER: " + response.getHeaders() + " RESPONSE BODY: " + response.getBody());
             }
 
         } catch (IOException e) {

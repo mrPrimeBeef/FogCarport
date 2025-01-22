@@ -7,6 +7,7 @@ dependency-reduced-pom.xml
 ### Loggingfile ###
 loggingfile.log
 loggingfile.log.1
+loggingfile.log.lck
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

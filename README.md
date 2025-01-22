@@ -14,3 +14,11 @@ Dette repository indholder vores Fog carport webapplikations projekt.
 4. Kopiér SQL scriptet fra `??` til PostgreSQL og kør det
 5. Byg og kør projektet i IntelliJ
 6. Se web appen ved at åbne `??` i din browser
+
+
+Nødvendige environment variables:
+FROM_EMAIL_ADDRESS
+SENDGRID_API_KEY
+TEMPLATE_ID_QUOTE_CONFIRMATION
+TEMPLATE_ID_QUOTE_READY
+TEMPLATE_ID_FORGOT_PASSWORD
