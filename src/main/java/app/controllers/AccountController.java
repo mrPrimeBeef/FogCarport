@@ -152,8 +152,6 @@ public class AccountController {
 
             AccountMapper.updatePassword(email, newPassword1, connectionPool);
 
-            System.out.println("Den indtastede email: " + email + "\n" + "Din nye adgangskode er: " + newPassword1);
-
             ctx.attribute("successMessage", "Din adgangskode er blevet opdateret.");
             ctx.render("opdaterkundeinfo.html");
 
