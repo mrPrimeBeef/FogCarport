@@ -1,5 +1,8 @@
 package app.util;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -8,8 +11,7 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 
-import java.io.IOException;
-import java.util.HashMap;
+import app.exceptions.EmailException;
 
 public class EmailSender {
 
@@ -20,14 +22,14 @@ public class EmailSender {
     public static final String TEMPLATE_ID_QUOTE_CONFIRMATION = System.getenv("TEMPLATE_ID_QUOTE_CONFIRMATION");
     public static final String TEMPLATE_ID_FORGOT_PASSWORD = System.getenv("TEMPLATE_ID_FORGOT_PASSWORD");
 
-    public static void sendEmail(String toEmailAddress, String sendgridTemplateId, HashMap<String, Object> map) {
+    public static void sendEmail(String toEmailAddress, String sendgridTemplateId, Map<String, Object> emailParams) throws EmailException {
         Email from = new Email(FROM_EMAIL_ADDRESS);
         from.setName("Byggemarked");
 
         Personalization personalization = new Personalization();
         personalization.addTo(new Email(toEmailAddress));
-        for (String key : map.keySet()) {
-            personalization.addDynamicTemplateData(key, map.get(key));
+        for (String key : emailParams.keySet()) {
+            personalization.addDynamicTemplateData(key, emailParams.get(key));
         }
 
         Mail mail = new Mail();
@@ -37,19 +39,21 @@ public class EmailSender {
         mail.addCategory("carportapp");
 
         SendGrid sg = new SendGrid(SENDGRID_API_KEY);
-        Request request = new Request();
 
         try {
+            Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
 
             Response response = sg.api(request);
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getBody());
-            System.out.println(response.getHeaders());
+            if (response.getStatusCode() != 202) {
+                throw new EmailException("Error when sending email: RESPONSE STATUS CODE: " + response.getStatusCode()
+                        + "RESPONSE HEADER: " + response.getHeaders() + "RESPONSE BODY: " + response.getBody());
+            }
+
         } catch (IOException e) {
-            System.out.println("Error sending mail");
+            throw new EmailException("Error when sending mail: " + e.getMessage());
         }
     }
 

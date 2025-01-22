@@ -2,9 +2,9 @@ package app.controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -16,11 +16,13 @@ import app.entities.Orderline;
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
+import app.exceptions.EmailException;
 import app.exceptions.OrderException;
 import app.persistence.OrderlineMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.AccountMapper;
 import app.persistence.OrderMapper;
+import app.util.EmailSender;
 
 public class AccountController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -91,10 +93,10 @@ public class AccountController {
                 String newPassword = PasswordGenerator.generatePassword();
                 AccountMapper.updatePassword(email, newPassword, connectionPool);
 
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("email", email);
-                map.put("newPassword", newPassword);
-                EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_FORGOT_PASSWORD, map);
+                Map<String, Object> emailParams = new HashMap<>();
+                emailParams.put("email", email);
+                emailParams.put("newPassword", newPassword);
+                EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_FORGOT_PASSWORD, emailParams);
 
                 ctx.attribute("message", "Din adgangskode er blevet nulstillet. Log ind med den nye adgangskode.");
                 ctx.render("login.html");
@@ -102,7 +104,7 @@ public class AccountController {
                 ctx.attribute("errorMessage", "Ingen konto fundet for den indtastede email. Prøv igen.");
                 ctx.render("glemtkode.html");
             }
-        } catch (AccountException | DatabaseException e) {
+        } catch (AccountException | DatabaseException | EmailException e) {
             ctx.attribute("errorMessage", "Error in forgotPassword() " + e.getMessage());
             ctx.render("error.html");
         }

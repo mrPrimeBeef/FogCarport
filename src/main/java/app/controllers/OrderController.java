@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import app.util.EmailSender;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -18,11 +17,13 @@ import app.entities.Account;
 import app.entities.Orderline;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
+import app.exceptions.EmailException;
 import app.exceptions.OrderException;
 import app.persistence.AccountMapper;
 import app.services.svgEngine.CarportSvg;
 import app.services.StructureCalculationEngine.Entities.Carport;
 import app.services.StructureCalculationEngine.Entities.Material;
+import app.util.EmailSender;
 
 public class OrderController {
     private static final Logger LOGGER = LoggerConfig.getLOGGER();
@@ -67,19 +68,19 @@ public class OrderController {
             int accountId = getOrCreateAccountId(email, name, address, zip, phone, connectionPool);
             OrderMapper.createOrder(accountId, carportWidth, carportLength, carportHeight, connectionPool);
 
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("carportWidth", carportWidth);
-            map.put("carportLength", carportLength);
-            map.put("carportHeight", carportHeight);
-            map.put("name", name);
-            map.put("address", address);
-            map.put("zip", zip);
-            map.put("phone", phone);
-            map.put("email", email);
-            EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_QUOTE_CONFIRMATION, map);
+            Map<String, Object> emailParams = new HashMap<>();
+            emailParams.put("carportWidth", carportWidth);
+            emailParams.put("carportLength", carportLength);
+            emailParams.put("carportHeight", carportHeight);
+            emailParams.put("name", name);
+            emailParams.put("address", address);
+            emailParams.put("zip", zip);
+            emailParams.put("phone", phone);
+            emailParams.put("email", email);
+            EmailSender.sendEmail(email, EmailSender.TEMPLATE_ID_QUOTE_CONFIRMATION, emailParams);
 
             showThankYouPage(name, email, ctx);
-        } catch (AccountException | OrderException | DatabaseException e) {
+        } catch (AccountException | OrderException | DatabaseException | EmailException e) {
 
             LOGGER.severe("Fejl ved posting af carport info: " + e.getMessage());
 
@@ -131,15 +132,15 @@ public class OrderController {
             int accountId = Integer.parseInt(ctx.formParam("accountId"));
             Account account = AccountMapper.getPasswordAndEmail(accountId, connectionPool);
 
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("email", account.getEmail());
-            map.put("password", account.getPassword());
-            EmailSender.sendEmail(account.getEmail(), EmailSender.TEMPLATE_ID_QUOTE_READY, map);
+            Map<String, Object> emailParams = new HashMap<>();
+            emailParams.put("email", account.getEmail());
+            emailParams.put("password", account.getPassword());
+            EmailSender.sendEmail(account.getEmail(), EmailSender.TEMPLATE_ID_QUOTE_READY, emailParams);
 
             int orderId = Integer.parseInt(ctx.formParam("ordrenr"));
             ctx.redirect("saelgerordre?ordrenr=" + orderId);
 
-        } catch (AccountException e) {
+        } catch (AccountException | EmailException e) {
             LOGGER.severe(e.getMessage());
             ctx.attribute("errorMessage", "Error in sendCustomerInfo " + e.getMessage());
             ctx.render("error.html");
