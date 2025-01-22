@@ -1,8 +1,8 @@
 package app.exceptions;
 
-public class DatabaseException extends Exception {
+public class EmailException extends Exception {
 
-    public DatabaseException(String userMessage) {
+    public EmailException(String userMessage) {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
     }
