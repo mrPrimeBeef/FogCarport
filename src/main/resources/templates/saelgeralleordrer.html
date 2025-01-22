@@ -9,6 +9,9 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" href="../public/images/favicon-fog.png" th:href="@{images/favicon-fog.png}">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
 </head>
 <body class="bg-light">
 <header th:replace="~{fragments :: headerAdmin}"></header>
@@ -33,7 +36,9 @@
                     <tbody class="table-group-divider">
                     <tr th:each="OverviewOrderAccountDto : ${OverviewOrderAccountDtos}">
                         <td>
-                            <a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}" th:text="${OverviewOrderAccountDto.orderId}"></a>
+                            <a href="saelgerordre.html"
+                               th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}"
+                               th:text="${OverviewOrderAccountDto.orderId}"></a>
                         </td>
                         <td th:text="${OverviewOrderAccountDto.email}"></td>
                         <td th:text="${OverviewOrderAccountDto.datePlaced}"></td>
@@ -52,13 +57,19 @@
                         <h5 class="card-title" th:text="'Ordrenr. ' + ${OverviewOrderAccountDto.orderId}">Ordrenr.</h5>
                         <p class="card-text">
                             <strong>Email:</strong> <span th:text="${OverviewOrderAccountDto.email}"></span><br>
-                            <strong>Henvendelse:</strong> <span th:text="${OverviewOrderAccountDto.datePlaced}"></span><br>
-                            <strong>Dato betalt:</strong> <span th:text="${OverviewOrderAccountDto.datePaid}"></span><br>
-                            <strong>Dato færdig:</strong> <span th:text="${OverviewOrderAccountDto.dateCompleted}"></span><br>
-                            <strong>Salgspris inkl. moms:</strong> <span th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></span><br>
+                            <strong>Henvendelse:</strong> <span
+                                th:text="${OverviewOrderAccountDto.datePlaced}"></span><br>
+                            <strong>Dato betalt:</strong> <span
+                                th:text="${OverviewOrderAccountDto.datePaid}"></span><br>
+                            <strong>Dato færdig:</strong> <span
+                                th:text="${OverviewOrderAccountDto.dateCompleted}"></span><br>
+                            <strong>Salgspris inkl. moms:</strong> <span
+                                th:text="${#numbers.formatDecimal(OverviewOrderAccountDto.salePriceInclVAT, 1, 'POINT', 2, 'COMMA')}"></span><br>
                             <strong>Status:</strong> <span th:text="${OverviewOrderAccountDto.status}"></span>
                         </p>
-                        <a href="saelgerordre.html" th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}" class="btn btn-primary">Se ordren</a>
+                        <a href="saelgerordre.html"
+                           th:href="@{/saelgerordre(ordrenr=${OverviewOrderAccountDto.orderId})}"
+                           class="btn btn-primary">Se ordren</a>
                     </div>
                 </div>
             </div>
@@ -67,8 +78,5 @@
 
 </main>
 <footer th:replace="~{fragments :: footer}"></footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
 </html>
