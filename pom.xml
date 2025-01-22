@@ -24,8 +24,6 @@
         <hamcrest.version>2.2</hamcrest.version>
         <postgresql.version>42.7.2</postgresql.version>
         <sendgrid-java.version>4.10.3</sendgrid-java.version>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
