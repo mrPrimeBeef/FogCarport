@@ -3,9 +3,9 @@
 Dette repository indholder vores Fog carport webapplikations projekt.
 
 ## Links
-- [Vores rapport som PDF]()
+- [Vores rapport som PDF](https://github.com/mrPrimeBeef/FogCarport/blob/peter/Rapport.pdf)
 - [Video-demo af vores web app](https://www.youtube.com/watch?v=kcoIhAZ_xQo)
-- [Figma filer]()
+- [Figma filer](https://github.com/mrPrimeBeef/FogCarport/tree/peter/Figma)
 
 ## Installationsvejledning
 1. Klon dette repository
