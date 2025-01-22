@@ -2,9 +2,11 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+dependency-reduced-pom.xml
 
 ### Loggingfile ###
 loggingfile.log
+loggingfile.log.1
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
