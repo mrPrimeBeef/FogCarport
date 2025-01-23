@@ -1,6 +1,7 @@
 package app.persistence;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,11 +49,31 @@ class OrderMapperTest extends AbstractMapperTest {
 
     @Test
     void getDetailOrderAccountDtoByOrderId() throws DatabaseException {
-        DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(1, connectionPool);
-        String actual = dto.getStatus();
-        assertNotNull(dto);
-        assertEquals("henvendelse", actual);
-        assertNotEquals("In progress", dto.getStatus());
+        DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(2, connectionPool);
+        assertEquals(2, dto.getOrderId());
+        assertEquals(1, dto.getAccountId());
+        assertEquals("test@test.dk", dto.getEmail());
+        assertEquals("Test Testersen", dto.getName());
+        assertEquals("12345678", dto.getPhone());
+        assertEquals(2100, dto.getZip());
+        assertEquals("København Ø", dto.getCity());
+        System.out.println(LocalDate.now().minusDays(1));
+        assertEquals(LocalDate.now().minusDays(1).toString(), dto.getDatePlaced().toString());
+        assertEquals(null, dto.getDatePaid());
+        assertEquals(null, dto.getDateCompleted());
+        assertEquals(30, Math.round(dto.getMarginPercentage()));
+        assertEquals(84, Math.round(dto.getMarginAmount()));
+        assertEquals(195, Math.round(dto.getCostPrice()));
+        assertEquals(279, Math.round(dto.getSalePrice()));
+        assertEquals(348, Math.round(dto.getSalePriceInclVAT()));
+        assertEquals("betalt", dto.getStatus());
+        assertEquals(580, dto.getCarportLengthCm());
+        assertEquals(530, dto.getCarportWidthCm());
+        assertEquals(230, dto.getCarportHeightCm());
+        assertEquals(null, dto.getSvgSideView());
+        assertEquals(null, dto.getSvgTopView());
+
+        assertThrows(DatabaseException.class, () -> OrderMapper.getDetailOrderAccountDtoByOrderId(0, connectionPool));
     }
 
     @Test

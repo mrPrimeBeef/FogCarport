@@ -1,22 +1,21 @@
 package app.persistence;
 
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import app.entities.Account;
 import app.exceptions.AccountException;
 import app.exceptions.DatabaseException;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class AccountMapperTest extends AbstractMapperTest {
     @Test
     void getAllAccountEmails() throws DatabaseException {
         ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
         assertEquals(3, emails.size());
-        assertEquals("test@test.dk", emails.get(0));
-        assertEquals("admin@admin.dk", emails.get(1));
+        assertTrue(emails.contains("test@test.dk"));
+        assertTrue(emails.contains("admin@admin.dk"));
     }
 
     @Test
@@ -32,33 +31,78 @@ class AccountMapperTest extends AbstractMapperTest {
     void getAllCustomerAccounts() throws AccountException {
         ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
         assertEquals(2, accounts.size());
+
+        assertEquals("test@test.dk", accounts.get(0).getEmail());
         assertEquals("Test Testersen", accounts.get(0).getName());
+        assertEquals("Testvej 1", accounts.get(0).getAddress());
+        assertEquals(2100, accounts.get(0).getZip());
+        assertEquals("København Ø", accounts.get(0).getCity());
+        assertEquals("12345678", accounts.get(0).getPhone());
+
+        assertEquals("kunde@kunde.dk", accounts.get(1).getEmail());
         assertEquals("Kurt Kunde", accounts.get(1).getName());
-//        TODO: Also test for all the other attirbutes
+        assertEquals("Kundevej 123", accounts.get(1).getAddress());
+        assertEquals(2300, accounts.get(1).getZip());
+        assertEquals("København S", accounts.get(1).getCity());
+        assertEquals("11223344", accounts.get(1).getPhone());
     }
 
     @Test
-    void createAccount() throws AccountException {
-        int actual = AccountMapper.createAccount("String name", "String address", 2100, "String phone", "String email", connectionPool);
-        assertEquals(4, actual);
+    void createAccount() throws AccountException, DatabaseException {
+        int accountId = AccountMapper.createAccount("String name", "String address", 2100, "String phone", "String email", connectionPool);
+        assertEquals(4, accountId);
+        Account account = AccountMapper.getAccountByEmail("String email", connectionPool);
+        assertEquals(4, account.getAccountId());
+        assertEquals("String email", account.getEmail());
+        assertEquals("Kunde", account.getRole());
+        assertEquals(4, AccountMapper.getAllAccountEmails(connectionPool).size());
 
-        actual = AccountMapper.createAccount("String name2", "String address2", 2100, "String phone2", "String email2", connectionPool);
-        assertEquals(5, actual);
+        accountId = AccountMapper.createAccount("String name2", "String address2", 2200, "String phone2", "String email2", connectionPool);
+        assertEquals(5, accountId);
+        account = AccountMapper.getAccountByEmail("String email2", connectionPool);
+        assertEquals(5, account.getAccountId());
+        assertEquals("String email2", account.getEmail());
+        assertEquals("Kunde", account.getRole());
+        assertEquals(5, AccountMapper.getAllAccountEmails(connectionPool).size());
 
-        // TODO: Use get account to test that the correct things come out (even though I am interesting to test that the correct things come in)
+        // TODO: There should be some tests with: Too long email, too long password, email that allready exists
     }
 
     @Test
     void login() throws AccountException {
-        Account account;
-        account = AccountMapper.login("test@test.dk", "1234", connectionPool);
+        // Login as customer
+        Account account = AccountMapper.login("test@test.dk", "1234", connectionPool);
         assertEquals(1, account.getAccountId());
+        assertEquals("test@test.dk", account.getEmail());
+        assertEquals("Test Testersen", account.getName());
         assertEquals("Kunde", account.getRole());
-        // TODO: Evt. test for de andre ting der bliver puttet ind i Account objectet for en kunde
+        assertEquals("Testvej 1", account.getAddress());
+        assertEquals("København Ø", account.getCity());
+        assertEquals("12345678", account.getPhone());
+        assertEquals(0, account.getZip());
+        assertEquals(null, account.getPassword());
 
-        // TODO: Lav nedenstående om så der istedet testes for når der bliver logget ind som sælger
-        assertNotEquals(2, account.getAccountId());
-        assertNotEquals("admin", account.getRole());
+        // Login as salesrep
+        account = AccountMapper.login("admin@admin.dk", "admin", connectionPool);
+        assertEquals(2, account.getAccountId());
+        assertEquals(null, account.getEmail());
+        assertEquals(null, account.getName());
+        assertEquals("salesrep", account.getRole());
+        assertEquals(null, account.getAddress());
+        assertEquals(null, account.getCity());
+        assertEquals(null, account.getPhone());
+        assertEquals(0, account.getZip());
+        assertEquals(null, account.getPassword());
+
+        // Login with valid email and invalid password
+        assertNull(AccountMapper.login("test@test.dk", "WrongPassword", connectionPool));
+        assertNull(AccountMapper.login("test@test.dk", "", connectionPool));
+        assertNull(AccountMapper.login("test@test.dk", null, connectionPool));
+
+        // Login with invalid email and valid password
+        assertNull(AccountMapper.login("dont@exists.dk", "1234", connectionPool));
+        assertNull(AccountMapper.login("", "1234", connectionPool));
+        assertNull(AccountMapper.login(null, "1234", connectionPool));
     }
 
     @Test
@@ -73,14 +117,9 @@ class AccountMapperTest extends AbstractMapperTest {
         assertEquals("admin@admin.dk", account.getEmail());
         assertEquals("salesrep", account.getRole());
 
-        account = AccountMapper.getAccountByEmail("dont@exists.dk", connectionPool);
-        assertNull(account);
-
-        account = AccountMapper.getAccountByEmail("", connectionPool);
-        assertNull(account);
-
-        account = AccountMapper.getAccountByEmail(null, connectionPool);
-        assertNull(account);
+        assertNull(AccountMapper.getAccountByEmail("dont@exists.dk", connectionPool));
+        assertNull(AccountMapper.getAccountByEmail("", connectionPool));
+        assertNull(AccountMapper.getAccountByEmail(null, connectionPool));
     }
 
     @Test
@@ -93,8 +132,7 @@ class AccountMapperTest extends AbstractMapperTest {
         assertEquals("admin", account.getPassword());
         assertEquals("admin@admin.dk", account.getEmail());
 
-        account = AccountMapper.getPasswordAndEmail(0, connectionPool);
-        assertNull(account);
+        assertNull(AccountMapper.getPasswordAndEmail(0, connectionPool));
     }
 
     @Test
@@ -102,16 +140,10 @@ class AccountMapperTest extends AbstractMapperTest {
         Account account = AccountMapper.getPasswordByEmail("test@test.dk", connectionPool);
         assertEquals("1234", account.getPassword());
 
-        account = AccountMapper.getPasswordByEmail("dont@exists.dk", connectionPool);
-        assertNull(account);
-
-        account = AccountMapper.getPasswordByEmail("", connectionPool);
-        assertNull(account);
-
-        account = AccountMapper.getPasswordByEmail(null, connectionPool);
-        assertNull(account);
+        assertNull(AccountMapper.getPasswordByEmail("dont@exists.dk", connectionPool));
+        assertNull(AccountMapper.getPasswordByEmail("", connectionPool));
+        assertNull(AccountMapper.getPasswordByEmail(null, connectionPool));
     }
-
 
 
     @Test
@@ -129,7 +161,7 @@ class AccountMapperTest extends AbstractMapperTest {
         // Valid email and null password
         assertThrows(AccountException.class, () -> AccountMapper.updatePassword("test@test.dk", null, connectionPool));
 
-        // Valid password and invalid emails
+        // Invalid email and valid password
         assertThrows(AccountException.class, () -> AccountMapper.updatePassword("dont@exists.dk", "4321", connectionPool));
         assertThrows(AccountException.class, () -> AccountMapper.updatePassword("", "4321", connectionPool));
         assertThrows(AccountException.class, () -> AccountMapper.updatePassword(null, "4321", connectionPool));
