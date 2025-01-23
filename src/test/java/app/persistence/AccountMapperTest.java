@@ -12,26 +12,20 @@ import app.exceptions.DatabaseException;
 
 class AccountMapperTest extends AbstractMapperTest {
     @Test
-    void getAllEmailsFromAccount() throws DatabaseException {
-        ArrayList<String> emails = new ArrayList<>();
-
-        emails = AccountMapper.getAllAccountEmails(connectionPool);
+    void getAllAccountEmails() throws DatabaseException {
+        ArrayList<String> emails = AccountMapper.getAllAccountEmails(connectionPool);
         assertEquals(3, emails.size());
-
-        String mail = emails.get(0);
-        assertEquals("test@test.dk", mail);
-
-        mail = emails.get(1);
-        assertNotEquals("test@test.dk", mail);
+        assertEquals("test@test.dk", emails.get(0));
+        assertEquals("admin@admin.dk", emails.get(1));
     }
 
     @Test
-    void getIdFromAccountEmail() throws AccountException {
-        int actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
-        assertEquals(1, actual);
-
-        actual = AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool);
-        assertNotEquals(0, actual);
+    void getAccountIdFromEmail() throws AccountException {
+        assertEquals(1, AccountMapper.getAccountIdFromEmail("test@test.dk", connectionPool));
+        assertEquals(2, AccountMapper.getAccountIdFromEmail("admin@admin.dk", connectionPool));
+        assertThrows(AccountException.class, () -> AccountMapper.getAccountIdFromEmail("dont@exists.dk", connectionPool));
+        assertThrows(AccountException.class, () -> AccountMapper.getAccountIdFromEmail("", connectionPool));
+        assertThrows(AccountException.class, () -> AccountMapper.getAccountIdFromEmail(null, connectionPool));
     }
 
     @Test
