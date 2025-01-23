@@ -98,18 +98,40 @@ class AccountMapperTest extends AbstractMapperTest {
     }
 
     @Test
+    void getPasswordByEmail() throws AccountException {
+        Account account = AccountMapper.getPasswordByEmail("test@test.dk", connectionPool);
+        assertEquals("1234", account.getPassword());
+
+        account = AccountMapper.getPasswordByEmail("dont@exists.dk", connectionPool);
+        assertNull(account);
+
+        account = AccountMapper.getPasswordByEmail("", connectionPool);
+        assertNull(account);
+
+        account = AccountMapper.getPasswordByEmail(null, connectionPool);
+        assertNull(account);
+    }
+
+
+
+    @Test
     void updatePassword() throws AccountException {
-        Account account = AccountMapper.getPasswordAndEmail(1, connectionPool);
-        String actual = account.getPassword();
-
-        assertEquals("1234", actual);
-        assertNotEquals("234", actual);
-
+        // Valid email and valid password
         AccountMapper.updatePassword("test@test.dk", "234", connectionPool);
-        account = AccountMapper.getPasswordAndEmail(1, connectionPool);
-        actual = account.getPassword();
+        Account account = AccountMapper.getPasswordByEmail("test@test.dk", connectionPool);
+        assertEquals("234", account.getPassword());
 
-        assertEquals("234", actual);
-        assertNotEquals("1234", actual);
+        // Valid email and empty password
+        AccountMapper.updatePassword("test@test.dk", "", connectionPool);
+        account = AccountMapper.getPasswordByEmail("test@test.dk", connectionPool);
+        assertEquals("", account.getPassword());
+
+        // Valid email and null password
+        assertThrows(AccountException.class, () -> AccountMapper.updatePassword("test@test.dk", null, connectionPool));
+
+        // Valid password and invalid emails
+        assertThrows(AccountException.class, () -> AccountMapper.updatePassword("dont@exists.dk", "4321", connectionPool));
+        assertThrows(AccountException.class, () -> AccountMapper.updatePassword("", "4321", connectionPool));
+        assertThrows(AccountException.class, () -> AccountMapper.updatePassword(null, "4321", connectionPool));
     }
 }
