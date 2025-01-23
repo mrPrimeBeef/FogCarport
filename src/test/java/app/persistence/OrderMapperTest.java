@@ -70,8 +70,8 @@ class OrderMapperTest extends AbstractMapperTest {
         assertEquals(580, dto.getCarportLengthCm());
         assertEquals(530, dto.getCarportWidthCm());
         assertEquals(230, dto.getCarportHeightCm());
-        assertEquals(null, dto.getSvgSideView());
-        assertEquals(null, dto.getSvgTopView());
+        assertEquals("<svg></svg>", dto.getSvgSideView());
+        assertEquals("<svg></svg>", dto.getSvgTopView());
 
         assertThrows(DatabaseException.class, () -> OrderMapper.getDetailOrderAccountDtoByOrderId(0, connectionPool));
     }
