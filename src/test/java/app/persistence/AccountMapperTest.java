@@ -31,21 +31,21 @@ class AccountMapperTest extends AbstractMapperTest {
     @Test
     void getAllCustomerAccounts() throws AccountException {
         ArrayList<Account> accounts = AccountMapper.getAllCustomerAccounts(connectionPool);
-        String actual = accounts.get(0).getName();
-
-        assertEquals("Test Testersen", actual);
         assertEquals(2, accounts.size());
-
-        assertNotEquals("Test Testersen", accounts.get(1).getName());
+        assertEquals("Test Testersen", accounts.get(0).getName());
+        assertEquals("Kurt Kunde", accounts.get(1).getName());
+//        TODO: Also test for all the other attirbutes
     }
 
     @Test
     void createAccount() throws AccountException {
-        int actual = AccountMapper.createAccount("String name", "String adress", 2100, "String phone", "String email", connectionPool);
+        int actual = AccountMapper.createAccount("String name", "String address", 2100, "String phone", "String email", connectionPool);
         assertEquals(4, actual);
 
-        actual = AccountMapper.createAccount("String name2", "String adress2", 2100, "String phone2", "String email2", connectionPool);
-        assertNotEquals(4, actual);
+        actual = AccountMapper.createAccount("String name2", "String address2", 2100, "String phone2", "String email2", connectionPool);
+        assertEquals(5, actual);
+
+        // TODO: Use get account to test that the correct things come out (even though I am interesting to test that the correct things come in)
     }
 
     @Test
@@ -54,7 +54,9 @@ class AccountMapperTest extends AbstractMapperTest {
         account = AccountMapper.login("test@test.dk", "1234", connectionPool);
         assertEquals(1, account.getAccountId());
         assertEquals("Kunde", account.getRole());
+        // TODO: Evt. test for de andre ting der bliver puttet ind i Account objectet for en kunde
 
+        // TODO: Lav nedenstående om så der istedet testes for når der bliver logget ind som sælger
         assertNotEquals(2, account.getAccountId());
         assertNotEquals("admin", account.getRole());
     }
@@ -62,27 +64,37 @@ class AccountMapperTest extends AbstractMapperTest {
     @Test
     void getAccountByEmail() throws AccountException {
         Account account = AccountMapper.getAccountByEmail("test@test.dk", connectionPool);
-
         assertEquals(1, account.getAccountId());
         assertEquals("test@test.dk", account.getEmail());
         assertEquals("Kunde", account.getRole());
 
-        assertNotEquals(2, account.getAccountId());
-        assertNotEquals("test@testtest.dk", account.getEmail());
-        assertNotEquals("salesrep", account.getRole());
+        account = AccountMapper.getAccountByEmail("admin@admin.dk", connectionPool);
+        assertEquals(2, account.getAccountId());
+        assertEquals("admin@admin.dk", account.getEmail());
+        assertEquals("salesrep", account.getRole());
+
+        account = AccountMapper.getAccountByEmail("dont@exists.dk", connectionPool);
+        assertNull(account);
+
+        account = AccountMapper.getAccountByEmail("", connectionPool);
+        assertNull(account);
+
+        account = AccountMapper.getAccountByEmail(null, connectionPool);
+        assertNull(account);
     }
 
     @Test
     void getPasswordAndEmail() throws AccountException {
         Account account = AccountMapper.getPasswordAndEmail(1, connectionPool);
+        assertEquals("1234", account.getPassword());
+        assertEquals("test@test.dk", account.getEmail());
 
-        String actual = account.getPassword();
-        assertEquals("1234", actual);
-        assertNotEquals("234", actual);
+        account = AccountMapper.getPasswordAndEmail(2, connectionPool);
+        assertEquals("admin", account.getPassword());
+        assertEquals("admin@admin.dk", account.getEmail());
 
-        actual = account.getEmail();
-        assertEquals("test@test.dk", actual);
-        assertNotEquals("hal@admin.dk", account.getEmail());
+        account = AccountMapper.getPasswordAndEmail(0, connectionPool);
+        assertNull(account);
     }
 
     @Test
