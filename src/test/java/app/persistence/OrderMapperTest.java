@@ -49,6 +49,10 @@ class OrderMapperTest extends AbstractMapperTest {
 
     @Test
     void getDetailOrderAccountDtoByOrderId() throws DatabaseException {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        LocalDate dayAfterTomorrow = today.plusDays(2);
+
         DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(2, connectionPool);
         assertEquals(2, dto.getOrderId());
         assertEquals(1, dto.getAccountId());
@@ -57,10 +61,9 @@ class OrderMapperTest extends AbstractMapperTest {
         assertEquals("12345678", dto.getPhone());
         assertEquals(2100, dto.getZip());
         assertEquals("København Ø", dto.getCity());
-        System.out.println(LocalDate.now().minusDays(1));
-        assertEquals(LocalDate.now().minusDays(1).toString(), dto.getDatePlaced().toString());
-        assertEquals(null, dto.getDatePaid());
-        assertEquals(null, dto.getDateCompleted());
+        assertEquals(today.toString(), dto.getDatePlaced().toString());
+        assertEquals(tomorrow.toString(), dto.getDatePaid().toString());
+        assertEquals(dayAfterTomorrow.toString(), dto.getDateCompleted().toString());
         assertEquals(30, Math.round(dto.getMarginPercentage()));
         assertEquals(84, Math.round(dto.getMarginAmount()));
         assertEquals(195, Math.round(dto.getCostPrice()));
@@ -70,8 +73,8 @@ class OrderMapperTest extends AbstractMapperTest {
         assertEquals(580, dto.getCarportLengthCm());
         assertEquals(530, dto.getCarportWidthCm());
         assertEquals(230, dto.getCarportHeightCm());
-        assertEquals("<svg></svg>", dto.getSvgSideView());
-        assertEquals("<svg></svg>", dto.getSvgTopView());
+        assertEquals("<svg>SideView</svg>", dto.getSvgSideView());
+        assertEquals("<svg>TopView</svg>", dto.getSvgTopView());
 
         assertThrows(DatabaseException.class, () -> OrderMapper.getDetailOrderAccountDtoByOrderId(0, connectionPool));
     }

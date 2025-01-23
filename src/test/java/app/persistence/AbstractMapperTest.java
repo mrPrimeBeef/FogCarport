@@ -155,9 +155,9 @@ public abstract class AbstractMapperTest {
                     """);
 
             stmt.execute("""
-                        INSERT INTO orderr (date_placed, account_id, status, paid, margin_percentage, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view) VALUES
-                            (CURRENT_DATE, 1, 'henvendelse', FALSE, 30, 780, 600, 230, '<svg></svg>', '<svg></svg>'),
-                            (CURRENT_DATE - INTERVAL '1 day', 1, 'betalt', TRUE, 30, 580, 530, 230, '<svg></svg>', '<svg></svg>')
+                        INSERT INTO orderr (date_completed, account_id, status, paid, date_paid, margin_percentage, carport_length_cm, carport_width_cm, carport_height_cm, svg_side_view, svg_top_view) VALUES
+                            (null, 1, 'henvendelse', FALSE, null, 30, 780, 600, 230, '<svg></svg>', '<svg></svg>'),
+                            (CURRENT_DATE + INTERVAL '2 day', 1, 'betalt', TRUE, CURRENT_DATE + INTERVAL '1 day', 30, 580, 530, 230, '<svg>SideView</svg>', '<svg>TopView</svg>')
                     """);
 
             stmt.execute("""
