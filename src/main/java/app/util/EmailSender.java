@@ -36,7 +36,7 @@ public class EmailSender {
         mail.setFrom(from);
         mail.templateId = sendgridTemplateId;
         mail.addPersonalization(personalization);
-        mail.addCategory("carportapp");
+        mail.addCategory("FogCarport");
 
         SendGrid sg = new SendGrid(SENDGRID_API_KEY);
 
