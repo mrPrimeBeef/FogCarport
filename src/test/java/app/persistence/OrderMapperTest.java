@@ -53,6 +53,7 @@ class OrderMapperTest extends AbstractMapperTest {
         LocalDate tomorrow = today.plusDays(1);
         LocalDate dayAfterTomorrow = today.plusDays(2);
 
+        // Valid orderId
         DetailOrderAccountDto dto = OrderMapper.getDetailOrderAccountDtoByOrderId(2, connectionPool);
         assertEquals(2, dto.getOrderId());
         assertEquals(1, dto.getAccountId());
@@ -76,6 +77,7 @@ class OrderMapperTest extends AbstractMapperTest {
         assertEquals("<svg>SideView</svg>", dto.getSvgSideView());
         assertEquals("<svg>TopView</svg>", dto.getSvgTopView());
 
+        // Invalid orderId
         assertThrows(DatabaseException.class, () -> OrderMapper.getDetailOrderAccountDtoByOrderId(0, connectionPool));
     }
 
